@@ -1,0 +1,381 @@
+{
+  "id": "com.gruijter.magister",
+  "name": {
+      "en": "Magister 6 for Homey",
+      "nl": "Magister 6 voor Homey"
+  },
+  "description": {
+    "en": "school information from Magister 6",
+    "nl": "School informatie van Magister 6"
+  },
+  "version": "0.0.3",
+  "compatibility": "0.x || 1.x",
+  "author": {
+      "name": "Gruijter",
+      "email": "gruijter@hotmail.com"
+  },
+  "images": {
+    "large": "./assets/images/large.jpg",
+    "small": "./assets/images/small.jpg"
+  },
+  "category": "tools",
+  "drivers": [
+    {
+      "id": "student",
+      "name": {
+        "en": "Student",
+        "nl": "Scholier"
+      },
+      "pair": [
+        {
+        "id": "pair"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Magister student information",
+            "nl": "Magister student informatie"
+          },
+          "children": [
+            {
+              "id": "studentName",
+              "type": "text",
+              "label": {
+                "en": "Studentname",
+                "nl": "Studentnaam"
+              },
+              "attr": {"disabled": true}
+            },
+            {
+              "id": "period",
+              "type": "text",
+              "label": {
+                "en": "Schoolperiod",
+                "nl": "Schooljaar"
+              },
+              "attr": {"disabled": true}
+            },
+            {
+              "id": "type_group",
+              "type": "text",
+              "label": {
+                "en": "Education type and group",
+                "nl": "Schooltype en klas"
+              },
+              "attr": {"disabled": true}
+            },
+            {
+              "id": "totalAverageGrade",
+              "type": "text",
+              "label": {
+                "en": "Total average grade",
+                "nl": "Cijfergemiddelde"
+              },
+              "attr": {"disabled": true}
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Magister 6 settings",
+            "nl": "Magister 6 instellingen"
+          },
+          "children": [
+            {
+              "id": "school",
+              "type": "text",
+              "label": {
+                "en": "School",
+                "nl": "School"
+              }
+            },
+            {
+              "id": "username",
+              "type": "text",
+              "label": {
+                "en": "Username",
+                "nl": "Gebruikersnaam"
+              }
+            },
+            {
+              "id": "password",
+              "type": "password",
+              "label": {
+                "en": "Password",
+                "nl": "Wachtwoord"
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Options",
+            "nl": "Opties"
+          },
+          "children": [
+            {
+              "id": "notifyGradeChange",
+              "type": "checkbox",
+              "label": {
+                "en": "Say new grades",
+                "en": "Zeg nieuwe cijfers"
+              }
+            },
+            {
+              "id": "notifyRosterChange",
+              "type": "checkbox",
+              "label": {
+                "en": "Say roster changes",
+                "en": "Zeg rooster wijzigingen"
+              }
+            }
+          ]
+        }
+      ],
+      "images": {
+        "large": "./drivers/student/assets/images/large.jpg",
+        "small": "./drivers/student/assets/images/small.jpg"
+      },
+      "class": "other",
+      "capabilities": [ "onoff" ]
+    }
+  ],
+  "flow":	{
+    "triggers":[
+      {
+        "id":"new_grade",
+        "title": {
+          "en":"There is a new grade",
+          "nl":"Er is een nieuw cijfer"
+        },
+        "args": [
+          {
+            "name": "device_data",
+            "type": "device",
+            "filter": "driver_uri=homey:app:com.gruijter.magister&driver_id=student",
+            "placeholder": {
+              "en": "Which student",
+              "nl": "Welke scholier"
+             }
+          }
+        ],
+        "tokens":[
+          {
+          "name":"name",
+            "title": {
+              "en":"name",
+              "nl":"naam"
+            }
+          },
+          {
+          "name":"class",
+            "title": {
+              "en":"class",
+              "nl":"vak"
+            }
+          },
+          {
+          "name":"description",
+            "title": {
+              "en":"description",
+              "nl":"omschrijving"
+            }
+          },
+          {
+          "name":"weight",
+            "title": {
+              "en":"weight",
+              "nl":"gewicht"
+            }
+          },
+          {
+          "name":"grade",
+            "title": {
+              "en":"grade",
+              "nl":"cijfer"
+            }
+          }
+        ]
+      },
+      {
+        "id":"roster_changed",
+        "title": {
+          "en":"The roster has changed",
+          "nl":"Het rooster is gewijzigd"
+        },
+        "args": [
+          {
+            "name": "student",
+            "type": "device",
+            "filter": "driver_uri=homey:app:com.gruijter.magister&driver_id=student",
+            "placeholder": {
+              "en": "Which student",
+              "nl": "Welke scholier"
+             }
+          }
+        ],
+        "tokens":[
+          {
+          "name":"name",
+            "title": {
+              "en":"student",
+              "nl":"student"
+            }
+          },
+          {
+          "name":"beginHour",
+            "title": {
+              "en":"1st hr",
+              "nl":"1e uur"
+            }
+          },
+          {
+          "name":"beginTime",
+            "title": {
+              "en":"starttime",
+              "nl":"starttijd"
+            }
+          },
+          {
+          "name":"endHour",
+            "title": {
+              "en":"last hr",
+              "nl":"laatste uur"
+            }
+          },
+          {
+            "name":"endTime",
+            "title": {
+              "en":"endtime",
+              "nl":"eindtijd"
+            }
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "sayRoster",
+        "title": {
+          "en": "Say roster of",
+          "nl": "Zeg het rooster van"
+        },
+        "args": [
+          {
+            "name": "device_data",
+            "type": "device",
+            "filter": "driver_uri=homey:app:com.gruijter.magister&driver_id=student",
+            "placeholder": {
+              "en": "Which student",
+              "nl": "Welke scholier"
+             }
+          },
+          {
+            "name": "when",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "today",
+                "label": {
+                  "en": "today",
+                  "nl": "vandaag"
+                }
+              },
+              {
+                "id": "tomorrow",
+                "label": {
+                  "en": "tomorrow",
+                  "nl": "morgen"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sayHomework",
+        "title": {
+          "en": "Say homework of",
+          "nl": "Zeg het huiswerk van"
+        },
+        "args": [
+          {
+            "name": "device_data",
+            "type": "device",
+            "filter": "driver_uri=homey:app:com.gruijter.magister&driver_id=student",
+            "placeholder": {
+              "en": "Which student",
+              "nl": "Welke scholier"
+             }
+          },
+          {
+            "name": "when",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "today",
+                "label": {
+                  "en": "today",
+                  "nl": "vandaag"
+                }
+              },
+              {
+                "id": "tomorrow",
+                "label": {
+                  "en": "tomorrow",
+                  "nl": "morgen"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sayGrades",
+        "title": {
+          "en": "Say new grades of",
+          "nl": "Zeg de nieuwe cijfers van"
+        },
+        "args": [
+          {
+            "name": "device_data",
+            "type": "device",
+            "filter": "driver_uri=homey:app:com.gruijter.magister&driver_id=student",
+            "placeholder": {
+              "en": "Which student",
+              "nl": "Welke scholier"
+             }
+          },
+          {
+            "name": "when",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "today",
+                "label": {
+                  "en": "today",
+                  "nl": "vandaag"
+                }
+              },
+              {
+                "id": "week",
+                "label": {
+                  "en": "last 7 days",
+                  "nl": "afgelopen 7 dagen"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": [
+    "homey:manager:speech-output",
+	  "homey:manager:speech-input"
+  ]
+}
