@@ -394,6 +394,22 @@ function handleDayRosterTomorrow(device_data, date){
 
 //========================GET DATA FROM MAGISTER================================
 
+getMagister = (function () {
+	var magisterCache = {};
+
+	return function (credentials) {
+		var id = credentials.school + '_' + credentials.username;
+
+		var magister = magisterCache[id];
+		if (magister === undefined) {
+			magister = new Magister.Magister(credentials);
+			magisterCache[id] = magister;
+		}
+
+		return magister;
+	};
+})();
+
 //get school and student info, used during pairing and settings update
 function getPupil(credentials, callback) {
   //Homey.log("entering get pupil");
@@ -402,7 +418,7 @@ function getPupil(credentials, callback) {
     callback("Error: school, username and password are required",null)
     return;
   }
-  new Magister.Magister(credentials).ready(function (error) {
+  getMagister(credentials).ready(function (error) {
     if (error) {
       Homey.log("Error connecting: ", error.message);
       callback(error.message, null);
@@ -435,7 +451,7 @@ function getPupil(credentials, callback) {
 //schoolyear course
 function getCourse(credentials, callback) {
   Homey.log("getting course info");
-  new Magister.Magister(credentials).ready(function (error) {
+  getMagister(credentials).ready(function (error) {
     if (error) {
       Homey.log("Error getting course: "+ error.message);
       callback(error.message, null);
@@ -488,7 +504,7 @@ function getGrades(credentials, callback) {
   var grade = {};
   var grades = [];
 
-  new Magister.Magister(credentials).ready(function (error) {
+  getMagister(credentials).ready(function (error) {
     if (error) {
       Homey.log("Error getting grades: "+error.message);
       callback(error.message, null);
@@ -534,7 +550,7 @@ function getDayRoster(credentials, date, callback) {
   var dayRoster = {};
   var lesson = [];
 
-  new Magister.Magister(credentials).ready(function (error) {
+  getMagister(credentials).ready(function (error) {
     if (error) {
       Homey.log("Error getting day roster: "+ error);
       callback(error, null);
