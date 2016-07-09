@@ -394,7 +394,7 @@ function handleDayRosterTomorrow(device_data, date){
 
 //========================GET DATA FROM MAGISTER================================
 
-getMagister = (function () {
+var getMagister = (function () {
 	var magisterCache = {};
 
 	return function (credentials) {
