@@ -70,7 +70,7 @@
               "id": "totalAverageGrade",
               "type": "text",
               "label": {
-                "en": "Total average grade",
+                "en": "Total grade average",
                 "nl": "Cijfergemiddelde"
               },
               "attr": {"disabled": true}
@@ -122,7 +122,7 @@
               "type": "checkbox",
               "label": {
                 "en": "Say new grades",
-                "en": "Zeg nieuwe cijfers"
+                "nl": "Zeg nieuwe cijfers"
               }
             },
             {
@@ -130,7 +130,7 @@
               "type": "checkbox",
               "label": {
                 "en": "Say roster changes",
-                "en": "Zeg rooster wijzigingen"
+                "nl": "Zeg rooster wijzigingen"
               }
             }
           ]
@@ -222,8 +222,8 @@
           {
           "name":"name",
             "title": {
-              "en":"student",
-              "nl":"student"
+              "en":"name",
+              "nl":"naam"
             }
           },
           {

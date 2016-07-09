@@ -548,8 +548,8 @@ function getDayRoster(credentials, date, callback) {
           beginTime   : null,
           endHour     : null,
           endTime     : null,
-          description : null,
-          content     : null,
+          description : "",
+          content     : "",
           fullDay     : null,
           lessons     : []
         };
