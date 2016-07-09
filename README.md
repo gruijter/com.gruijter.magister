@@ -44,6 +44,8 @@ been tested with one student, so it is very likely there will be unknown bugs :)
 ===============================================================================
 
 Version changelog
+v0.0.4 206.07.09
+Added caching of Magister object for improved performance.
 
 v0.0.3 2016.07.09
 Initial release
