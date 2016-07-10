@@ -1,5 +1,28 @@
 {
-  "title": "Hello World",
+  "today"                       : "vandaag",
+  "tomorrow"                    : "morgen",
+
+  "has no class"                : " heeft geen les ",
+  "but there is a description"  : "er is wel een omschrijving: ",
+  "the roster of"               : "het rooster van ",
+  "of"                          : " van ",
+  "starts at"                   : ", begint om ",
+  "and ends at"                 : " en is afgelopen om ",
+  "class"                       : "uur ",
+  "has been scrapped"           : ": is uitgevallen",
+
+  "homework of"                 : "Huiswerk van ",
+  "no homework"                 : " Geen huiswerk ",
+
+  "has a new grade for"         : " heeft een nieuw cijfer voor ",
+  "it's a"                      : ", een ",
+  "this one counts"             : "! Deze telt ",
+  "times"                       : " keer mee",
+  "the past 7 days"             : "de afgelopen 7 dagen",
+  "new grades of"               : "Nieuwe cijfers van ",
+  "no new grades"               : " Geen nieuwe cijfers ",
+
+
   "pair": {
       "title": "Magister school, username and password invoeren:"
     }

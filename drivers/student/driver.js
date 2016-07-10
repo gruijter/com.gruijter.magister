@@ -186,8 +186,8 @@ function startPolling(device_data){
   setTimeout(function() {         //delay http call to spread Homey load
     handleGradesData(device_data);      //get grades info first time
     intervalId2[device_data.id] = setInterval(function () {      //start polling grades info every 10 min
-    handleGradesData(device_data)       //start polling grades info every 60 min
-  }, 1000*60*60);
+    handleGradesData(device_data)       //start polling grades info every 10 min
+  }, 1000*60*10);
 }, 15000);
 
   //testen met data
@@ -310,7 +310,7 @@ function logGrade(device_data, grade){
           en: devices[device_data.id].currentCourse.classesById[grade.class.id].description
       },
       type: 'number',
-      chart: 'stepLine' // prefered, or default chart type. can be: line, area, stepLine, column, spline, splineArea, scatter
+      chart: 'scatter' // default chart type. can be: line, area, stepLine, column, spline, splineArea, scatter
   }, function callback(err , success){
       //if( err ) Homey.log(Homey.error(err)); //return Homey.error(err);
       Homey.manager('insights').createEntry( grade.class.id.toString(), parseFloat(grade.grade), logDate, function(err, success){
@@ -558,19 +558,19 @@ function getDayRoster(credentials, date, callback) {
     }
     else {
     	this.appointments(date, function (error, result) {
-        //Homey.log(result[0]);
+      //  Homey.log(result[0]);
         dayRoster = {
           beginHour   : null,
-          beginTime   : null,
+          beginTime   : new Date(0),
           endHour     : null,
-          endTime     : null,
+          endTime     : new Date(0),
           description : "",
           content     : "",
           fullDay     : null,
           lessons     : []
         };
         if (result[0]==undefined){
-          Homey.log("No lessons for this day: "+date);
+          //Homey.log("No lessons for this day: "+date);
           callback (null, dayRoster);
           return;
         };
@@ -590,7 +590,7 @@ function getDayRoster(credentials, date, callback) {
         };
 
         if ( result[0].beginBySchoolHour() == null ) {
-          Homey.log("No lessons for this day: "+date);
+          //Homey.log("No lessons for this day: "+date);
           callback (null, dayRoster);
           return;
         } else {
@@ -646,30 +646,30 @@ Homey.manager('flow').on('action.sayGrades', function( callback, args ){
 function sayRoster (args) {
   if (args.when == "today"){
     var requested_roster = devices[args.device_data.id].dayRosterToday;
-    var requested_day = "vandaag";
+    var requested_day = __("today");
   }
   else {
     var requested_roster = devices[args.device_data.id].dayRosterTomorrow;
-    var requested_day = "morgen";
+    var requested_day = __("tomorrow");
   };
-  Homey.log(requested_roster);
+  //Homey.log(requested_roster);
   if (requested_roster.beginHour == null ){
-    Homey.manager('speech-output').say( devices[args.device_data.id].name + " heeft geen les "+requested_day);
+    Homey.manager('speech-output').say( devices[args.device_data.id].name + __("has no class")+requested_day);
     if ( requested_roster.description != "" || requested_roster.content != "" ) {
-      Homey.manager('speech-output').say( "er is wel een omschrijving: " +
+      Homey.manager('speech-output').say( __("but there is a description") +
         requested_roster.description + " " + requested_roster.content);
     }
   } else {
     Homey.manager('speech-output').say(
-      "het rooster van "+ devices[args.device_data.id].name +
-      " van "+ requested_day +", begint om "+ requested_roster.beginTime.toTimeString().substr(0, 5) +
-      " en is afgelopen om " + requested_roster.endTime.toTimeString().substr(0, 5)
+      __("the roster of")+ devices[args.device_data.id].name +
+      __("of")+ requested_day +__("starts at")+ requested_roster.beginTime.toTimeString().substr(0, 5) +
+      __("and ends at") + requested_roster.endTime.toTimeString().substr(0, 5)
     );
     requested_roster.lessons.forEach(function(currentLesson,index,arr){
       if (currentLesson.scrapped == true){
-        Homey.manager('speech-output').say("uur "+currentLesson.hour+": is uitgevallen");
+        Homey.manager('speech-output').say(__("class")+currentLesson.hour+__("has been scrapped"));
       } else {
-        Homey.manager('speech-output').say("uur "+currentLesson.hour+": "+currentLesson.class)
+        Homey.manager('speech-output').say(__("class")+currentLesson.hour+": "+currentLesson.class)
         }
     })
   }
@@ -678,15 +678,15 @@ function sayRoster (args) {
 function sayHomework (args) {
   if (args.when == "today"){
     var requested_roster = devices[args.device_data.id].dayRosterToday;
-    var requested_day = "vandaag";
+    var requested_day = __("today");
   }
   else {
     var requested_roster = devices[args.device_data.id].dayRosterTomorrow;
-    var requested_day = "morgen";
+    var requested_day = __("tomorrow");
   };
-  Homey.log(requested_roster.lessons);
+  //Homey.log(requested_roster.lessons);
   Homey.manager('speech-output').say(
-    "Huiswerk van "+ devices[args.device_data.id].name + " voor "+ requested_day
+    __("homework of")+ devices[args.device_data.id].name + __("of")+ requested_day
   );
   var homework = false;
   requested_roster.lessons.forEach(function(currentLesson,index,arr){
@@ -696,7 +696,7 @@ function sayHomework (args) {
     }
   });
   if (homework==false){
-    Homey.manager('speech-output').say(" Geen huiswerk "+requested_day);
+    Homey.manager('speech-output').say(__("no homework")+requested_day);
   };
 }
 
@@ -704,36 +704,36 @@ function sayGrades (args) {
   if (args.when == "last"){
     var lastGrade=args.device_data.grades.pop();
     Homey.manager('speech-output').say(
-      devices[args.device_data.id].name + " heeft een nieuw cijfer voor "+
+      devices[args.device_data.id].name + __("has a new grade for")+
       devices[args.device_data.id].currentCourse.classesById[lastGrade.class.id].description +
-      ", een " + lastGrade.grade + "! Deze telt " + lastGrade.weight + " keer mee"
+      __("it's a") + lastGrade.grade + __("this one counts") + lastGrade.weight + __("times")
     );
     return;
   };
   if (args.when == "today"){
     var requested_period = new Date();
     requested_period.setDate(requested_period.getDate()-1);
-    var requested_day = "vandaag";
+    var requested_day = __("today");
   };
   if (args.when == "week"){
     var requested_period = new Date();
     requested_period.setDate(requested_period.getDate()-7);
-    var requested_day = "de afgelopen 7 dagen";
+    var requested_day = __("the past 7 days");
   };
-  Homey.log("saying grades since " + requested_period);
+  //Homey.log("saying grades since " + requested_period);
   Homey.manager('speech-output').say(
-    "Nieuwe cijfers van "+ devices[args.device_data.id].name + " voor "+ requested_day
+    __("new grades of")+ devices[args.device_data.id].name + __("of")+ requested_day
   );
   var newGrades = false;
   devices[args.device_data.id].grades.forEach(function(currentGrade,index,arr){
     if (currentGrade.dateFilledIn >= requested_period){
       newGrades = true;
       Homey.manager('speech-output').say( devices[args.device_data.id].currentCourse.classesById[currentGrade.class.id].description +
-        ", een " + currentGrade.grade + "! Deze telt " + currentGrade.weight + " keer mee"
+        __("it's a") + currentGrade.grade + __("this one counts") + currentGrade.weight + __("times")
       );
     }
   });
   if (newGrades==false){
-    Homey.manager('speech-output').say(" Geen nieuwe cijfers "+requested_day);
+    Homey.manager('speech-output').say(__("no new grades")+requested_day);
   };
 }

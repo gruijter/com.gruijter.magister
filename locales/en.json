@@ -1,5 +1,27 @@
 {
-  "title": "Hello World",
+  "today"                       : "today",
+  "tomorrow"                    : "tomorrow",
+
+  "has no class"                : " has no class ",
+  "but there is a description"  : "but there is a description: ",
+  "the roster of"               : "the roster of ",
+  "of"                          : " of ",
+  "starts at"                   : ", starts at ",
+  "and ends at"                 : " and ends at ",
+  "class"                       : "class ",
+  "has been scrapped"           : ": has been scrapped",
+
+  "homework of"                 : "homework of ",
+  "no homework"                 : " no homework ",
+
+  "has a new grade for"         : " has a new grade for ",
+  "it's a"                      : ", a ",
+  "this one counts"             : "! this one counts ",
+  "times"                       : " times",
+  "the past 7 days"             : "the past 7 days",
+  "new grades of"               : "new grades of ",
+  "no new grades"               : " no new grades ",
+
   "pair": {
       "title": "Please enter your Magister school, username and password:"
     }
