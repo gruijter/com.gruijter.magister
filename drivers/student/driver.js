@@ -341,7 +341,7 @@ function calcAverageGrade (device_data) {
 
 function handleDayRosterToday(device_data, date){
   getDayRoster(devices[device_data.id].credentials, date, function (error, result){
-    if (!error) {
+    if (!error && result!={}) {
       //Homey.log(JSON.stringify(result));
       if ( JSON.stringify(result)!=JSON.stringify(devices[device_data.id].dayRosterToday) ) {
         Homey.log("dayroster today has changed");
@@ -372,7 +372,7 @@ function handleDayRosterToday(device_data, date){
 
 function handleDayRosterTomorrow(device_data, date){
   getDayRoster(devices[device_data.id].credentials, date, function (error, result){
-    if (!error) {
+    if (!error&& result!={}) {
       if (JSON.stringify(result)!=JSON.stringify(devices[device_data.id].dayRosterTomorrow) ) {
         Homey.log("dayroster tomorrow has changed");
         devices[device_data.id].dayRosterTomorrow=result;

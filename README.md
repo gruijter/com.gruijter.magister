@@ -40,6 +40,6 @@ with one student, so it is very likely there will be unknown bugs :)
 ===============================================================================
 
 Version changelog
-v0.0.5 2016.07.11 Improved handling of unexpected datareturn from Magister
+v0.0.6 2016.07.11 Improved handling of unexpected datareturn from Magister
 v0.0.4 2016.07.10 Added caching of Magister object for improved performance
 v0.0.3 2016.07.09 Initial release
