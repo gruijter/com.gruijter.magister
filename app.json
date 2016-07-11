@@ -132,6 +132,14 @@
                 "en": "Say roster changes",
                 "nl": "Zeg rooster wijzigingen"
               }
+            },
+            {
+              "id": "fetchAllGrades",
+              "type": "checkbox",
+              "label": {
+                "en": "One time fetch all grades for insights",
+                "nl": "Eenmalig alle cijfers ophalen voor insights"
+              }
             }
           ]
         }

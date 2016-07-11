@@ -90,6 +90,13 @@ module.exports.settings = function(device_data, newSettingsObj, oldSettingsObj, 
         school		: result.magisterSchool.name,
         studentName	: result.fullName
       }
+      if (newSettingsObj.fetchAllGrades==true){
+        Homey.log("fetching all grades for Insights")
+        Homey.log(device_data);
+        devices[device_data.id].lastGradeDateFilledIn=0;
+        handleGradesData(device_data);
+      };
+      settings.fetchAllGrades=false;
       module.exports.setSettings( device_data, settings, function( err, settings ){
             // ... dunno what to do here, think nothing...
       });
