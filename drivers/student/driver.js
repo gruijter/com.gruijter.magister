@@ -185,9 +185,9 @@ function startPolling(device_data){
 
   setTimeout(function() {         //delay http call to spread Homey load
     handleGradesData(device_data);      //get grades info first time
-    intervalId2[device_data.id] = setInterval(function () {      //start polling grades info every 10 min
-    handleGradesData(device_data)       //start polling grades info every 10 min
-  }, 1000*60*10);
+    intervalId2[device_data.id] = setInterval(function () {      //start polling grades info every 60 min
+    handleGradesData(device_data)
+  }, 1000*60*60);
 }, 15000);
 
   //testen met data
@@ -521,19 +521,25 @@ function getGrades(credentials, callback) {
           //console.log(result);
         	result.grades(function (error, result) {
             //console.log(result);
-            for(var index in result) {
-              //console.log(result[index]);
-              grade = {
-                id: result[index].type().id(),   //e.g. 284587
-                class: result[index].class(),   //e.g. { id: 532518, abbreviation: 'ne', description: '' }
-                period: result[index].gradePeriod(),  //e.g. { id: 3117, name: 'T2' }
-                testDate: result[index].testDate(), //e.g. Tue Nov 17 2015 00:00:00 GMT+0100 (CET)
-                dateFilledIn: result[index].dateFilledIn(),  //e.g. Tue Mar 29 2016 11:26:10 GMT+0200 (West-Europa (zomertijd))
-                description: result[index].description(), //e.g. SO Spelling H1-4
-                grade: result[index].grade().replace(',', '.'),  //e.g. 7.2
-                weight: result[index].weight()  //e.g. 2
-              };
-              grades.push(grade);
+            if (result!=undefined) {
+              for(var index in result) {
+                //console.log(result[index]);
+                grade = {
+                  id: result[index].type().id(),   //e.g. 284587
+                  class: result[index].class(),   //e.g. { id: 532518, abbreviation: 'ne', description: '' }
+                  period: result[index].gradePeriod(),  //e.g. { id: 3117, name: 'T2' }
+                  testDate: result[index].testDate(), //e.g. Tue Nov 17 2015 00:00:00 GMT+0100 (CET)
+                  dateFilledIn: result[index].dateFilledIn(),  //e.g. Tue Mar 29 2016 11:26:10 GMT+0200 (West-Europa (zomertijd))
+                  description: result[index].description(), //e.g. SO Spelling H1-4
+                  grade: result[index].grade().replace(',', '.'),  //e.g. 7.2
+                  weight: result[index].weight()  //e.g. 2
+                };
+                grades.push(grade);
+              }
+            } else {
+              Homey.log("there are no grades available");
+              callback ("there are no grades available", null);
+              return;
             }
             //console.log(grades);
             callback (null, grades);
@@ -568,6 +574,11 @@ function getDayRoster(credentials, date, callback) {
           content     : "",
           fullDay     : null,
           lessons     : []
+        };
+        if (result==undefined){
+          //Homey.log("No lessons for this day: "+date);
+          callback (null, dayRoster);
+          return;
         };
         if (result[0]==undefined){
           //Homey.log("No lessons for this day: "+date);
