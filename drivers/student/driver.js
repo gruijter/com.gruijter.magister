@@ -46,7 +46,7 @@ module.exports.deleted = function(device_data, callback) {
   clearInterval(intervalId3[device_data.id]); //end polling of device for day roster
   setTimeout(function() {         //wait to let current poll finish
     delete devices[device_data.id];
-  },30000)
+  },10000)
   callback(null, true);
 };
 
@@ -186,14 +186,20 @@ function startPolling(device_data){
   setTimeout(function() {         //delay http call to spread Homey load
     handleCourseData(device_data);     //get schoolyear courseInfo first time
     intervalId1[device_data.id] = setInterval(function () {      //start polling schoolyear courseInfo every 24 hrs
-    handleCourseData(device_data)
+      if (device_data!=undefined){
+        handleCourseData(device_data);
+      };
     }, 1000*60*60*24);
   }, 5000);
 
   setTimeout(function() {         //delay http call to spread Homey load
-    handleGradesData(device_data);      //get grades info first time
+    if (device_data!=undefined){
+      handleGradesData(device_data);      //get grades info first time
+    };
     intervalId2[device_data.id] = setInterval(function () {      //start polling grades info every 60 min
-    handleGradesData(device_data)
+      if (device_data!=undefined){
+        handleGradesData(device_data);
+      };
   }, 1000*60*60);
 }, 15000);
 
@@ -205,9 +211,13 @@ function startPolling(device_data){
   tomorrow.setDate(today.getDate()+1);
 
   setTimeout(function() {                             //delay http call to spread Homey load
-    handleDayRosterToday(device_data, today);         //get dayRosterToday info first time
+    if (device_data!=undefined){
+      handleDayRosterToday(device_data, today);         //get dayRosterToday info first time
+    };
     setTimeout(function() {                           //delay http call to spread Homey load
-      handleDayRosterTomorrow(device_data, tomorrow)  //get dayRosterTomorrow info first time
+      if (device_data!=undefined){
+        handleDayRosterTomorrow(device_data, tomorrow);  //get dayRosterTomorrow info first time
+      };
     }, 10000);
     intervalId3[device_data.id] = setInterval(function () {      //start polling dayRoster info every 10 min
       longAgo = new Date();
@@ -215,9 +225,13 @@ function startPolling(device_data){
       today = new Date(longAgo);
       tomorrow = new Date(today);
       tomorrow.setDate(today.getDate()+1);
-      handleDayRosterToday(device_data, today);
+      if (device_data!=undefined){
+        handleDayRosterToday(device_data, today);
+      };
       setTimeout(function() {         //delay http call to spread Homey load
-        handleDayRosterTomorrow(device_data, tomorrow)
+        if (device_data!=undefined){
+          handleDayRosterTomorrow(device_data, tomorrow);
+        };
       }, 20000);
     }, 1000*60*10);
   }, 25000);
@@ -249,7 +263,7 @@ function handleCourseData(device_data){
 
 function handleGradesData(device_data){
   getGrades(devices[device_data.id].credentials, function (error, result){
-    if (result!=null) {
+    if (result!=null && result!=[]) {
       for (var index in result) {
         if (result[index].dateFilledIn > devices[device_data.id].lastGradeDateFilledIn) {
           Homey.log(devices[device_data.id].name + " has a new grade for: " +
@@ -281,7 +295,7 @@ function handleGradesData(device_data){
             null,
             devices[device_data.id].homey_device
           );
-        }
+        };
       };
       var datesFilledIn = ( result.map(function (g) {       //get an array of all dateFilledIn
           return Date.parse(g.dateFilledIn);
@@ -350,7 +364,7 @@ function handleDayRosterToday(device_data, date){
   getDayRoster(devices[device_data.id].credentials, date, function (error, result){
     if (!error && result!={}) {
       //Homey.log(JSON.stringify(result));
-      if ( JSON.stringify(result)!=JSON.stringify(devices[device_data.id].dayRosterToday) ) {
+      if ( JSON.stringify(result)!=JSON.stringify(devices[device_data.id].dayRosterToday) && result.date!=devices[device_data.id].dayRosterToday.date) {
         Homey.log("dayroster today has changed");
         // Trigger flow for roster_changed
         Homey.manager('flow').triggerDevice('roster_changed', {
@@ -380,7 +394,7 @@ function handleDayRosterToday(device_data, date){
 function handleDayRosterTomorrow(device_data, date){
   getDayRoster(devices[device_data.id].credentials, date, function (error, result){
     if (!error&& result!={}) {
-      if (JSON.stringify(result)!=JSON.stringify(devices[device_data.id].dayRosterTomorrow) ) {
+      if (JSON.stringify(result)!=JSON.stringify(devices[device_data.id].dayRosterTomorrow) && result.date!=devices[device_data.id].dayRosterToday.date ) {
         Homey.log("dayroster tomorrow has changed");
         devices[device_data.id].dayRosterTomorrow=result;
         // say the new roster if selected in settings.
@@ -536,7 +550,7 @@ function getGrades(credentials, callback) {
                   class: result[index].class(),   //e.g. { id: 532518, abbreviation: 'ne', description: '' }
                   period: result[index].gradePeriod(),  //e.g. { id: 3117, name: 'T2' }
                   testDate: result[index].testDate(), //e.g. Tue Nov 17 2015 00:00:00 GMT+0100 (CET)
-                  dateFilledIn: result[index].dateFilledIn(),  //e.g. Tue Mar 29 2016 11:26:10 GMT+0200 (West-Europa (zomertijd))
+                  dateFilledIn: new Date(Date.parse(result[index].dateFilledIn())),  //e.g. Tue Mar 29 2016 11:26:10 GMT+0200 (West-Europa (zomertijd))
                   description: result[index].description(), //e.g. SO Spelling H1-4
                   grade: result[index].grade().replace(',', '.'),  //e.g. 7.2
                   weight: result[index].weight()  //e.g. 2
@@ -573,6 +587,7 @@ function getDayRoster(credentials, date, callback) {
     	this.appointments(date, function (error, result) {
       //  Homey.log(result[0]);
         dayRoster = {
+          date        : date,
           beginHour   : null,
           beginTime   : new Date(0),
           endHour     : null,
