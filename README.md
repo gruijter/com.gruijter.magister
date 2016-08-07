@@ -36,6 +36,12 @@ Insights-logging of all previous grades of the present schoolyear is theoretical
 possible, but due to Homey limitations not implemented. I hope that in a next
 Homey firmware update this feature can be added.
 
+Donate:
+If you like the app you can show your appreciation by posting it in the forum,
+and if you really like it you can donate. Feature requests can also be placed on
+the forum.
+[![Paypal donate][pp-donate-image]][pp-donate-link]
+
 ===============================================================================
 
 Version changelog
@@ -48,3 +54,6 @@ v0.0.6  2016.07.11 Improved handling of unexpected datareturn from Magister
 v0.0.4  2016.07.10 Added caching of Magister object for improved performance
 v0.0.3  2016.07.09 Initial release
 ```
+
+[pp-donate-link]: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YGTW25KRKEADE
+[pp-donate-image]: https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif
