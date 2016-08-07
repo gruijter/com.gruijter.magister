@@ -40,6 +40,7 @@ Homey firmware update this feature can be added.
 
 Version changelog
 ```
+v0.0.9  2016.08.07 Modified for compatibility with Homey Firmware 0.9+.
 v0.0.8  2016.07.13 Suppress roster change event at midnight. Modified grade
         change logging. Improved handling of deleted student.
 v0.0.7  2016.07.11 Added fetch all grades for insights in setup

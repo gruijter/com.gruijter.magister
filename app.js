@@ -1,3 +1,3 @@
 "use strict";
 
-console.log("app.js started");
+Homey.log("app.js started");

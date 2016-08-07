@@ -46,7 +46,8 @@
                 "en": "Studentname",
                 "nl": "Studentnaam"
               },
-              "attr": {"disabled": true}
+              "attr": {"disabled": true},
+              "value": "student"
             },
             {
               "id": "period",
@@ -55,7 +56,8 @@
                 "en": "Schoolperiod",
                 "nl": "Schooljaar"
               },
-              "attr": {"disabled": true}
+              "attr": {"disabled": true},
+              "value": "schooljaar"
             },
             {
               "id": "type_group",
@@ -64,7 +66,8 @@
                 "en": "Education type and group",
                 "nl": "Schooltype en klas"
               },
-              "attr": {"disabled": true}
+              "attr": {"disabled": true},
+              "value": "type en groep"
             },
             {
               "id": "totalAverageGrade",
@@ -73,7 +76,8 @@
                 "en": "Total grade average",
                 "nl": "Cijfergemiddelde"
               },
-              "attr": {"disabled": true}
+              "attr": {"disabled": true},
+              "value": "0"
             }
           ]
         },
@@ -90,7 +94,8 @@
               "label": {
                 "en": "School",
                 "nl": "School"
-              }
+              },
+              "value": "school"
             },
             {
               "id": "username",
@@ -98,7 +103,8 @@
               "label": {
                 "en": "Username",
                 "nl": "Gebruikersnaam"
-              }
+              },
+              "value": "gebruikersnaam"
             },
             {
               "id": "password",
@@ -106,7 +112,8 @@
               "label": {
                 "en": "Password",
                 "nl": "Wachtwoord"
-              }
+              },
+              "value": "wachtwoord"
             }
           ]
         },
@@ -123,7 +130,8 @@
               "label": {
                 "en": "Say new grades",
                 "nl": "Zeg nieuwe cijfers"
-              }
+              },
+              "value": false
             },
             {
               "id": "notifyRosterChange",
@@ -131,7 +139,8 @@
               "label": {
                 "en": "Say roster changes",
                 "nl": "Zeg rooster wijzigingen"
-              }
+              },
+              "value": false
             },
             {
               "id": "fetchAllGrades",
@@ -139,7 +148,8 @@
               "label": {
                 "en": "One time fetch all grades for insights",
                 "nl": "Eenmalig alle cijfers ophalen voor insights"
-              }
+              },
+              "value": false
             }
           ]
         }
