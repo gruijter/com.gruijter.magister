@@ -49,6 +49,8 @@ the forum.
 
 Version changelog
 ```
+v0.0.10 2016.08.24 Bugfix circular JSON stringify. Fix for roster change
+        event. Fix no grades detection.
 v0.0.9  2016.08.07 Modified for compatibility with Homey Firmware 0.9+.
 v0.0.8  2016.07.13 Suppress roster change event at midnight. Modified grade
         change logging. Improved handling of deleted student.

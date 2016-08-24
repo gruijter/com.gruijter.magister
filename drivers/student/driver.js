@@ -3,6 +3,7 @@
 Homey.log("entering driver.js");
 
 var Magister = require('magister.js');
+var util = require('util');
 var devices = {};
 var intervalId1 = {};   //polling of device for course info
 var intervalId2 = {};   //polling of device for grades
@@ -244,9 +245,9 @@ function startPolling(device_data){
 function handleCourseData(device_data){
   getCourse(devices[device_data.id].credentials, function (error, result){
     if (result!=null) {
-      if ( JSON.stringify(result)!=JSON.stringify(devices[device_data.id].currentCourse) ) {
+//      Homey.log(util.inspect(result));
+      if ( util.inspect(result)!=util.inspect(devices[device_data.id].currentCourse) ) {
         Homey.log("course has changed");
-        //Homey.log(result);
         //Homey.manager('speech-output').say( "Er is iets veranderd in Magister: het schooljaar" );
         devices[device_data.id].currentCourse=result;
         var settings = {
@@ -363,8 +364,9 @@ function calcAverageGrade (device_data) {
 function handleDayRosterToday(device_data, date){
   getDayRoster(devices[device_data.id].credentials, date, function (error, result){
     if (!error && result!={}) {
-      //Homey.log(JSON.stringify(result));
-      if ( JSON.stringify(result)!=JSON.stringify(devices[device_data.id].dayRosterToday) && result.date!=devices[device_data.id].dayRosterToday.date) {
+//      Homey.log(util.inspect(result));
+      if (util.inspect(result)!=util.inspect(devices[device_data.id].dayRosterToday)
+        && result.date==devices[device_data.id].dayRosterToday.date || devices[device_data.id].dayRosterToday.date==undefined) {
         Homey.log("dayroster today has changed");
         // Trigger flow for roster_changed
         Homey.manager('flow').triggerDevice('roster_changed', {
@@ -394,7 +396,9 @@ function handleDayRosterToday(device_data, date){
 function handleDayRosterTomorrow(device_data, date){
   getDayRoster(devices[device_data.id].credentials, date, function (error, result){
     if (!error&& result!={}) {
-      if (JSON.stringify(result)!=JSON.stringify(devices[device_data.id].dayRosterTomorrow) && result.date!=devices[device_data.id].dayRosterToday.date ) {
+//      Homey.log(util.inspect(result));
+      if (util.inspect(result)!=util.inspect(devices[device_data.id].dayRosterTomorrow)
+        && result.date==devices[device_data.id].dayRosterTomorrow.date || devices[device_data.id].dayRosterTomorrow.date==undefined) {
         Homey.log("dayroster tomorrow has changed");
         devices[device_data.id].dayRosterTomorrow=result;
         // say the new roster if selected in settings.
@@ -539,10 +543,10 @@ function getGrades(credentials, callback) {
           return;
         }
         else {
-          //console.log(result);
+  //        Homey.log(util.inspect(result));
         	result.grades(function (error, result) {
-            //console.log(result);
-            if (result!=undefined) {
+  //          Homey.log(util.inspect(result));
+            if (result!=undefined && result[0]!=undefined) {
               for(var index in result) {
                 //console.log(result[index]);
                 grade = {
@@ -586,6 +590,7 @@ function getDayRoster(credentials, date, callback) {
     else {
     	this.appointments(date, function (error, result) {
       //  Homey.log(result[0]);
+        date.setHours(0,0,0,0);
         dayRoster = {
           date        : date,
           beginHour   : null,
