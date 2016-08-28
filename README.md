@@ -27,7 +27,6 @@ Setup a student via "Devices" and enter the schoolname, student username and
 student password. Please note: the parent credentials cannot be used at this stage.
 
 ### Known limitations: ###
-
 Since Magister is used in the Dutch school system, the app is optimized for Dutch
 language. Magister information provided by the school is usually in Dutch.
 Only student credentials can be used at this stage, not the parents' credentials.
@@ -45,13 +44,15 @@ the forum.
 
 [![Paypal donate][pp-donate-image]][pp-donate-link]
 
+
 ===============================================================================
 
 Version changelog
 ```
-v0.0.10 2016.08.24 Bugfix circular JSON stringify. Fix for roster change
-        event. Fix no grades detection.
-v0.0.9  2016.08.07 Modified for compatibility with Homey Firmware 0.9+.
+v0.0.10 2016.08.27 Bugfix circular JSON stringify. Fix for roster change
+        event. Fix no grades detection. Compatibility to fw 0.9.3. changed
+        error handling of pupil during pairing.
+v0.0.9  2016.08.07 Modified for compatibility with Homey Firmware 0.9+
 v0.0.8  2016.07.13 Suppress roster change event at midnight. Modified grade
         change logging. Improved handling of deleted student.
 v0.0.7  2016.07.11 Added fetch all grades for insights in setup
@@ -59,6 +60,7 @@ v0.0.6  2016.07.11 Improved handling of unexpected datareturn from Magister
 v0.0.4  2016.07.10 Added caching of Magister object for improved performance
 v0.0.3  2016.07.09 Initial release
 ```
+
 
 [forum]: https://forum.athom.com/discussion/1716
 [pp-donate-link]: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YGTW25KRKEADE

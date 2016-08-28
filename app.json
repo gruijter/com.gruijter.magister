@@ -41,42 +41,38 @@
           "children": [
             {
               "id": "studentName",
-              "type": "text",
+              "type": "label",
               "label": {
                 "en": "Studentname",
                 "nl": "Studentnaam"
               },
-              "attr": {"disabled": true},
               "value": "student"
             },
             {
               "id": "period",
-              "type": "text",
+              "type": "label",
               "label": {
                 "en": "Schoolperiod",
                 "nl": "Schooljaar"
               },
-              "attr": {"disabled": true},
               "value": "schooljaar"
             },
             {
               "id": "type_group",
-              "type": "text",
+              "type": "label",
               "label": {
                 "en": "Education type and group",
                 "nl": "Schooltype en klas"
               },
-              "attr": {"disabled": true},
               "value": "type en groep"
             },
             {
               "id": "totalAverageGrade",
-              "type": "text",
+              "type": "label",
               "label": {
                 "en": "Total grade average",
                 "nl": "Cijfergemiddelde"
               },
-              "attr": {"disabled": true},
               "value": "0"
             }
           ]

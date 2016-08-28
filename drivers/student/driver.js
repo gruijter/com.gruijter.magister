@@ -446,7 +446,8 @@ function getPupil(credentials, callback) {
   getMagister(credentials).ready(function (error) {
     if (error) {
       Homey.log("Error connecting: ", error.message);
-      callback(error.message, null);
+      Homey.log(error);
+      callback(error, null);
       return
     }
     else {
