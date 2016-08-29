@@ -49,9 +49,10 @@ the forum.
 
 Version changelog
 ```
-v0.0.10 2016.08.27 Bugfix circular JSON stringify. Fix for roster change
-        event. Fix no grades detection. Compatibility to fw 0.9.3. changed
-        error handling of pupil during pairing.
+v0.0.10 2016.08.29 Bugfix circular JSON stringify. Fix for roster change
+        event. Fix no grades detection. Compatibility to fw 0.9.3. Changed
+        error handling of pupil during pairing. Catch 'OnvoldoendePrivileges'
+        error.
 v0.0.9  2016.08.07 Modified for compatibility with Homey Firmware 0.9+
 v0.0.8  2016.07.13 Suppress roster change event at midnight. Modified grade
         change logging. Improved handling of deleted student.

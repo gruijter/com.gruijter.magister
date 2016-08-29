@@ -444,32 +444,34 @@ function getPupil(credentials, callback) {
     return;
   }
   getMagister(credentials).ready(function (error) {
-    if (error) {
-      Homey.log("Error connecting: ", error.message);
-      Homey.log(error);
-      callback(error, null);
-      return
+    if (error!=null) {
+        if (error.fouttype === 'OnvoldoendePrivileges') {
+          this._ready = true;
+        } else {
+          Homey.log("Error connecting: ", error.message);
+          Homey.log(error);
+          callback(error, null);
+          return;
+        }
+      };
+    Homey.log(this);
+    var test;
+    if( this.profileInfo().birthDate() != undefined){
+      var student = {
+        id: this.profileInfo().id(),
+        firstName: this.profileInfo().firstName(),
+        namePrefix: this.profileInfo().namePrefix(),
+        lastName: this.profileInfo().lastName(),
+        fullName: this.profileInfo().fullName(),
+        magisterSchool: this.magisterSchool
+      };
+      callback(null, student);
+      return;
     }
     else {
-      Homey.log(this);
-      var test;
-      if( this.profileInfo().birthDate() != undefined){
-        var student = {
-          id: this.profileInfo().id(),
-          firstName: this.profileInfo().firstName(),
-          namePrefix: this.profileInfo().namePrefix(),
-          lastName: this.profileInfo().lastName(),
-          fullName: this.profileInfo().fullName(),
-          magisterSchool: this.magisterSchool
-        };
-        callback(null, student);
-        return;
-      }
-      else {
-        Homey.log("Error connecting: login cannot be from a parent");
-        callback("login must be from a student (not a parent)", null);
-        return
-      }
+      Homey.log("Error connecting: login cannot be from a parent");
+      callback("login must be from a student (not a parent)", null);
+      return
     }
   });
 }
@@ -478,48 +480,51 @@ function getPupil(credentials, callback) {
 function getCourse(credentials, callback) {
   Homey.log("getting course info");
   getMagister(credentials).ready(function (error) {
-    if (error) {
-      Homey.log("Error getting course: "+ error.message);
-      callback(error.message, null);
-      return;
-    }
-    else {
-      this.currentCourse(function (error, result) {
-        if (error) {
-          //Homey.log("got error: "+error);
-          callback(error.message, null);
+    if (error!=null) {
+        if (error.fouttype === 'OnvoldoendePrivileges') {
+          this._ready = true;
+        } else {
+          Homey.log("Error connecting: ", error.message);
+          Homey.log(error);
+          callback(error, null);
+          return;
         }
-        else {
-          var courseInfo = {
-            period: result.schoolPeriod(), //e.g. 1516
-            begin: result.begin(),  //e.g. Sat Aug 01 2015 00:00:00 GMT+0200 (West-Europa (zomertijd))
-            end: result.end(),    //e.g. Sun Jul 31 2016 00:00:00 GMT+0200 (West-Europa (zomertijd))
-            type: result.type(),   // e.g. { id: 1346, description: '1 gymnasium' },
-            group: result.group(),   // e.g. { id: 6150, description: '1gb', locationId: 0 },
-            classesById: {}
-          };
-
-          result.classes(function(error, courseClasses) {
-            if (error) {
-              Homey.log(error.message);
-              callback(error.message, null);
-              return;
-            } else {
-            	for (var courseClass of courseClasses) {
-            		courseInfo.classesById[courseClass.id()] = {
-                  id: courseClass.id(),                       //e.g. 532518
-                  abbreviation: courseClass.abbreviation(),   //e.g. 'ne'
-                  description: courseClass.description(),     //e.g. 'Nederlandse taal'
-                  number: courseClass.number()                //e.g. 1
-                };
-            	};
-              //Homey.log(courseInfo);
-              callback(null, courseInfo);
-            };
-          });
+      };
+    this.currentCourse(function (error, result) {
+      if (error) {
+        //Homey.log("got error: "+error);
+        callback(error.message, null);
+      }
+      else {
+        var courseInfo = {
+          period: result.schoolPeriod(), //e.g. 1516
+          begin: result.begin(),  //e.g. Sat Aug 01 2015 00:00:00 GMT+0200 (West-Europa (zomertijd))
+          end: result.end(),    //e.g. Sun Jul 31 2016 00:00:00 GMT+0200 (West-Europa (zomertijd))
+          type: result.type(),   // e.g. { id: 1346, description: '1 gymnasium' },
+          group: result.group(),   // e.g. { id: 6150, description: '1gb', locationId: 0 },
+          classesById: {}
         };
-    	});
-    }
+
+        result.classes(function(error, courseClasses) {
+          if (error) {
+            Homey.log(error.message);
+            callback(error.message, null);
+            return;
+          } else {
+          	for (var courseClass of courseClasses) {
+          		courseInfo.classesById[courseClass.id()] = {
+                id: courseClass.id(),                       //e.g. 532518
+                abbreviation: courseClass.abbreviation(),   //e.g. 'ne'
+                description: courseClass.description(),     //e.g. 'Nederlandse taal'
+                number: courseClass.number()                //e.g. 1
+              };
+          	};
+            //Homey.log(courseInfo);
+            callback(null, courseInfo);
+          };
+        });
+      };
+  	});
   });
 }
 
@@ -531,48 +536,51 @@ function getGrades(credentials, callback) {
   var grades = [];
 
   getMagister(credentials).ready(function (error) {
-    if (error) {
-      Homey.log("Error getting grades: "+error.message);
-      callback(error.message, null);
-      return;
-    }
-    else {
-    	this.currentCourse(function (error, result) {
-        if (error) {
-          Homey.log("Error getting currentCourse: "+error);
-          callback (error.message, null);
+    if (error!=null) {
+        if (error.fouttype === 'OnvoldoendePrivileges') {
+          this._ready = true;
+        } else {
+          Homey.log("Error connecting: ", error.message);
+          Homey.log(error);
+          callback(error, null);
           return;
         }
-        else {
-  //        Homey.log(util.inspect(result));
-        	result.grades(function (error, result) {
-  //          Homey.log(util.inspect(result));
-            if (result!=undefined && result[0]!=undefined) {
-              for(var index in result) {
-                //console.log(result[index]);
-                grade = {
-                  id: result[index].type().id(),   //e.g. 284587
-                  class: result[index].class(),   //e.g. { id: 532518, abbreviation: 'ne', description: '' }
-                  period: result[index].gradePeriod(),  //e.g. { id: 3117, name: 'T2' }
-                  testDate: result[index].testDate(), //e.g. Tue Nov 17 2015 00:00:00 GMT+0100 (CET)
-                  dateFilledIn: new Date(Date.parse(result[index].dateFilledIn())),  //e.g. Tue Mar 29 2016 11:26:10 GMT+0200 (West-Europa (zomertijd))
-                  description: result[index].description(), //e.g. SO Spelling H1-4
-                  grade: result[index].grade().replace(',', '.'),  //e.g. 7.2
-                  weight: result[index].weight()  //e.g. 2
-                };
-                grades.push(grade);
-              }
-            } else {
-              Homey.log("there are no grades available");
-              callback ("there are no grades available", null);
-              return;
+      };
+  	this.currentCourse(function (error, result) {
+      if (error) {
+        Homey.log("Error getting currentCourse: "+error);
+        callback (error.message, null);
+        return;
+      }
+      else {
+//        Homey.log(util.inspect(result));
+      	result.grades(function (error, result) {
+//          Homey.log(util.inspect(result));
+          if (result!=undefined && result[0]!=undefined) {
+            for(var index in result) {
+              //console.log(result[index]);
+              grade = {
+                id: result[index].type().id(),   //e.g. 284587
+                class: result[index].class(),   //e.g. { id: 532518, abbreviation: 'ne', description: '' }
+                period: result[index].gradePeriod(),  //e.g. { id: 3117, name: 'T2' }
+                testDate: result[index].testDate(), //e.g. Tue Nov 17 2015 00:00:00 GMT+0100 (CET)
+                dateFilledIn: new Date(Date.parse(result[index].dateFilledIn())),  //e.g. Tue Mar 29 2016 11:26:10 GMT+0200 (West-Europa (zomertijd))
+                description: result[index].description(), //e.g. SO Spelling H1-4
+                grade: result[index].grade().replace(',', '.'),  //e.g. 7.2
+                weight: result[index].weight()  //e.g. 2
+              };
+              grades.push(grade);
             }
-            //console.log(grades);
-            callback (null, grades);
-      		});
-        };
-    	});
-    }
+          } else {
+            Homey.log("there are no grades available");
+            callback ("there are no grades available", null);
+            return;
+          }
+          //console.log(grades);
+          callback (null, grades);
+    		});
+      };
+  	});
   });
 }
 
@@ -583,81 +591,84 @@ function getDayRoster(credentials, date, callback) {
   var lesson = [];
 
   getMagister(credentials).ready(function (error) {
-    if (error) {
-      Homey.log("Error getting day roster: "+ error);
-      callback(error, null);
-      return;
-    }
-    else {
-    	this.appointments(date, function (error, result) {
-      //  Homey.log(result[0]);
-        date.setHours(0,0,0,0);
-        dayRoster = {
-          date        : date,
-          beginHour   : null,
-          beginTime   : new Date(0),
-          endHour     : null,
-          endTime     : new Date(0),
-          description : "",
-          content     : "",
-          fullDay     : null,
-          lessons     : []
-        };
-        if (result==undefined){
-          //Homey.log("No lessons for this day: "+date);
-          callback (null, dayRoster);
-          return;
-        };
-        if (result[0]==undefined){
-          //Homey.log("No lessons for this day: "+date);
-          callback (null, dayRoster);
-          return;
-        };
-
-        for (var index in result) {
-          if (result[index].scrapped() == false && dayRoster.beginHour == null ) {   //get first non-scrapped schoolhour
-            dayRoster.beginHour = result[index].beginBySchoolHour();
-            dayRoster.beginTime = result[index].begin();
-            dayRoster.description = result[index].description();
-            dayRoster.content = result[index].content();
-            dayRoster.fullDay = result[index].fullDay()
-          };
-          if (result[index].scrapped() == false) {   //get last non-scrapped schoolhour
-            dayRoster.endHour = result[index].beginBySchoolHour();
-            dayRoster.endTime = result[index].end();
-          }
-        };
-
-        if ( result[0].beginBySchoolHour() == null ) {
-          //Homey.log("No lessons for this day: "+date);
-          callback (null, dayRoster);
-          return;
+    if (error!=null) {
+        if (error.fouttype === 'OnvoldoendePrivileges') {
+          this._ready = true;
         } else {
-          for(var index in result) {
-            //console.log(result[index]);
-            lesson = {
-              hour: result[index].beginBySchoolHour(), //e.g. 1
-              begin: result[index].begin(),   //e.g. Thu Jun 23 2016 08:00:00 GMT+0200 (West-Europa (zomertijd))
-              end: result[index].end(),       //e.g. Thu Jun 23 2016 14:00:00 GMT+0200 (West-Europa (zomertijd))
-              description: result[index].description(), // e.g. 'te - pri - 1gb' or 'Toetsweek'
-              content: result[index].content(),   //e.g. null or 'Maken\tblz 164: opgave 27 t/m 31' or 'Toetsweek, rooster op www.minkema.nl'
-              class: result[index].classes()[0], //e.g. 'tekenen',
-              fullDay: result[index].fullDay(), // e.g. false
-              location: result[index].location(), //e.g. 'M218',
-              teacher: result[index].teachers()[0].fullName(), //e.g. 'G. D. Lasseur'
-              scrapped: result[index].scrapped(),  //e.g. true
-              changed: result[index].changed(),   //e.g. false
-              absenceInfo: result[index].absenceInfo()  //e.g. undefined
-            };
-            //console.log(lesson);
-            dayRoster.lessons.push(lesson);
-          }
+          Homey.log("Error connecting: ", error.message);
+          Homey.log(error);
+          callback(error, null);
+          return;
         }
-        //Homey.log(dayRoster);
-        callback(null, dayRoster);
+      };
+  	this.appointments(date, function (error, result) {
+    //  Homey.log(result[0]);
+      date.setHours(0,0,0,0);
+      dayRoster = {
+        date        : date,
+        beginHour   : null,
+        beginTime   : new Date(0),
+        endHour     : null,
+        endTime     : new Date(0),
+        description : "",
+        content     : "",
+        fullDay     : null,
+        lessons     : []
+      };
+      if (result==undefined){
+        //Homey.log("No lessons for this day: "+date);
+        callback (null, dayRoster);
         return;
-    	});
-    };
+      };
+      if (result[0]==undefined){
+        //Homey.log("No lessons for this day: "+date);
+        callback (null, dayRoster);
+        return;
+      };
+
+      for (var index in result) {
+        if (result[index].scrapped() == false && dayRoster.beginHour == null ) {   //get first non-scrapped schoolhour
+          dayRoster.beginHour = result[index].beginBySchoolHour();
+          dayRoster.beginTime = result[index].begin();
+          dayRoster.description = result[index].description();
+          dayRoster.content = result[index].content();
+          dayRoster.fullDay = result[index].fullDay()
+        };
+        if (result[index].scrapped() == false) {   //get last non-scrapped schoolhour
+          dayRoster.endHour = result[index].beginBySchoolHour();
+          dayRoster.endTime = result[index].end();
+        }
+      };
+
+      if ( result[0].beginBySchoolHour() == null ) {
+        //Homey.log("No lessons for this day: "+date);
+        callback (null, dayRoster);
+        return;
+      } else {
+        for(var index in result) {
+          //console.log(result[index]);
+          lesson = {
+            hour: result[index].beginBySchoolHour(), //e.g. 1
+            begin: result[index].begin(),   //e.g. Thu Jun 23 2016 08:00:00 GMT+0200 (West-Europa (zomertijd))
+            end: result[index].end(),       //e.g. Thu Jun 23 2016 14:00:00 GMT+0200 (West-Europa (zomertijd))
+            description: result[index].description(), // e.g. 'te - pri - 1gb' or 'Toetsweek'
+            content: result[index].content(),   //e.g. null or 'Maken\tblz 164: opgave 27 t/m 31' or 'Toetsweek, rooster op www.minkema.nl'
+            class: result[index].classes()[0], //e.g. 'tekenen',
+            fullDay: result[index].fullDay(), // e.g. false
+            location: result[index].location(), //e.g. 'M218',
+            teacher: result[index].teachers()[0].fullName(), //e.g. 'G. D. Lasseur'
+            scrapped: result[index].scrapped(),  //e.g. true
+            changed: result[index].changed(),   //e.g. false
+            absenceInfo: result[index].absenceInfo()  //e.g. undefined
+          };
+          //console.log(lesson);
+          dayRoster.lessons.push(lesson);
+        }
+      }
+      //Homey.log(dayRoster);
+      callback(null, dayRoster);
+      return;
+  	});
   });
 }
 
