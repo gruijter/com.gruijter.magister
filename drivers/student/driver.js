@@ -234,7 +234,7 @@ function startPolling(device_data){
           handleDayRosterTomorrow(device_data, tomorrow);
         };
       }, 20000);
-    }, 1000*60*10);
+    }, 1000*60)*10);
   }, 25000);
 
 }  //end startPolling
@@ -364,9 +364,12 @@ function calcAverageGrade (device_data) {
 function handleDayRosterToday(device_data, date){
   getDayRoster(devices[device_data.id].credentials, date, function (error, result){
     if (!error && result!={}) {
-//      Homey.log(util.inspect(result));
-      if (util.inspect(result)!=util.inspect(devices[device_data.id].dayRosterToday)
-        && result.date==devices[device_data.id].dayRosterToday.date || devices[device_data.id].dayRosterToday.date==undefined) {
+    //  Homey.log(util.inspect(result));
+      if (devices[device_data.id].dayRosterToday.date==undefined) { //startup condition of app
+        Homey.log("app is initializing, first data is being stored");
+        devices[device_data.id].dayRosterToday=result;
+      } else if (util.inspect(result)!=util.inspect(devices[device_data.id].dayRosterToday)
+        && result.date.toSring==devices[device_data.id].dayRosterToday.date.toString) {
         Homey.log("dayroster today has changed");
         // Trigger flow for roster_changed
         Homey.manager('flow').triggerDevice('roster_changed', {
@@ -397,8 +400,11 @@ function handleDayRosterTomorrow(device_data, date){
   getDayRoster(devices[device_data.id].credentials, date, function (error, result){
     if (!error&& result!={}) {
 //      Homey.log(util.inspect(result));
-      if (util.inspect(result)!=util.inspect(devices[device_data.id].dayRosterTomorrow)
-        && result.date==devices[device_data.id].dayRosterTomorrow.date || devices[device_data.id].dayRosterTomorrow.date==undefined) {
+      if (devices[device_data.id].dayRosterTomorrow.date==undefined) { //startup condition of app
+        Homey.log("app is initializing, first data is being stored");
+        devices[device_data.id].dayRosterTomorrow=result;
+      } else if (util.inspect(result)!=util.inspect(devices[device_data.id].dayRosterTomorrow)
+        && result.date.toSring==devices[device_data.id].dayRosterTomorrow.date.toString) {
         Homey.log("dayroster tomorrow has changed");
         devices[device_data.id].dayRosterTomorrow=result;
         // say the new roster if selected in settings.
@@ -602,7 +608,7 @@ function getDayRoster(credentials, date, callback) {
         }
       };
   	this.appointments(date, function (error, result) {
-    //  Homey.log(result[0]);
+//      Homey.log(result[0]);
       date.setHours(0,0,0,0);
       dayRoster = {
         date        : date,
@@ -702,12 +708,16 @@ function sayRoster (args) {
     var requested_roster = devices[args.device_data.id].dayRosterTomorrow;
     var requested_day = __("tomorrow");
   };
-  //Homey.log(requested_roster);
+  Homey.log(requested_roster);
   if (requested_roster.beginHour == null ){
     Homey.manager('speech-output').say( devices[args.device_data.id].name + __("has no class")+requested_day);
+//    Homey.log(requested_roster.description);
+//    Homey.log(requested_roster.content);
     if ( requested_roster.description != "" || requested_roster.content != "" ) {
+      Homey.log("starting to say description");
       Homey.manager('speech-output').say( __("but there is a description") +
-        requested_roster.description + " " + requested_roster.content);
+        requested_roster.description);
+      Homey.manager('speech-output').say(requested_roster.content);
     }
   } else {
     Homey.manager('speech-output').say(

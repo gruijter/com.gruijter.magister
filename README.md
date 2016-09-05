@@ -49,6 +49,7 @@ the forum.
 
 Version changelog
 ```
+v0.0.11 2016.09.05 Improved/fixed roster change. Improved roster speech output.
 v0.0.10 2016.08.29 Bugfix circular JSON stringify. Fix for roster change
         event. Fix no grades detection. Compatibility to fw 0.9.3. Changed
         error handling of pupil during pairing. Catch 'OnvoldoendePrivileges'
