@@ -234,7 +234,7 @@ function startPolling(device_data){
           handleDayRosterTomorrow(device_data, tomorrow);
         };
       }, 20000);
-    }, 1000*60)*10);
+    }, 1000*60*10);
   }, 25000);
 
 }  //end startPolling
