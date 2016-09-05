@@ -714,10 +714,10 @@ function sayRoster (args) {
 //    Homey.log(requested_roster.description);
 //    Homey.log(requested_roster.content);
     if ( requested_roster.description != "" || requested_roster.content != "" ) {
-      Homey.log("starting to say description");
+//      Homey.log("starting to say description");
       Homey.manager('speech-output').say( __("but there is a description") +
         requested_roster.description);
-      Homey.manager('speech-output').say(requested_roster.content);
+      Homey.manager('speech-output').say(requested_roster.content.substr(0, 255));
     }
   } else {
     Homey.manager('speech-output').say(
@@ -752,7 +752,7 @@ function sayHomework (args) {
   requested_roster.lessons.forEach(function(currentLesson,index,arr){
     if (currentLesson.content != ""){
       homework = true;
-      Homey.manager('speech-output').say(currentLesson.class+": "+ currentLesson.content);
+      Homey.manager('speech-output').say(currentLesson.class+": "+ currentLesson.content.substr(0, 255));
     }
   });
   if (homework==false){
