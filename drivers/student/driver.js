@@ -72,7 +72,7 @@ module.exports.settings = function(device_data, newSettingsObj, oldSettingsObj, 
 //  });
 
   validateConnection(newSettingsObj, function(error, result) {
-    if (error) {
+    if (error || result==undefined) {
       Homey.log('Connection is invalid, ignoring new settings');
       callback( error, null ); //  settings must not be saved
       return
@@ -461,7 +461,18 @@ function getPupil(credentials, callback) {
         }
       };
     Homey.log(this);
-    var test;
+
+//testing children
+    Homey.log("testing children");
+    this.children( function (error, result){
+      Homey.log(error);
+      Homey.log(util.inspect(result));
+      if ( result!=null) {
+        Homey.log("login is from parent");
+      } else { Homey.log("login is from pupil")}
+    });
+// end testing children
+
     if( this.profileInfo().birthDate() != undefined){
       var student = {
         id: this.profileInfo().id(),
@@ -497,9 +508,12 @@ function getCourse(credentials, callback) {
         }
       };
     this.currentCourse(function (error, result) {
-      if (error) {
+      if (error || result==null) {
         //Homey.log("got error: "+error);
-        callback(error.message, null);
+        if (!error) {
+          var error = "no current course data";
+        } else {error=error.message}
+        callback(error, null);
       }
       else {
         var courseInfo = {
@@ -553,10 +567,12 @@ function getGrades(credentials, callback) {
         }
       };
   	this.currentCourse(function (error, result) {
-      if (error) {
-        Homey.log("Error getting currentCourse: "+error);
-        callback (error.message, null);
-        return;
+      if (error || result==null) {
+        //Homey.log("got error: "+error);
+        if (!error) {
+          var error = "no current course data";
+        } else {error=error.message}
+        callback(error, null);
       }
       else {
 //        Homey.log(util.inspect(result));
@@ -715,9 +731,13 @@ function sayRoster (args) {
 //    Homey.log(requested_roster.content);
     if ( requested_roster.description != "" || requested_roster.content != "" ) {
 //      Homey.log("starting to say description");
-      Homey.manager('speech-output').say( __("but there is a description") +
-        requested_roster.description);
-      Homey.manager('speech-output').say(requested_roster.content.substr(0, 255));
+      Homey.manager('speech-output').say( __("but there is a description"));
+      if (requested_roster.description!=null){
+        Homey.manager('speech-output').say(requested_roster.description);
+      }
+      if (requested_roster.content!=null){
+        Homey.manager('speech-output').say(requested_roster.content.substr(0, 255));
+      }
     }
   } else {
     Homey.manager('speech-output').say(
@@ -750,7 +770,7 @@ function sayHomework (args) {
   );
   var homework = false;
   requested_roster.lessons.forEach(function(currentLesson,index,arr){
-    if (currentLesson.content != ""){
+    if (currentLesson.content != "" && currentLesson.content != null){
       homework = true;
       Homey.manager('speech-output').say(currentLesson.class+": "+ currentLesson.content.substr(0, 255));
     }
