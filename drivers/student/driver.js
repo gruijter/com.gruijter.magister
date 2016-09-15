@@ -369,7 +369,7 @@ function handleDayRosterToday(device_data, date){
         Homey.log("app is initializing, first data is being stored");
         devices[device_data.id].dayRosterToday=result;
       } else if (util.inspect(result)!=util.inspect(devices[device_data.id].dayRosterToday)
-        && result.date.toLocaleDateString()==devices[device_data.id].dayRosterToday.date.toString) {
+        && result.date.toSring==devices[device_data.id].dayRosterToday.date.toString) {
         Homey.log("dayroster today has changed");
         // Trigger flow for roster_changed
         Homey.manager('flow').triggerDevice('roster_changed', {
@@ -404,7 +404,7 @@ function handleDayRosterTomorrow(device_data, date){
         Homey.log("app is initializing, first data is being stored");
         devices[device_data.id].dayRosterTomorrow=result;
       } else if (util.inspect(result)!=util.inspect(devices[device_data.id].dayRosterTomorrow)
-        && result.date.toLocaleDateString()==devices[device_data.id].dayRosterTomorrow.date.toString) {
+        && result.date.toSring==devices[device_data.id].dayRosterTomorrow.date.toString) {
         Homey.log("dayroster tomorrow has changed");
         devices[device_data.id].dayRosterTomorrow=result;
         // say the new roster if selected in settings.
@@ -625,8 +625,7 @@ function getDayRoster(credentials, date, callback) {
       };
   	this.appointments(date, function (error, result) {
 //      Homey.log(result[0]);
-//      date.setHours(0,0,0,0);
-      date=date.toLocaleDateString();
+      date.setHours(0,0,0,0);
       dayRoster = {
         date        : date,
         beginHour   : null,
