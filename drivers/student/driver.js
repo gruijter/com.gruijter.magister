@@ -364,12 +364,11 @@ function calcAverageGrade (device_data) {
 function handleDayRosterToday(device_data, date){
   getDayRoster(devices[device_data.id].credentials, date, function (error, result){
     if (!error && result!={}) {
-    //  Homey.log(util.inspect(result));
+//      Homey.log(util.inspect(result));
       if (devices[device_data.id].dayRosterToday.date==undefined) { //startup condition of app
         Homey.log("app is initializing, first data is being stored");
-        devices[device_data.id].dayRosterToday=result;
       } else if (util.inspect(result)!=util.inspect(devices[device_data.id].dayRosterToday)
-        && result.date.toSring==devices[device_data.id].dayRosterToday.date.toString) {
+        && result.date==devices[device_data.id].dayRosterToday.date) {
         Homey.log("dayroster today has changed");
         // Trigger flow for roster_changed
         Homey.manager('flow').triggerDevice('roster_changed', {
@@ -392,6 +391,7 @@ function handleDayRosterToday(device_data, date){
           sayRoster(args);
         };
       };
+      devices[device_data.id].dayRosterToday=result;
     };
   });
 };
@@ -402,9 +402,8 @@ function handleDayRosterTomorrow(device_data, date){
 //      Homey.log(util.inspect(result));
       if (devices[device_data.id].dayRosterTomorrow.date==undefined) { //startup condition of app
         Homey.log("app is initializing, first data is being stored");
-        devices[device_data.id].dayRosterTomorrow=result;
       } else if (util.inspect(result)!=util.inspect(devices[device_data.id].dayRosterTomorrow)
-        && result.date.toSring==devices[device_data.id].dayRosterTomorrow.date.toString) {
+        && result.date==devices[device_data.id].dayRosterTomorrow.date) {
         Homey.log("dayroster tomorrow has changed");
         devices[device_data.id].dayRosterTomorrow=result;
         // say the new roster if selected in settings.
@@ -416,6 +415,7 @@ function handleDayRosterTomorrow(device_data, date){
           sayRoster(args);
         };
       };
+      devices[device_data.id].dayRosterTomorrow=result;
     };
   });
 };
@@ -611,7 +611,6 @@ function getDayRoster(credentials, date, callback) {
   Homey.log("getting roster info for: "+ date);
   var dayRoster = {};
   var lesson = [];
-
   getMagister(credentials).ready(function (error) {
     if (error!=null) {
         if (error.fouttype === 'OnvoldoendePrivileges') {
@@ -625,9 +624,8 @@ function getDayRoster(credentials, date, callback) {
       };
   	this.appointments(date, function (error, result) {
 //      Homey.log(result[0]);
-      date.setHours(0,0,0,0);
       dayRoster = {
-        date        : date,
+        date        : date.toDateString(),
         beginHour   : null,
         beginTime   : new Date(0),
         endHour     : null,
