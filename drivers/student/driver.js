@@ -580,9 +580,10 @@ function getGrades(credentials, callback) {
 //          Homey.log(util.inspect(result));
           if (result!=undefined && result[0]!=undefined) {
             for(var index in result) {
-              //console.log(result[index]);
+//              Homey.log(result[index]);
               grade = {
                 id: result[index].type().id(),   //e.g. 284587
+                type: result[index].type().type(),  //e.g. 1 or 2, where 1 is an actual grade and 2 a calulated grade
                 class: result[index].class(),   //e.g. { id: 532518, abbreviation: 'ne', description: '' }
                 period: result[index].gradePeriod(),  //e.g. { id: 3117, name: 'T2' }
                 testDate: result[index].testDate(), //e.g. Tue Nov 17 2015 00:00:00 GMT+0100 (CET)
@@ -591,14 +592,16 @@ function getGrades(credentials, callback) {
                 grade: result[index].grade().replace(',', '.'),  //e.g. 7.2
                 weight: result[index].weight()  //e.g. 2
               };
-              grades.push(grade);
+              if (grade.type==1){
+                grades.push(grade);
+              };
             }
           } else {
             Homey.log("there are no grades available");
             callback ("there are no grades available", null);
             return;
           }
-          //console.log(grades);
+//          Homey.log(grades);
           callback (null, grades);
     		});
       };
