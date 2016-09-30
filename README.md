@@ -49,6 +49,7 @@ the forum.
 
 Version changelog
 ```
+v0.0.13 2016.09.29 Firmware 0.10.x compatibility
 v0.0.12 2016.09.16 Fix rare crashes: currentCourse (schoolPeriod, grades),
         sayRoster (substr), validateConnection (fullName).
         Rewrite/fix roster change. Ignore calculated (non-test) grades.

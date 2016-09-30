@@ -255,6 +255,7 @@ function handleCourseData(device_data){
           type_group: result.type.description + " " + result.group.description
         };
         module.exports.setSettings( device_data, settings, function( err, settings ){
+          if (err) {Homey.log(err)}
               // ... dunno what to do here, think nothing...
         });
       }
@@ -309,6 +310,7 @@ function handleGradesData(device_data){
         totalAverageGrade: devices[device_data.id].totalAverageGrade.toFixed(2)
       };
       module.exports.setSettings( device_data, settings, function( err, settings ){
+        if (err) {Homey.log(err)}
             // ... dunno what to do here, think nothing...
       });
       //Homey.log(result)
@@ -539,7 +541,7 @@ function getCourse(credentials, callback) {
                 number: courseClass.number()                //e.g. 1
               };
           	};
-            //Homey.log(courseInfo);
+            Homey.log(courseInfo);
             callback(null, courseInfo);
           };
         });
