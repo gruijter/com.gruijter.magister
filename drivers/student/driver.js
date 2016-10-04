@@ -681,10 +681,13 @@ function getDayRoster(credentials, date, callback) {
             class: result[index].classes()[0], //e.g. 'tekenen',
             fullDay: result[index].fullDay(), // e.g. false
             location: result[index].location(), //e.g. 'M218',
-            teacher: result[index].teachers()[0].fullName(), //e.g. 'G. D. Lasseur'
+            teacher: '',   //result[index].teachers()[0].fullName(), //e.g. 'G. D. Lasseur'
             scrapped: result[index].scrapped(),  //e.g. true
             changed: result[index].changed(),   //e.g. false
             absenceInfo: result[index].absenceInfo()  //e.g. undefined
+          };
+          if (result[index].teachers()[0]!=undefined){
+            lesson.teacher= result[index].teachers()[0].fullName() //e.g. 'G. D. Lasseur'
           };
           //console.log(lesson);
           dayRoster.lessons.push(lesson);
