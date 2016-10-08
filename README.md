@@ -30,11 +30,9 @@ student password. Please note: the parent credentials cannot be used at this sta
 Since Magister is used in the Dutch school system, the app is optimized for Dutch
 language. Magister information provided by the school is usually in Dutch.
 Only student credentials can be used at this stage, not the parents' credentials.
-When adding multiple students the app might run into available resource limits.
 All insights from different students are presently logged in the same log.
-Insights-logging of all previous grades of the present schoolyear is theoretically
-possible, but due to Homey limitations not implemented. I hope that in a next
-Homey firmware update this feature can be added.
+Insights-logging of all previous grades of the present schoolyear is possible via
+settings, but they all get the present date/time stamp.
 
 ##### Donate: #####
 
@@ -49,7 +47,7 @@ the forum.
 
 Version changelog
 ```
-v0.0.14 2016.10.04 ***WIP*** fix crash lesson (fullName)
+v0.0.14 2016.10.08 Fix app crash lesson (fullName)
 v0.0.13 2016.09.29 Firmware 0.10.x compatibility
 v0.0.12 2016.09.16 Fix rare crashes: currentCourse (schoolPeriod, grades),
         sayRoster (substr), validateConnection (fullName).
