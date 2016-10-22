@@ -1,14 +1,14 @@
 {
   "id": "com.gruijter.magister",
   "name": {
-      "en": "Magister 6 for Homey",
-      "nl": "Magister 6 voor Homey"
+      "en": "Magister for Homey",
+      "nl": "Magister voor Homey"
   },
   "description": {
     "en": "school information from Magister 6",
     "nl": "School informatie van Magister 6"
   },
-  "version": "0.0.14",
+  "version": "0.0.15",
   "compatibility": ">= 0.10.x || 1.x",
   "author": {
       "name": "Gruijter",
