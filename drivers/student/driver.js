@@ -587,7 +587,7 @@ function getGrades(credentials, callback) {
                 id: result[index].type().id(),   //e.g. 284587
                 type: result[index].type().type(),  //e.g. 1 or 2, where 1 is an actual grade and 2 a calulated grade
                 class: result[index].class(),   //e.g. { id: 532518, abbreviation: 'ne', description: '' }
-                period: result[index].gradePeriod(),  //e.g. { id: 3117, name: 'T2' }
+                period: result[index].period(),  //e.g. { id: 3117, name: 'T2' }
                 testDate: result[index].testDate(), //e.g. Tue Nov 17 2015 00:00:00 GMT+0100 (CET)
                 dateFilledIn: new Date(Date.parse(result[index].dateFilledIn())),  //e.g. Tue Mar 29 2016 11:26:10 GMT+0200 (West-Europa (zomertijd))
                 description: result[index].description(), //e.g. SO Spelling H1-4
