@@ -1,6 +1,6 @@
-# Magister 6 #
+# Magister #
 
-Homey app to interface with the Magister 6 school information system.
+Homey app to interface with the Magister school information system.
 
 After adding a student as a device (sorry students :) ), the following
 functionality is available:
@@ -14,7 +14,7 @@ functionality is available:
 
 ### Flow: ###
 - Trigger a flow on new incoming grades
-- Trigger a flow on a change in day-roster (for today)
+- Trigger a flow on a change in day-roster (for today or tomorrow)
 - Action: Let Homey say all new grades for the last 24hrs or 7 days
 - Action: Let Homey say the day-roster of today or tomorrow
 - Action: Let Homey say the homework of today or tomorrow
@@ -47,7 +47,8 @@ the forum.
 
 Version changelog
 ```
-v0.0.15 2016.10.20 ***WIP*** node_modules update
+v0.0.15 2016.10.22 ***WIP*** Magister.js update to v1.22. Action card for roster
+        change tomorrow added.
 v0.0.14 2016.10.08 Fix app crash lesson (fullName)
 v0.0.13 2016.09.29 Firmware 0.10.x compatibility
 v0.0.12 2016.09.16 Fix rare crashes: currentCourse (schoolPeriod, grades),

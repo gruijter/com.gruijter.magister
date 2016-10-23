@@ -323,9 +323,9 @@ function handleGradesData(device_data){
 
 function logGrade(device_data, grade){
   var logDate = Date.parse(grade.dateFilledIn); // use dateFilledIn as logdate
-  if (grade.testDate != undefined) { logDate = Date.parse(grade.testDate) };  //// use testDate as logdate
+  if (grade.testDate != undefined) { logDate = Date.parse(grade.testDate) };  // use testDate as logdate
   logDate = new Date(logDate);       // e.g. Tue Sep 23 2015 00:00:00 GMT+0200 (CEST)
-  //Homey.log(logDate);
+  Homey.log(logDate);
 
   //create new log for grade in Homey
   //Homey.log(grade.class);
@@ -372,8 +372,8 @@ function handleDayRosterToday(device_data, date){
       } else if (util.inspect(result)!=util.inspect(devices[device_data.id].dayRosterToday)
         && result.date==devices[device_data.id].dayRosterToday.date) {
         Homey.log("dayroster today has changed");
-        // Trigger flow for roster_changed
-        Homey.manager('flow').triggerDevice('roster_changed', {
+        // Trigger flow for roster_changed_today
+        Homey.manager('flow').triggerDevice('roster_changed_today', {
           name        : devices[device_data.id].name,
           beginHour   : result.beginHour,
           beginTime   : result.beginTime.toTimeString().substr(0, 5),
@@ -407,6 +407,17 @@ function handleDayRosterTomorrow(device_data, date){
       } else if (util.inspect(result)!=util.inspect(devices[device_data.id].dayRosterTomorrow)
         && result.date==devices[device_data.id].dayRosterTomorrow.date) {
         Homey.log("dayroster tomorrow has changed");
+        // Trigger flow for roster_changed_tomorrow
+        Homey.manager('flow').triggerDevice('roster_changed_tomorrow', {
+          name        : devices[device_data.id].name,
+          beginHour   : result.beginHour,
+          beginTime   : result.beginTime.toTimeString().substr(0, 5),
+          endHour     : result.endHour,
+          endTime     : result.endTime.toTimeString().substr(0, 5)
+          },
+          null,
+          devices[device_data.id].homey_device
+        );
         devices[device_data.id].dayRosterTomorrow=result;
         // say the new roster if selected in settings.
         if(devices[device_data.id].notifyRosterChange){
@@ -462,13 +473,13 @@ function getPupil(credentials, callback) {
           return;
         }
       };
-    Homey.log(this);
+    //Homey.log(util.inspect(this.profileInfo(), { colors: true, depth: 10 }));
 
 //testing children
     Homey.log("testing children");
     this.children( function (error, result){
       Homey.log(error);
-      Homey.log(util.inspect(result));
+//      Homey.log(util.inspect(result));
       if ( result!=null) {
         Homey.log("login is from parent");
       } else { Homey.log("login is from pupil")}

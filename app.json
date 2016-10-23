@@ -216,10 +216,65 @@
         ]
       },
       {
-        "id":"roster_changed",
+        "id":"roster_changed_today",
         "title": {
-          "en":"The roster has changed",
-          "nl":"Het rooster is gewijzigd"
+          "en":"Todays roster has changed",
+          "nl":"Rooster vandaag is gewijzigd"
+        },
+        "args": [
+          {
+            "name": "student",
+            "type": "device",
+            "filter": "driver_uri=homey:app:com.gruijter.magister&driver_id=student",
+            "placeholder": {
+              "en": "Which student",
+              "nl": "Welke scholier"
+             }
+          }
+        ],
+        "tokens":[
+          {
+          "name":"name",
+            "title": {
+              "en":"name",
+              "nl":"naam"
+            }
+          },
+          {
+          "name":"beginHour",
+            "title": {
+              "en":"1st hr",
+              "nl":"1e uur"
+            }
+          },
+          {
+          "name":"beginTime",
+            "title": {
+              "en":"starttime",
+              "nl":"starttijd"
+            }
+          },
+          {
+          "name":"endHour",
+            "title": {
+              "en":"last hr",
+              "nl":"laatste uur"
+            }
+          },
+          {
+            "name":"endTime",
+            "title": {
+              "en":"endtime",
+              "nl":"eindtijd"
+            }
+          }
+        ]
+      },
+      {
+        "id":"roster_changed_tomorrow",
+        "title": {
+          "en":"Tomorrows roster has changed",
+          "nl":"Rooster morgen is gewijzigd"
         },
         "args": [
           {
