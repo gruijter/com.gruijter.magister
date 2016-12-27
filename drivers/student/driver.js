@@ -2,12 +2,12 @@
 
 Homey.log("entering driver.js");
 
-var Magister = require('magister.js');
-var util = require('util');
-var devices = {};
-var intervalId1 = {};   //polling of device for course info
-var intervalId2 = {};   //polling of device for grades
-var intervalId3 = {};   //polling of device for day roster
+const Magister = require('magister.js');
+const util = require('util');
+let devices = {};
+let intervalId1 = {};   //polling of device for course info
+let intervalId2 = {};   //polling of device for grades
+let intervalId3 = {};   //polling of device for day roster
 
 module.exports.init = function(devices_data, callback) {
     Homey.log("init in driver.js started");
@@ -86,7 +86,7 @@ module.exports.settings = function(device_data, newSettingsObj, oldSettingsObj, 
       Homey.log('Storing new device settings');
       callback(null, true); 	// always fire the callback, or the settings won't change!
       //update the settings with received data from Magister
-      var settings = {
+      let settings = {
         student		: result,
         school		: result.magisterSchool.name,
         studentName	: result.fullName
@@ -205,10 +205,10 @@ function startPolling(device_data){
 }, 15000);
 
   //testen met data
-  var longAgo = new Date();
+  let longAgo = new Date();
   longAgo.setDate(longAgo.getDate()-0);
-  var today = new Date(longAgo);
-  var tomorrow = new Date(longAgo);
+  let today = new Date(longAgo);
+  let tomorrow = new Date(longAgo);
   tomorrow.setDate(today.getDate()+1);
 
   setTimeout(function() {                             //delay http call to spread Homey load
@@ -250,7 +250,7 @@ function handleCourseData(device_data){
         Homey.log("course has changed");
         //Homey.manager('speech-output').say( "Er is iets veranderd in Magister: het schooljaar" );
         devices[device_data.id].currentCourse=result;
-        var settings = {
+        let settings = {
           period: result.period,
           type_group: result.type.description + " " + result.group.description
         };
@@ -266,7 +266,7 @@ function handleCourseData(device_data){
 function handleGradesData(device_data){
   getGrades(devices[device_data.id].credentials, function (error, result){
     if (result!=null && result!=[]) {
-      for (var index in result) {
+      for (let index in result) {
         if (result[index].dateFilledIn > devices[device_data.id].lastGradeDateFilledIn) {
           Homey.log(devices[device_data.id].name + " has a new grade for: " +
             devices[device_data.id].currentCourse.classesById[result[index].class.id].description
@@ -275,8 +275,8 @@ function handleGradesData(device_data){
 
           // say the new grade if selected in settings.
           if(devices[device_data.id].notifyGradeChange){
-            var temp_device_data = new Object(devices[device_data.id]);
-            var args = {
+            let temp_device_data = new Object(devices[device_data.id]);
+            let args = {
               when: "last",
               device_data: temp_device_data
             }
@@ -299,14 +299,14 @@ function handleGradesData(device_data){
           );
         };
       };
-      var datesFilledIn = ( result.map(function (g) {       //get an array of all dateFilledIn
+      let datesFilledIn = ( result.map(function (g) {       //get an array of all dateFilledIn
           return Date.parse(g.dateFilledIn);
         })
       );
       devices[device_data.id].lastGradeDateFilledIn = new Date (datesFilledIn.sort().pop());  //store last dateFilledIn
       devices[device_data.id].grades=result;                                                  //store all retrieved grades
       devices[device_data.id].totalAverageGrade=calcAverageGrade(device_data);                //calculate and store total average grade
-      var settings = {
+      let settings = {
         totalAverageGrade: devices[device_data.id].totalAverageGrade.toFixed(2)
       };
       module.exports.setSettings( device_data, settings, function( err, settings ){
@@ -322,7 +322,7 @@ function handleGradesData(device_data){
 
 
 function logGrade(device_data, grade){
-  var logDate = Date.parse(grade.dateFilledIn); // use dateFilledIn as logdate
+  let logDate = Date.parse(grade.dateFilledIn); // use dateFilledIn as logdate
   if (grade.testDate != undefined) { logDate = Date.parse(grade.testDate) };  // use testDate as logdate
   logDate = new Date(logDate);       // e.g. Tue Sep 23 2015 00:00:00 GMT+0200 (CEST)
   Homey.log(logDate);
@@ -346,9 +346,9 @@ function logGrade(device_data, grade){
 };
 
 function calcAverageGrade (device_data) {
-  var totalAverage=0;
-  var totalWeight=0;
-  var totalWeightedGrade=0;
+  let totalAverage=0;
+  let totalWeight=0;
+  let totalWeightedGrade=0;
   devices[device_data.id].grades.forEach(function(currentGrade,index,arr){
     if( !isNaN(currentGrade.grade*currentGrade.weight) && currentGrade.grade>=0 ) {
       totalWeightedGrade=totalWeightedGrade+currentGrade.grade*currentGrade.weight;
@@ -386,7 +386,7 @@ function handleDayRosterToday(device_data, date){
         devices[device_data.id].dayRosterToday=result;
         // say the new roster if selected in settings.
        if(devices[device_data.id].notifyRosterChange){
-          var args = {
+          let args = {
             when: "today",
             device_data: devices[device_data.id]
           }
@@ -421,7 +421,7 @@ function handleDayRosterTomorrow(device_data, date){
         devices[device_data.id].dayRosterTomorrow=result;
         // say the new roster if selected in settings.
         if(devices[device_data.id].notifyRosterChange){
-          var args = {
+          let args = {
             when: "tomorrow",
             device_data: devices[device_data.id]
           }
@@ -438,13 +438,13 @@ function handleDayRosterTomorrow(device_data, date){
 
 //========================GET DATA FROM MAGISTER================================
 
-var getMagister = (function () {
-	var magisterCache = {};
+let getMagister = (function () {
+	let magisterCache = {};
 
 	return function (credentials) {
-		var id = credentials.school + '_' + credentials.username;
+		let id = credentials.school + '_' + credentials.username;
 
-		var magister = magisterCache[id];
+		let magister = magisterCache[id];
 		if (magister === undefined) {
 			magister = new Magister.Magister(credentials);
 			magisterCache[id] = magister;
@@ -487,7 +487,7 @@ function getPupil(credentials, callback) {
 // end testing children
 
     if( this.profileInfo().birthDate() != undefined){
-      var student = {
+      let student = {
         id: this.profileInfo().id(),
         firstName: this.profileInfo().firstName(),
         namePrefix: this.profileInfo().namePrefix(),
@@ -524,12 +524,12 @@ function getCourse(credentials, callback) {
       if (error || result==null) {
         //Homey.log("got error: "+error);
         if (!error) {
-          var error = "no current course data";
+          let error = "no current course data";
         } else {error=error.message}
         callback(error, null);
       }
       else {
-        var courseInfo = {
+        let courseInfo = {
           period: result.schoolPeriod(), //e.g. 1516
           begin: result.begin(),  //e.g. Sat Aug 01 2015 00:00:00 GMT+0200 (West-Europa (zomertijd))
           end: result.end(),    //e.g. Sun Jul 31 2016 00:00:00 GMT+0200 (West-Europa (zomertijd))
@@ -544,7 +544,7 @@ function getCourse(credentials, callback) {
             callback(error.message, null);
             return;
           } else {
-          	for (var courseClass of courseClasses) {
+          	for (let courseClass of courseClasses) {
           		courseInfo.classesById[courseClass.id()] = {
                 id: courseClass.id(),                       //e.g. 532518
                 abbreviation: courseClass.abbreviation(),   //e.g. 'ne'
@@ -565,8 +565,8 @@ function getCourse(credentials, callback) {
 //grades
 function getGrades(credentials, callback) {
   Homey.log("getting grades info");
-  var grade = {};
-  var grades = [];
+  let grade = {};
+  let grades = [];
 
   getMagister(credentials).ready(function (error) {
     if (error!=null) {
@@ -583,7 +583,7 @@ function getGrades(credentials, callback) {
       if (error || result==null) {
         //Homey.log("got error: "+error);
         if (!error) {
-          var error = "no current course data";
+          let error = "no current course data";
         } else {error=error.message}
         callback(error, null);
       }
@@ -592,7 +592,7 @@ function getGrades(credentials, callback) {
       	result.grades(function (error, result) {
 //          Homey.log(util.inspect(result));
           if (result!=undefined && result[0]!=undefined) {
-            for(var index in result) {
+            for(let index in result) {
 //              Homey.log(result[index]);
               grade = {
                 id: result[index].type().id(),   //e.g. 284587
@@ -625,8 +625,8 @@ function getGrades(credentials, callback) {
 
 function getDayRoster(credentials, date, callback) {
   Homey.log("getting roster info for: "+ date);
-  var dayRoster = {};
-  var lesson = [];
+  let dayRoster = {};
+  let lesson = [];
   getMagister(credentials).ready(function (error) {
     if (error!=null) {
         if (error.fouttype === 'OnvoldoendePrivileges') {
@@ -662,7 +662,7 @@ function getDayRoster(credentials, date, callback) {
         return;
       };
 
-      for (var index in result) {
+      for (let index in result) {
         if (result[index].scrapped() == false && dayRoster.beginHour == null ) {   //get first non-scrapped schoolhour
           dayRoster.beginHour = result[index].beginBySchoolHour();
           dayRoster.beginTime = result[index].begin();
@@ -681,7 +681,7 @@ function getDayRoster(credentials, date, callback) {
         callback (null, dayRoster);
         return;
       } else {
-        for(var index in result) {
+        for(let index in result) {
           //console.log(result[index]);
           lesson = {
             hour: result[index].beginBySchoolHour(), //e.g. 1
@@ -733,13 +733,15 @@ Homey.manager('flow').on('action.sayGrades', function( callback, args ){
 //========================SPEECH OUTPUT=========================================
 
 function sayRoster (args) {
+  let requested_roster;
+  let requested_day;
   if (args.when == "today"){
-    var requested_roster = devices[args.device_data.id].dayRosterToday;
-    var requested_day = __("today");
+    requested_roster = devices[args.device_data.id].dayRosterToday;
+    requested_day = __("today");
   }
   else {
-    var requested_roster = devices[args.device_data.id].dayRosterTomorrow;
-    var requested_day = __("tomorrow");
+    requested_roster = devices[args.device_data.id].dayRosterTomorrow;
+    requested_day = __("tomorrow");
   };
   Homey.log(requested_roster);
   if (requested_roster.beginHour == null ){
@@ -773,19 +775,21 @@ function sayRoster (args) {
 }
 
 function sayHomework (args) {
+  let requested_roster;
+  let requested_day;
   if (args.when == "today"){
-    var requested_roster = devices[args.device_data.id].dayRosterToday;
-    var requested_day = __("today");
+    requested_roster = devices[args.device_data.id].dayRosterToday;
+    requested_day = __("today");
   }
   else {
-    var requested_roster = devices[args.device_data.id].dayRosterTomorrow;
-    var requested_day = __("tomorrow");
+    requested_roster = devices[args.device_data.id].dayRosterTomorrow;
+    requested_day = __("tomorrow");
   };
   //Homey.log(requested_roster.lessons);
   Homey.manager('speech-output').say(
     __("homework of")+ devices[args.device_data.id].name + __("of")+ requested_day
   );
-  var homework = false;
+  let homework = false;
   requested_roster.lessons.forEach(function(currentLesson,index,arr){
     if (currentLesson.content != "" && currentLesson.content != null){
       homework = true;
@@ -799,7 +803,7 @@ function sayHomework (args) {
 
 function sayGrades (args) {
   if (args.when == "last"){
-    var lastGrade=args.device_data.grades.pop();
+    let lastGrade=args.device_data.grades.pop();
     Homey.manager('speech-output').say(
       devices[args.device_data.id].name + __("has a new grade for")+
       devices[args.device_data.id].currentCourse.classesById[lastGrade.class.id].description +
@@ -807,21 +811,23 @@ function sayGrades (args) {
     );
     return;
   };
+  let requested_period;
+  let requested_day;
   if (args.when == "today"){
-    var requested_period = new Date();
+    requested_period = new Date();
     requested_period.setDate(requested_period.getDate()-1);
-    var requested_day = __("today");
+    requested_day = __("today");
   };
   if (args.when == "week"){
-    var requested_period = new Date();
+    requested_period = new Date();
     requested_period.setDate(requested_period.getDate()-7);
-    var requested_day = __("the past 7 days");
+    requested_day = __("the past 7 days");
   };
   //Homey.log("saying grades since " + requested_period);
   Homey.manager('speech-output').say(
     __("new grades of")+ devices[args.device_data.id].name + __("of")+ requested_day
   );
-  var newGrades = false;
+  let newGrades = false;
   devices[args.device_data.id].grades.forEach(function(currentGrade,index,arr){
     if (currentGrade.dateFilledIn >= requested_period){
       newGrades = true;

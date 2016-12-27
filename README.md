@@ -47,6 +47,7 @@ the forum.
 
 Version changelog
 ```
+v1.0.0  2016.12.27 Internal code changes
 v0.0.15 2016.11.08 Magister.js update to v1.22. Action card for roster change
         tomorrow added.
 v0.0.14 2016.10.08 Fix app crash lesson (fullName)
