@@ -47,6 +47,8 @@ the forum.
 
 Version changelog
 ```
+v1.0.1  2017.01.07 Fix for flow tokens not working anymore with fw 1.1.2. Debug
+        logging removed
 v1.0.0  2016.12.27 Internal code changes
 v0.0.15 2016.11.08 Magister.js update to v1.22. Action card for roster change
         tomorrow added.

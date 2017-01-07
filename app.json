@@ -8,7 +8,7 @@
     "en": "school information from Magister 6",
     "nl": "School informatie van Magister 6"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "compatibility": ">= 1.x",
   "author": {
       "name": "Gruijter",
@@ -180,38 +180,48 @@
         "tokens":[
           {
           "name":"name",
-            "title": {
-              "en":"name",
-              "nl":"naam"
-            }
+          "type": "string",
+          "title": {
+            "en":"name",
+            "nl":"naam"
+            },
+          "example": "naam"
           },
           {
           "name":"class",
-            "title": {
-              "en":"class",
-              "nl":"vak"
-            }
+          "type": "string",
+          "title": {
+            "en":"class",
+            "nl":"vak"
+            },
+          "example": "vak"
           },
           {
           "name":"description",
-            "title": {
-              "en":"description",
-              "nl":"omschrijving"
-            }
+          "type": "string",
+          "title": {
+            "en":"description",
+            "nl":"omschrijving"
+            },
+          "example": "omschrijving"
           },
           {
           "name":"weight",
-            "title": {
-              "en":"weight",
-              "nl":"gewicht"
-            }
+          "type": "number",
+          "title": {
+            "en":"weight",
+            "nl":"gewicht"
+            },
+          "example": 1
           },
           {
           "name":"grade",
-            "title": {
-              "en":"grade",
-              "nl":"cijfer"
-            }
+          "type": "string",
+          "title": {
+            "en":"grade",
+            "nl":"cijfer"
+            },
+          "example": "7.2"
           }
         ]
       },
@@ -235,38 +245,48 @@
         "tokens":[
           {
           "name":"name",
-            "title": {
-              "en":"name",
-              "nl":"naam"
-            }
+          "type": "string",
+          "title": {
+            "en":"name",
+            "nl":"naam"
+            },
+          "example": "naam"
           },
           {
           "name":"beginHour",
-            "title": {
-              "en":"1st hr",
-              "nl":"1e uur"
-            }
+          "type": "number",
+          "title": {
+            "en":"1st hr",
+            "nl":"1e uur"
+            },
+          "example": 1
           },
           {
           "name":"beginTime",
-            "title": {
-              "en":"starttime",
-              "nl":"starttijd"
-            }
+          "type": "string",
+          "title": {
+            "en":"starttime",
+            "nl":"starttijd"
+            },
+          "example": "08:30"
           },
           {
           "name":"endHour",
-            "title": {
-              "en":"last hr",
-              "nl":"laatste uur"
-            }
+          "type": "number",
+          "title": {
+            "en":"last hr",
+            "nl":"laatste uur"
+            },
+          "example": 7
           },
           {
-            "name":"endTime",
-            "title": {
-              "en":"endtime",
-              "nl":"eindtijd"
-            }
+          "name":"endTime",
+          "type": "string",
+          "title": {
+            "en":"endtime",
+            "nl":"eindtijd"
+          },
+          "example": "15:30"
           }
         ]
       },
@@ -290,38 +310,48 @@
         "tokens":[
           {
           "name":"name",
-            "title": {
-              "en":"name",
-              "nl":"naam"
-            }
+          "type": "string",
+          "title": {
+            "en":"name",
+            "nl":"naam"
+            },
+          "example": "naam"
           },
           {
           "name":"beginHour",
-            "title": {
-              "en":"1st hr",
-              "nl":"1e uur"
-            }
+          "type": "number",
+          "title": {
+            "en":"1st hr",
+            "nl":"1e uur"
+            },
+          "example": 1
           },
           {
           "name":"beginTime",
-            "title": {
-              "en":"starttime",
-              "nl":"starttijd"
-            }
+          "type": "string",
+          "title": {
+            "en":"starttime",
+            "nl":"starttijd"
+            },
+          "example": "08:30"
           },
           {
           "name":"endHour",
-            "title": {
-              "en":"last hr",
-              "nl":"laatste uur"
-            }
+          "type": "number",
+          "title": {
+            "en":"last hr",
+            "nl":"laatste uur"
+            },
+          "example": 7
           },
           {
-            "name":"endTime",
-            "title": {
-              "en":"endtime",
-              "nl":"eindtijd"
-            }
+          "name":"endTime",
+          "type": "string",
+          "title": {
+            "en":"endtime",
+            "nl":"eindtijd"
+          },
+          "example": "15:30"
           }
         ]
       }
@@ -444,7 +474,6 @@
     ]
   },
   "permissions": [
-    "homey:manager:speech-output",
-	  "homey:manager:speech-input"
+    "homey:manager:speech-output"
   ]
 }

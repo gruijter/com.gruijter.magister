@@ -20,11 +20,11 @@ module.exports.pair = function(socket) {
   socket.on('validate', function (credentials, callback){
     validateConnection(credentials, function(error, student) {
       if (!error) {
-        Homey.log('Pairing successful');
+        //Homey.log('Pairing successful');
         callback(null, student);
       }
       if (error) {
-        Homey.log('Pairing unsuccessful');
+        //Homey.log('Pairing unsuccessful');
         callback( error, null );
       }
     });
@@ -33,15 +33,15 @@ module.exports.pair = function(socket) {
 
 // the `added` method is called is when pairing is done and a device has been added for firmware 8.33+
 module.exports.added = function( device_data, callback ) {
-  Homey.log("initializing device ");
-  Homey.log(device_data);
+  //Homey.log("initializing device ");
+  //Homey.log(device_data);
   initDevice( device_data );
   callback( null, true );
 }
 
 
 module.exports.deleted = function(device_data, callback) {
-  Homey.log('Deleting ' + device_data.id);
+  //Homey.log('Deleting ' + device_data.id);
   clearInterval(intervalId1[device_data.id]); //end polling of device for course info
   clearInterval(intervalId2[device_data.id]); //end polling of device for grades
   clearInterval(intervalId3[device_data.id]); //end polling of device for day roster
@@ -52,7 +52,7 @@ module.exports.deleted = function(device_data, callback) {
 };
 
 module.exports.renamed = function( device_data, new_name ) {
-  Homey.log(devices[device_data.id].name + ' has been renamed to ' + new_name);
+  //Homey.log(devices[device_data.id].name + ' has been renamed to ' + new_name);
   devices[device_data.id].name = new_name;
 //  Homey.log(devices[device_data.id].name);
 };
@@ -60,11 +60,11 @@ module.exports.renamed = function( device_data, new_name ) {
 module.exports.settings = function(device_data, newSettingsObj, oldSettingsObj, changedKeysArr, callback) {
 	// run when the user has changed the device's settings in Homey.
 	// changedKeysArr contains an array of keys that have been changed, for your convenience :)
-  Homey.log(device_data);
-  Homey.log('old settings: ');
-  Homey.log(oldSettingsObj);
-  Homey.log('new settings: ')
-  Homey.log(newSettingsObj);
+  //Homey.log(device_data);
+  //Homey.log('old settings: ');
+  //Homey.log(oldSettingsObj);
+  //Homey.log('new settings: ')
+  //Homey.log(newSettingsObj);
 
 //  changedKeysArr.forEach(function(item){
 //    Homey.log(item + " old: "+oldSettingsObj[item]);
@@ -73,17 +73,17 @@ module.exports.settings = function(device_data, newSettingsObj, oldSettingsObj, 
 
   validateConnection(newSettingsObj, function(error, result) {
     if (error || result==undefined) {
-      Homey.log('Connection is invalid, ignoring new settings');
+      //Homey.log('Connection is invalid, ignoring new settings');
       callback( error, null ); //  settings must not be saved
       return
     };
     if (result.id!=device_data.magisterId) {
-      Homey.log("Not the student that was paired with");
+      //Homey.log("Not the student that was paired with");
       callback( "This is a different student", null ); //  settings must not be saved
       return
     };
     if (!error) {
-      Homey.log('Storing new device settings');
+      //Homey.log('Storing new device settings');
       callback(null, true); 	// always fire the callback, or the settings won't change!
       //update the settings with received data from Magister
       let settings = {
@@ -92,8 +92,8 @@ module.exports.settings = function(device_data, newSettingsObj, oldSettingsObj, 
         studentName	: result.fullName
       }
       if (newSettingsObj.fetchAllGrades==true){
-        Homey.log("fetching all grades for Insights")
-        Homey.log(device_data);
+        //Homey.log("fetching all grades for Insights")
+        //Homey.log(device_data);
         devices[device_data.id].lastGradeDateFilledIn=0;
         handleGradesData(device_data);
       };
@@ -106,16 +106,16 @@ module.exports.settings = function(device_data, newSettingsObj, oldSettingsObj, 
 };
 
 function validateConnection(credentials, callback) {  // Validate Magister connection data
-  Homey.log('Validating', credentials);
+  //Homey.log('Validating', credentials);
   getPupil(credentials, function (error, student){
     if (error) {
-      Homey.log("Error connecting: ", error);
+      //Homey.log("Error connecting: ", error);
       callback(error, null);
       return;
     }
     else {
-      Homey.log(student);
-      Homey.log('Connecting successful!');
+      //Homey.log(student);
+      //Homey.log('Connecting successful!');
       callback(null, student);
       return;
     }
@@ -129,16 +129,16 @@ function initDevice(device_data) {      //initDevice: retrieve device settings, 
   Homey.log("entering initDevice");
   module.exports.getSettings( device_data, function( error, settings ){
     if (error) {
-      Homey.log("error retrieving device settings");
+      //Homey.log("error retrieving device settings");
     } else {
-      Homey.log("retrieved settings are:");
-      Homey.log(settings);
+      //Homey.log("retrieved settings are:");
+      //Homey.log(settings);
       module.exports.getName( device_data, function( error, name ){   //retrieve device name
         if (error) {
-          Homey.log("error retrieving device name");
+          //Homey.log("error retrieving device name");
         } else {                                  // after settings and name received, build the new device object
-          Homey.log("retrieved name is:");
-          Homey.log(name);
+          //Homey.log("retrieved name is:");
+          //Homey.log(name);
           buildDevice(device_data, settings, name);
           startPolling(device_data);
         }
@@ -176,8 +176,8 @@ function buildDevice (device_data, settings, name){
     notifyGradeChange     : settings.notifyGradeChange,   //true or false
     notifyRosterChange    : settings.notifyRosterChange   //true or false
   };
-  Homey.log("init buildDevice is: " );
-  Homey.log(devices[device_data.id] );
+  //Homey.log("init buildDevice is: " );
+  //Homey.log(devices[device_data.id] );
 };
 
 
@@ -247,7 +247,7 @@ function handleCourseData(device_data){
     if (result!=null) {
 //      Homey.log(util.inspect(result));
       if ( util.inspect(result)!=util.inspect(devices[device_data.id].currentCourse) ) {
-        Homey.log("course has changed");
+        //Homey.log("course has changed");
         //Homey.manager('speech-output').say( "Er is iets veranderd in Magister: het schooljaar" );
         devices[device_data.id].currentCourse=result;
         let settings = {
@@ -255,7 +255,8 @@ function handleCourseData(device_data){
           type_group: result.type.description + " " + result.group.description
         };
         module.exports.setSettings( device_data, settings, function( err, settings ){
-          if (err) {Homey.log(err)}
+          if (err) { //Homey.log(err)
+          }
               // ... dunno what to do here, think nothing...
         });
       }
@@ -268,9 +269,9 @@ function handleGradesData(device_data){
     if (result!=null && result!=[]) {
       for (let index in result) {
         if (result[index].dateFilledIn > devices[device_data.id].lastGradeDateFilledIn) {
-          Homey.log(devices[device_data.id].name + " has a new grade for: " +
-            devices[device_data.id].currentCourse.classesById[result[index].class.id].description
-          );
+          //Homey.log(devices[device_data.id].name + " has a new grade for: " +
+          //  devices[device_data.id].currentCourse.classesById[result[index].class.id].description
+          //);
 //          Homey.log(result[index]);
 
           // say the new grade if selected in settings.
@@ -310,7 +311,8 @@ function handleGradesData(device_data){
         totalAverageGrade: devices[device_data.id].totalAverageGrade.toFixed(2)
       };
       module.exports.setSettings( device_data, settings, function( err, settings ){
-        if (err) {Homey.log(err)}
+        if (err) { //Homey.log(err)
+        }
             // ... dunno what to do here, think nothing...
       });
       //Homey.log(result)
@@ -325,7 +327,7 @@ function logGrade(device_data, grade){
   let logDate = Date.parse(grade.dateFilledIn); // use dateFilledIn as logdate
   if (grade.testDate != undefined) { logDate = Date.parse(grade.testDate) };  // use testDate as logdate
   logDate = new Date(logDate);       // e.g. Tue Sep 23 2015 00:00:00 GMT+0200 (CEST)
-  Homey.log(logDate);
+  //Homey.log(logDate);
 
   //create new log for grade in Homey
   //Homey.log(grade.class);
@@ -339,7 +341,7 @@ function logGrade(device_data, grade){
       //if( err ) Homey.log(Homey.error(err)); //return Homey.error(err);
       Homey.manager('insights').createEntry( grade.class.id.toString(), parseFloat(grade.grade), logDate, function(err, success){
           if( err ) {
-            Homey.log(Homey.error(err)); //return Homey.error(err);
+            //Homey.log(Homey.error(err)); //return Homey.error(err);
           };
       });
   });
@@ -358,7 +360,7 @@ function calcAverageGrade (device_data) {
   if (totalWeight!=0){
     totalAverage=totalWeightedGrade/totalWeight;
   }
-  Homey.log("Total Average Grade is: "+totalAverage);
+  //Homey.log("Total Average Grade is: "+totalAverage);
   return totalAverage;
 }
 
@@ -371,7 +373,7 @@ function handleDayRosterToday(device_data, date){
         Homey.log("app is initializing, first data is being stored");
       } else if (util.inspect(result)!=util.inspect(devices[device_data.id].dayRosterToday)
         && result.date==devices[device_data.id].dayRosterToday.date) {
-        Homey.log("dayroster today has changed");
+        //Homey.log("dayroster today has changed");
         // Trigger flow for roster_changed_today
         Homey.manager('flow').triggerDevice('roster_changed_today', {
           name        : devices[device_data.id].name,
@@ -406,7 +408,7 @@ function handleDayRosterTomorrow(device_data, date){
         Homey.log("app is initializing, first data is being stored");
       } else if (util.inspect(result)!=util.inspect(devices[device_data.id].dayRosterTomorrow)
         && result.date==devices[device_data.id].dayRosterTomorrow.date) {
-        Homey.log("dayroster tomorrow has changed");
+        //Homey.log("dayroster tomorrow has changed");
         // Trigger flow for roster_changed_tomorrow
         Homey.manager('flow').triggerDevice('roster_changed_tomorrow', {
           name        : devices[device_data.id].name,
@@ -458,7 +460,7 @@ let getMagister = (function () {
 function getPupil(credentials, callback) {
   //Homey.log("entering get pupil");
   if (credentials.school=='' || credentials.username=='' || credentials.password ==''){
-    Homey.log("Error: school, username and password are required");
+    //Homey.log("Error: school, username and password are required");
     callback("Error: school, username and password are required",null)
     return;
   }
@@ -467,8 +469,8 @@ function getPupil(credentials, callback) {
         if (error.fouttype === 'OnvoldoendePrivileges') {
           this._ready = true;
         } else {
-          Homey.log("Error connecting: ", error.message);
-          Homey.log(error);
+          //Homey.log("Error connecting: ", error.message);
+          //Homey.log(error);
           callback(error, null);
           return;
         }
@@ -476,13 +478,14 @@ function getPupil(credentials, callback) {
     //Homey.log(util.inspect(this.profileInfo(), { colors: true, depth: 10 }));
 
 //testing children
-    Homey.log("testing children");
+    //Homey.log("testing children");
     this.children( function (error, result){
-      Homey.log(error);
+      //Homey.log(error);
 //      Homey.log(util.inspect(result));
       if ( result!=null) {
-        Homey.log("login is from parent");
-      } else { Homey.log("login is from pupil")}
+        //Homey.log("login is from parent");
+      } else { //Homey.log("login is from pupil")
+      }
     });
 // end testing children
 
@@ -499,7 +502,7 @@ function getPupil(credentials, callback) {
       return;
     }
     else {
-      Homey.log("Error connecting: login cannot be from a parent");
+      //Homey.log("Error connecting: login cannot be from a parent");
       callback("login must be from a student (not a parent)", null);
       return
     }
@@ -508,14 +511,14 @@ function getPupil(credentials, callback) {
 
 //schoolyear course
 function getCourse(credentials, callback) {
-  Homey.log("getting course info");
+  //Homey.log("getting course info");
   getMagister(credentials).ready(function (error) {
     if (error!=null) {
         if (error.fouttype === 'OnvoldoendePrivileges') {
           this._ready = true;
         } else {
-          Homey.log("Error connecting: ", error.message);
-          Homey.log(error);
+          //Homey.log("Error connecting: ", error.message);
+          //Homey.log(error);
           callback(error, null);
           return;
         }
@@ -540,7 +543,7 @@ function getCourse(credentials, callback) {
 
         result.classes(function(error, courseClasses) {
           if (error) {
-            Homey.log(error.message);
+            //Homey.log(error.message);
             callback(error.message, null);
             return;
           } else {
@@ -552,7 +555,7 @@ function getCourse(credentials, callback) {
                 number: courseClass.number()                //e.g. 1
               };
           	};
-            Homey.log(courseInfo);
+            //Homey.log(courseInfo);
             callback(null, courseInfo);
           };
         });
@@ -564,7 +567,7 @@ function getCourse(credentials, callback) {
 
 //grades
 function getGrades(credentials, callback) {
-  Homey.log("getting grades info");
+  //Homey.log("getting grades info");
   let grade = {};
   let grades = [];
 
@@ -573,8 +576,8 @@ function getGrades(credentials, callback) {
         if (error.fouttype === 'OnvoldoendePrivileges') {
           this._ready = true;
         } else {
-          Homey.log("Error connecting: ", error.message);
-          Homey.log(error);
+          //Homey.log("Error connecting: ", error.message);
+          //Homey.log(error);
           callback(error, null);
           return;
         }
@@ -610,7 +613,7 @@ function getGrades(credentials, callback) {
               };
             }
           } else {
-            Homey.log("there are no grades available");
+            //Homey.log("there are no grades available");
             callback ("there are no grades available", null);
             return;
           }
@@ -624,7 +627,7 @@ function getGrades(credentials, callback) {
 
 
 function getDayRoster(credentials, date, callback) {
-  Homey.log("getting roster info for: "+ date);
+  //Homey.log("getting roster info for: "+ date);
   let dayRoster = {};
   let lesson = [];
   getMagister(credentials).ready(function (error) {
@@ -632,8 +635,8 @@ function getDayRoster(credentials, date, callback) {
         if (error.fouttype === 'OnvoldoendePrivileges') {
           this._ready = true;
         } else {
-          Homey.log("Error connecting: ", error.message);
-          Homey.log(error);
+          //Homey.log("Error connecting: ", error.message);
+          //Homey.log(error);
           callback(error, null);
           return;
         }
@@ -743,7 +746,7 @@ function sayRoster (args) {
     requested_roster = devices[args.device_data.id].dayRosterTomorrow;
     requested_day = __("tomorrow");
   };
-  Homey.log(requested_roster);
+  //Homey.log(requested_roster);
   if (requested_roster.beginHour == null ){
     Homey.manager('speech-output').say( devices[args.device_data.id].name + __("has no class")+requested_day);
 //    Homey.log(requested_roster.description);
