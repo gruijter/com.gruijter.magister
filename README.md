@@ -31,8 +31,6 @@ Since Magister is used in the Dutch school system, the app is optimized for Dutc
 language. Magister information provided by the school is usually in Dutch.
 Only student credentials can be used at this stage, not the parents' credentials.
 All insights from different students are presently logged in the same log.
-Insights-logging of all previous grades of the present schoolyear is possible via
-settings, but they all get the present date/time stamp.
 
 ##### Donate: #####
 
@@ -47,6 +45,7 @@ the forum.
 
 Version changelog
 ```
+v1.0.2  2017.03.03 Magister.js update to 1.23.2. Bugfix (grade replace)
 v1.0.1  2017.01.07 Fix for flow tokens not working anymore with fw 1.1.2. Debug
         logging removed
 v1.0.0  2016.12.27 Internal code changes

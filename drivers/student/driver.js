@@ -605,8 +605,12 @@ function getGrades(credentials, callback) {
                 testDate: result[index].testDate(), //e.g. Tue Nov 17 2015 00:00:00 GMT+0100 (CET)
                 dateFilledIn: new Date(Date.parse(result[index].dateFilledIn())),  //e.g. Tue Mar 29 2016 11:26:10 GMT+0200 (West-Europa (zomertijd))
                 description: result[index].description(), //e.g. SO Spelling H1-4
-                grade: result[index].grade().replace(',', '.'),  //e.g. 7.2
+                grade: result[index].grade(),  //e.g. 7.2
                 weight: result[index].weight()  //e.g. 2
+              };
+              //Homey.log(typeof grade.grade );
+              if (typeof grade.grade == "string"){
+                grade.grade=grade.grade.replace(',', '.');
               };
               if (grade.type==1){
                 grades.push(grade);
