@@ -45,6 +45,7 @@ the forum.
 
 Version changelog
 ```
+v1.0.3  2017.03.23 Magister.js update to 1.23.3 (hotfix incorrect API key)
 v1.0.2  2017.03.03 Magister.js update to 1.23.2. Bugfix (grade replace)
 v1.0.1  2017.01.07 Fix for flow tokens not working anymore with fw 1.1.2. Debug
         logging removed
