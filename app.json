@@ -1,17 +1,17 @@
 {
   "id": "com.gruijter.magister",
   "name": {
-      "en": "Magister for Homey",
-      "nl": "Magister voor Homey"
+      "en": "Magister",
+      "nl": "Magister"
   },
   "description": {
-    "en": "school information from Magister 6",
-    "nl": "School informatie van Magister 6"
+    "en": "school information from Magister",
+    "nl": "School informatie van Magister"
   },
-  "version": "1.0.3",
-  "compatibility": ">= 1.x",
+  "version": "2.0.5",
+  "compatibility": ">= 1.3",
   "author": {
-      "name": "Gruijter",
+      "name": "Robin Gruijter",
       "email": "gruijter@hotmail.com"
   },
   "images": {
@@ -19,6 +19,7 @@
     "small": "./assets/images/small.jpg"
   },
   "category": ["internet", "tools"],
+
   "drivers": [
     {
       "id": "student",
@@ -158,19 +159,19 @@
       "capabilities": [ ]
     }
   ],
+
   "flow":	{
     "triggers":[
       {
         "id":"new_grade",
         "title": {
-          "en":"There is a new grade",
-          "nl":"Er is een nieuw cijfer"
+          "en":"There is a new grade for:",
+          "nl":"Er is een nieuw cijfer voor:"
         },
         "args": [
           {
-            "name": "device_data",
-            "type": "device",
-            "filter": "driver_uri=homey:app:com.gruijter.magister&driver_id=student",
+            "name": "student",
+            "type": "autocomplete",
             "placeholder": {
               "en": "Which student",
               "nl": "Welke scholier"
@@ -185,7 +186,7 @@
             "en":"name",
             "nl":"naam"
             },
-          "example": "naam"
+          "example": "Jason"
           },
           {
           "name":"class",
@@ -194,7 +195,7 @@
             "en":"class",
             "nl":"vak"
             },
-          "example": "vak"
+          "example": "English"
           },
           {
           "name":"description",
@@ -203,7 +204,7 @@
             "en":"description",
             "nl":"omschrijving"
             },
-          "example": "omschrijving"
+          "example": "grammar"
           },
           {
           "name":"weight",
@@ -234,8 +235,7 @@
         "args": [
           {
             "name": "student",
-            "type": "device",
-            "filter": "driver_uri=homey:app:com.gruijter.magister&driver_id=student",
+            "type": "autocomplete",
             "placeholder": {
               "en": "Which student",
               "nl": "Welke scholier"
@@ -244,49 +244,58 @@
         ],
         "tokens":[
           {
-          "name":"name",
-          "type": "string",
-          "title": {
-            "en":"name",
-            "nl":"naam"
+            "name":"name",
+            "type": "string",
+            "title": {
+              "en":"name",
+              "nl":"naam"
             },
-          "example": "naam"
+            "example": "Jason"
           },
           {
-          "name":"beginHour",
-          "type": "number",
-          "title": {
-            "en":"1st hr",
-            "nl":"1e uur"
+            "name":"beginHour",
+            "type": "number",
+            "title": {
+              "en":"1st hr",
+              "nl":"1e uur"
             },
-          "example": 1
+            "example": 1
           },
           {
-          "name":"beginTime",
-          "type": "string",
-          "title": {
-            "en":"starttime",
-            "nl":"starttijd"
+            "name":"beginTime",
+            "type": "string",
+            "title": {
+              "en":"starttime",
+              "nl":"starttijd"
             },
-          "example": "08:30"
+            "example": "08:30"
           },
           {
-          "name":"endHour",
-          "type": "number",
-          "title": {
-            "en":"last hr",
-            "nl":"laatste uur"
+            "name":"endHour",
+            "type": "number",
+            "title": {
+              "en":"last hr",
+              "nl":"laatste uur"
             },
-          "example": 7
+            "example": 7
           },
           {
-          "name":"endTime",
-          "type": "string",
-          "title": {
-            "en":"endtime",
-            "nl":"eindtijd"
+            "name":"endTime",
+            "type": "string",
+            "title": {
+              "en":"endtime",
+              "nl":"eindtijd"
+            },
+            "example": "15:00"
           },
-          "example": "15:30"
+          {
+            "name":"scrappedLessons",
+            "type": "boolean",
+            "title": {
+              "en":"scrapped",
+              "nl":"uitval"
+            },
+            "example": false
           }
         ]
       },
@@ -299,8 +308,7 @@
         "args": [
           {
             "name": "student",
-            "type": "device",
-            "filter": "driver_uri=homey:app:com.gruijter.magister&driver_id=student",
+            "type": "autocomplete",
             "placeholder": {
               "en": "Which student",
               "nl": "Welke scholier"
@@ -309,49 +317,134 @@
         ],
         "tokens":[
           {
-          "name":"name",
-          "type": "string",
-          "title": {
-            "en":"name",
-            "nl":"naam"
+            "name":"name",
+            "type": "string",
+            "title": {
+              "en":"name",
+              "nl":"naam"
             },
-          "example": "naam"
+            "example": "Jason"
           },
           {
-          "name":"beginHour",
-          "type": "number",
-          "title": {
-            "en":"1st hr",
-            "nl":"1e uur"
+            "name":"beginHour",
+            "type": "number",
+            "title": {
+              "en":"1st hr",
+              "nl":"1e uur"
             },
-          "example": 1
+            "example": 1
           },
           {
-          "name":"beginTime",
-          "type": "string",
-          "title": {
-            "en":"starttime",
-            "nl":"starttijd"
+            "name":"beginTime",
+            "type": "string",
+            "title": {
+              "en":"starttime",
+              "nl":"starttijd"
             },
-          "example": "08:30"
+            "example": "08:30"
           },
           {
-          "name":"endHour",
-          "type": "number",
-          "title": {
-            "en":"last hr",
-            "nl":"laatste uur"
+            "name":"endHour",
+            "type": "number",
+            "title": {
+              "en":"last hr",
+              "nl":"laatste uur"
             },
-          "example": 7
+            "example": 7
           },
           {
-          "name":"endTime",
-          "type": "string",
-          "title": {
-            "en":"endtime",
-            "nl":"eindtijd"
+            "name":"endTime",
+            "type": "string",
+            "title": {
+              "en":"endtime",
+              "nl":"eindtijd"
+            },
+            "example": "15:00"
           },
-          "example": "15:30"
+          {
+            "name":"scrappedLessons",
+            "type": "boolean",
+            "title": {
+              "en":"scrapped",
+              "nl":"uitval"
+            },
+            "example": false
+          }
+        ]
+      }
+    ],
+    "conditions": [
+      {
+        "id": "scrapped",
+        "title": {
+          "en": "A lesson !{{is|isn't}} scrapped",
+          "nl": "Een les is !{{|niet}} uitgevallen"
+        },
+        "args": [
+          {
+            "name": "student",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Which student",
+              "nl": "Welke scholier"
+             }
+          },
+          {
+            "name": "when",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "Today",
+                "label": {
+                  "en": "today",
+                  "nl": "vandaag"
+                }
+              },
+              {
+                "id": "Tomorrow",
+                "label": {
+                  "en": "tomorrow",
+                  "nl": "morgen"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "testPlanned",
+        "title": {
+          "en": "A test !{{is|isn't}} planned",
+          "nl": "Er is !{{een|geen}} toets"
+        },
+        "args": [
+          {
+            "name": "student",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Which student",
+              "nl": "Welke scholier"
+             }
+          },
+          {
+            "name": "when",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "Today",
+                "label": {
+                  "en": "today",
+                  "nl": "vandaag"
+                }
+              },
+              {
+                "id": "Tomorrow",
+                "label": {
+                  "en": "tomorrow",
+                  "nl": "morgen"
+                }
+              }
+            ]
           }
         ]
       }
@@ -365,9 +458,8 @@
         },
         "args": [
           {
-            "name": "device_data",
-            "type": "device",
-            "filter": "driver_uri=homey:app:com.gruijter.magister&driver_id=student",
+            "name": "student",
+            "type": "autocomplete",
             "placeholder": {
               "en": "Which student",
               "nl": "Welke scholier"
@@ -403,9 +495,8 @@
         },
         "args": [
           {
-            "name": "device_data",
-            "type": "device",
-            "filter": "driver_uri=homey:app:com.gruijter.magister&driver_id=student",
+            "name": "student",
+            "type": "autocomplete",
             "placeholder": {
               "en": "Which student",
               "nl": "Welke scholier"
@@ -441,9 +532,8 @@
         },
         "args": [
           {
-            "name": "device_data",
-            "type": "device",
-            "filter": "driver_uri=homey:app:com.gruijter.magister&driver_id=student",
+            "name": "student",
+            "type": "autocomplete",
             "placeholder": {
               "en": "Which student",
               "nl": "Welke scholier"
@@ -465,6 +555,43 @@
                 "label": {
                   "en": "last 7 days",
                   "nl": "afgelopen 7 dagen"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sayTests",
+        "title": {
+          "en": "Say tests of",
+          "nl": "Zeg toetsen van"
+        },
+        "args": [
+          {
+            "name": "student",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Which student",
+              "nl": "Welke scholier"
+             }
+          },
+          {
+            "name": "when",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "today",
+                "label": {
+                  "en": "today",
+                  "nl": "vandaag"
+                }
+              },
+              {
+                "id": "tomorrow",
+                "label": {
+                  "en": "tomorrow",
+                  "nl": "morgen"
                 }
               }
             ]

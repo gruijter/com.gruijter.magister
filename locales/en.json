@@ -14,15 +14,39 @@
   "homework of"                 : "homework of ",
   "no homework"                 : " no homework ",
 
+  "tests of"                    : "tests of ",
+  "no tests"                    : " no tests ",
+
   "has a new grade for"         : " has a new grade for ",
-  "it's a"                      : ", a ",
+  "its a"                      	: ", a ",
   "this one counts"             : "! this one counts ",
   "times"                       : " times",
   "the past 7 days"             : "the past 7 days",
   "new grades of"               : "new grades of ",
   "no new grades"               : " no new grades ",
 
-  "pair": {
-      "title": "Please enter your Magister school, username and password:"
+    "settings": {
+      "title"               : "Magister settings",
+      "student"             : "Student",
+      "newStudent"          : "Add a new student",
+      "loginSettings"       : "Account credentials",
+      "school"              : "School",
+      "username"            : "Username",
+      "password"            : "Password",
+      "buttonCheck"         : "check",
+      "buttonSave"          : "save",
+      "buttonClear"         : "delete student",
+      "confirmClearAccount" : "are you sure?",
+      "busyValidation"      : "validating account",
+      "error sup"           : "school, username and password are mandatory",
+      "busySaving"          : "saving account",
+      "successSaving"       : "settings are saved",
+      "error"               : "",
+      "studentOptions"      : "Options",
+      "studentInfo"         : "Student information",
+      "period"              : "Schoolperiod",
+      "type_group"          : "Schooltype and group",
+      "totalAverageGrade"   : "Total grade average "
     }
+
 }

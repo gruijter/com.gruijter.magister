@@ -14,8 +14,11 @@
   "homework of"                 : "Huiswerk van ",
   "no homework"                 : " Geen huiswerk ",
 
+  "tests of"                    : "Toetsen van ",
+  "no tests"                    : " Geen toetsen ",
+
   "has a new grade for"         : " heeft een nieuw cijfer voor ",
-  "it's a"                      : ", een ",
+  "its a"                      	: ", een ",
   "this one counts"             : "! Deze telt ",
   "times"                       : " keer mee",
   "the past 7 days"             : "de afgelopen 7 dagen",
@@ -24,20 +27,30 @@
 
 
   "settings": {
-    "title"               : "Magister settings",
+    "title"               : "Magister instellingen",
+    "student"             : "Scholier",
+    "newStudent"          : "Nieuwe scholier toevoegen",
+    "loginSettings"       : "Login gegevens",
     "school"              : "School",
     "username"            : "Gebruikersnaam",
     "password"            : "Wachtwoord",
+    "buttonCheck"         : "controleren",
     "buttonSave"          : "opslaan",
-    "buttonClear"         : "gegevens wissen",
+    "buttonClear"         : "scholier wissen",
     "confirmClearAccount" : "weet je het zeker?",
     "busyValidation"      : "account gegevens controleren",
     "error sup"           : "school, username en password zijn verplicht",
     "busySaving"          : "gegevens worden opgeslagen",
     "successSaving"       : "gegevens opgeslagen",
-    "error"               : "fout: "
-  },
-  "pair": {
-      "title": "Magister school, username and password invoeren:"
-    }
+    "error"               : "",
+    "studentOptions"      : "Opties",
+    "notifyGradeChange"   : " zeg nieuwe cijfers",
+    "notifyRosterChange"  : " zeg rooster wijzigingen",
+    "fetchAllGrades"      : " éénmalig alle cijfers ophalen voor insights",
+    "studentInfo"         : "Leerling gegevens",
+    "period"              : "Schooljaar",
+    "type_group"          : "Schooltype en klas",
+    "totalAverageGrade"   : "Cijfergemiddelde"
+  }
+
 }
