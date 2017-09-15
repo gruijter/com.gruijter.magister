@@ -9,9 +9,9 @@ const Magister = require('magister.js');
 // const devices = {};
 const allStudents = {};		// object containing all students
 let studentList = [];		// array containing all students for flow autocomplete
-const intervalId1 = {};   // polling for course info
-const intervalId2 = {};   // polling for grades
-const intervalId3 = {};   // polling for day roster
+const intervalId1 = {}; // polling for course info
+const intervalId2 = {}; // polling for grades
+const intervalId3 = {}; // polling for day roster
 
 module.exports.init = init;
 module.exports.validateAccount = validateConnection;
@@ -22,7 +22,7 @@ function init() {
 	Homey.log('init started');
 	initAllStudents();
 	// debug show what files are in userdata
- // fs.readdir('./userdata/', function (err, res) { Homey.log(err); Homey.log(res) });
+	// fs.readdir('./userdata/', function (err, res) { Homey.log(err); Homey.log(res) });
 	setTimeout(() => {
 		let x = 0;
 		Homey.log(allStudents);
@@ -64,7 +64,7 @@ function deleteAccount(key, callback) {
 	callback(null, 'deletion is done');
 }
 
-function validateConnection(credentials, callback) {  // Validate Magister connection data
+function validateConnection(credentials, callback) { // Validate Magister connection data
 	Homey.log('Validating', credentials);
 	getStudent(credentials, (error, student) => {
 		if (error) {
@@ -111,7 +111,7 @@ function initAllStudents() {
 			dayRosterToday: {},                           	// lessons roster of this day
 			dayRosterTomorrow: {},                          // lessons roster of tomorrow
 		};
-				// Homey.log(`settings avg grade: ${settings.totalAverageGrade}`);
+		// Homey.log(`settings avg grade: ${settings.totalAverageGrade}`);
 		if (settings.totalAverageGrade === null || settings.lastGradeDateFilledIn === undefined) {
 			Homey.log('Student is newly added or re-fetch requested; will retrieve all historic grades');
 			deleteLogs(allStudents[key]);	//  delete all student insight logs
@@ -367,8 +367,8 @@ function handleDayRosterToday(student, date) {
 
 function handleDayRosterTomorrow(student, date) {
 	getDayRoster(allStudents[student.studentId].credentials, date, (error, result) => {
-		if (!error && result !== {}) {
-//       Homey.log(util.inspect(result));
+		if (!error && result !== {} || null) {
+			// Homey.log(util.inspect(result));
 			if (allStudents[student.studentId].dayRosterTomorrow.date === undefined) { // startup condition of app
 				Homey.log('app is initializing, first data is being stored');
 			} else if (util.inspect(result) !== util.inspect(allStudents[student.studentId].dayRosterTomorrow)
@@ -387,7 +387,7 @@ function handleDayRosterTomorrow(student, date) {
 				// Homey.log(tokens);
 				// Homey.log(state);
 				Homey.manager('flow').trigger('roster_changed_tomorrow', tokens, state, (err, res) => {
-					// Homey.log(result);
+					// Homey.log(res);
 					if (err) return Homey.log(err);
 				});
 				allStudents[student.studentId].dayRosterTomorrow = result;
@@ -779,13 +779,27 @@ Homey.manager('flow').on('action.sayTests', (callback, args) => {
 });
 
 Homey.manager('flow').on('condition.scrapped', (callback, args) => {
-	const result = allStudents[args.student.studentId][`dayRoster${args.when}`].scrappedLessons;
-	callback(null, result);
+	if (allStudents[args.student.studentId] === undefined) {
+		return callback('unknown student', null);
+	}
+	const dayRoster = allStudents[args.student.studentId][`dayRoster${args.when}`];
+	if (dayRoster.hasOwnProperty('scrappedLessons')) {
+		const result = dayRoster.scrappedLessons;
+		return callback(null, result);
+	}
+	callback('no roster data available', null);
 });
 
 Homey.manager('flow').on('condition.testPlanned', (callback, args) => {
-	const result = allStudents[args.student.studentId][`dayRoster${args.when}`].tests;
-	callback(null, result);
+	if (allStudents[args.student.studentId] === undefined) {
+		return callback('unknown student', null);
+	}
+	const dayRoster = allStudents[args.student.studentId][`dayRoster${args.when}`];
+	if (dayRoster.hasOwnProperty('tests')) {
+		const result = dayRoster.tests;
+		return callback(null, result);
+	}
+	callback('no roster data available', null);
 });
 
 // ============================Autocomplete lists FLOWS==========================
