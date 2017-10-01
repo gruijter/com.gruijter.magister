@@ -47,6 +47,7 @@ If you really like the app you can buy me a beer.
 
 Version changelog
 ```
+v2.0.7	2017.10.01 Minor bugfixes
 v2.0.6	2017.08.05 Condition cards bugfix. Removed driver
 v2.0.5	2017.08.05 Complete rewrite from device to app settings. Extra flowcards
 				Parent login partially implemented. Student login is preferred
