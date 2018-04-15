@@ -27,6 +27,10 @@
 
     "settings": {
       "title"               : "Magister settings",
+			"loggingTitle"				: "Debug logs",
+			"deletelogs"          : "Delete logs",
+			"getlogs"             : "Refresh logs",
+			"settingsTitle"				: "Settings",
       "student"             : "Student",
       "newStudent"          : "Add a new student",
       "loginSettings"       : "Account credentials",
@@ -39,8 +43,8 @@
       "confirmClearAccount" : "are you sure?",
       "busyValidation"      : "validating account",
       "error sup"           : "school, username and password are mandatory",
-      "busySaving"          : "saving account",
-      "successSaving"       : "settings are saved",
+			"testOk"							: "OK!\r\n__profileInfo__",
+      "settingsSaved"       : "Settings were saved",
       "error"               : "",
       "studentOptions"      : "Options",
       "studentInfo"         : "Student information",

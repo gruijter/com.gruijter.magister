@@ -1,7 +1,9 @@
 <!doctype html>
 <html>
   <head>
-    <script type="text/javascript" src="/manager/webserver/assets/js/jquery.js"></script>
+		<!-- The '/homey.js' script must be included in your settings view to work -->
+		<script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+		<script type="text/javascript" src="/manager/webserver/assets/js/jquery.js"></script>
     <script type="text/javascript" src="/manager/webserver/assets/js/jquery.ui.js"></script>
     <script type="text/javascript" src="js/settings.js"></script>
     <style>
@@ -13,50 +15,59 @@
   <body>
     <h1 data-i18n="settings.title"> </h1>
 
-    <div class="field row">
-      <label for="studentList" data-i18n="settings.student"> StudentX </label>
-      <select id="studentList" style="width: 250px" onchange="studentSelected()" >
-      </select>
-    </div>
+      <div id="panel-buttons">
+        <button id="panel-button-1" class="button panel-button" onclick="showPanel(1)" data-i18n="settings.settingsTitle">Settings</button>&nbsp;
+        <button id="panel-button-2" class="button panel-button" onclick="showPanel(2)" data-i18n="settings.loggingTitle">Logging</button>&nbsp;
+        <br><br>
+      </div>
 
-    <fieldset>
-      <legend data-i18n="settings.loginSettings"> </legend>
-      <div class="field row">
-          <label for="school" data-i18n="settings.school"> </label>
-          <input id="school" type="text" placeholder="School" value="" />
+      <!-- Settings panel -->
+      <div id="panel-1" class="panel">
+        <div class="field row">
+          <label for="studentList" data-i18n="settings.student"> StudentX </label>
+          <select id="studentList" style="width: 250px" onchange="studentSelected()" >
+          </select>
+        </div>
+        <fieldset>
+          <legend data-i18n="settings.loginSettings"> </legend>
+          <div class="field row">
+              <label for="school" data-i18n="settings.school"> </label>
+              <input id="school" type="text" placeholder="School" value="" />
+          </div>
+          <div class="field row">
+              <label for="username" data-i18n="settings.username"> </label>
+              <input id="username" type="text" placeholder="Username" value="" />
+          </div>
+          <div class="field row">
+              <label for="password" data-i18n="settings.password"> </label>
+              <input id="password" type="password" placeholder="Password" value="" />
+          </div>
+          <button id="validate" class="right" onclick="validate()"><i class="fa fa-save"></i> <span data-i18n="settings.buttonSave">Save</span></button>
+          <button id="clearAccount" class="right" onclick="clearAccount()"><i class="fa fa-trash-o"></i> <span data-i18n="settings.buttonClear">Clear</span></button>
+        </fieldset>
+        <fieldset>
+          <legend data-i18n="settings.studentInfo"> </legend>
+          <img id="photo" src="student.jpg" alt="photo" style="width:128px;height:128px;">
+          <div class="field row">
+              <label for="period" data-i18n="settings.period"> </label>
+              <input id="period" type="text" disabled="true" value="" />
+          </div>
+          <div class="field row">
+              <label for="type_group" data-i18n="settings.type_group"> </label>
+              <input id="type_group" type="text" disabled="true" value="" />
+          </div>
+          <div class="field row">
+              <label for="totalAverageGrade" data-i18n="settings.totalAverageGrade"> </label>
+              <input id="totalAverageGrade" type="text" disabled="true" value="" />
+          </div>
+        </fieldset>
       </div>
-      <div class="field row">
-          <label for="username" data-i18n="settings.username"> </label>
-          <input id="username" type="text" placeholder="Username" value="" />
-      </div>
-      <div class="field row">
-          <label for="password" data-i18n="settings.password"> </label>
-          <input id="password" type="password" placeholder="Password" value="" />
-      </div>
-      <button id="validate" class="right" onclick="validate()"><i class="fa fa-save"></i> <span data-i18n="settings.buttonSave">Save</span></button>
-      <button id="clearAccount" class="right" onclick="clearAccount()"><i class="fa fa-trash-o"></i> <span data-i18n="settings.buttonClear">Clear</span></button>
 
-      <i id="busy" class="magister-status magister-loading fa fa-cog fa-spin fa-2x fa-fw"> </i>
-      <i id="error" class="magister-status magister-err fa fa-times-circle fa-2x fa-fw"> </i>
-      <i id="success" class="magister-status magister-ok fa fa-check fa-2x fa-fw"> </i>
-
-    </fieldset>
-
-    <fieldset>
-      <legend data-i18n="settings.studentInfo"> </legend>
-      <img id="photo" src="student.jpg" alt="photo" style="width:128px;height:128px;">
-      <div class="field row">
-          <label for="period" data-i18n="settings.period"> </label>
-          <input id="period" type="text" disabled="true" value="" />
+      <!-- Debug logs panel -->
+      <div id="panel-2" class="panel">
+        <button type="button" class="right" id="button_deletelog" onclick="deleteLogs()" data-i18n="settings.deletelogs">Delete Logs</button>
+        <button type="button" class="right" id="button_getlog" onclick="showLogs()" data-i18n="settings.getlogs">Get Logs</button>
+        <div id="loglines"></div>
       </div>
-      <div class="field row">
-          <label for="type_group" data-i18n="settings.type_group"> </label>
-          <input id="type_group" type="text" disabled="true" value="" />
-      </div>
-      <div class="field row">
-          <label for="totalAverageGrade" data-i18n="settings.totalAverageGrade"> </label>
-          <input id="totalAverageGrade" type="text" disabled="true" value="" />
-      </div>
-    </fieldset>
 
 </html>

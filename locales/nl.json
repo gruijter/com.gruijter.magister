@@ -28,6 +28,10 @@
 
   "settings": {
     "title"               : "Magister instellingen",
+		"loggingTitle"        : "Debug logs",
+		"deletelogs"          : "logs verwijderen",
+		"getlogs"             : "logs verversen",
+		"settingsTitle"		    : "Instellingen",
     "student"             : "Scholier",
     "newStudent"          : "Nieuwe scholier toevoegen",
     "loginSettings"       : "Login gegevens",
@@ -40,8 +44,8 @@
     "confirmClearAccount" : "weet je het zeker?",
     "busyValidation"      : "account gegevens controleren",
     "error sup"           : "school, username en password zijn verplicht",
-    "busySaving"          : "gegevens worden opgeslagen",
-    "successSaving"       : "gegevens opgeslagen",
+		"testOk"  						: "OK! \r\n __profileInfo__",
+    "settingsSaved"       : "De gegevens zijn opgeslagen",
     "error"               : "",
     "studentOptions"      : "Opties",
     "notifyGradeChange"   : " zeg nieuwe cijfers",
@@ -52,5 +56,7 @@
     "type_group"          : "Schooltype en klas",
     "totalAverageGrade"   : "Cijfergemiddelde"
   }
+
+
 
 }

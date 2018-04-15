@@ -37,16 +37,11 @@ If you really like the app you can buy me a beer.
 
 [![Paypal donate][pp-donate-image]][pp-donate-link]
 
-<sup>btc: 14VR1QCpqWUWiSLa1sn3Dpzq3Wrp83zFfC</sup>
-
-<sup>eth: 0xEcF4747203Eba214c071fDAa4825cD867B410d70</sup>
-
-<sup>ltc: LfGJu1AdnPFMoBXwHvf2qG9sCV1onyXDvd</sup>
-
 ===============================================================================
 
 Version changelog
 ```
+v3.0.0  2018.04.15 ***WIP*** Complete rewrite to SDK2
 v2.0.7	2017.10.01 Minor bugfixes
 v2.0.6	2017.08.05 Condition cards bugfix. Removed driver
 v2.0.5	2017.08.05 Complete rewrite from device to app settings. Extra flowcards
