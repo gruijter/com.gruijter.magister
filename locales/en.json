@@ -37,6 +37,7 @@
       "school"              : "School",
       "username"            : "Username",
       "password"            : "Password",
+			"childNumber"					: "Parent login #",
       "buttonCheck"         : "check",
       "buttonSave"          : "save",
       "buttonClear"         : "delete student",

@@ -42,8 +42,14 @@
               <label for="password" data-i18n="settings.password"> </label>
               <input id="password" type="password" placeholder="Password" value="" />
           </div>
-          <button id="validate" class="right" onclick="validate()"><i class="fa fa-save"></i> <span data-i18n="settings.buttonSave">Save</span></button>
-          <button id="clearAccount" class="right" onclick="clearAccount()"><i class="fa fa-trash-o"></i> <span data-i18n="settings.buttonClear">Clear</span></button>
+					<div class="field row">
+							<label for="password" data-i18n="settings.childNumber"> </label>
+							<input id="childNumber" type="number" min="1" max="9" style="width: 30px;" value="1" />
+					</div>
+
+					<i id="busy" class="magister-status magister-loading fa fa-cog fa-spin fa-2x fa-fw"> </i>
+					<button id="validate" class="right" onclick="save()"><i class="fa fa-save"></i> <span data-i18n="settings.buttonSave">Save</span></button>
+        	<button id="clearAccount" class="right" onclick="clearAccount()"><i class="fa fa-trash-o"></i> <span data-i18n="settings.buttonClear">Clear</span></button>
         </fieldset>
         <fieldset>
           <legend data-i18n="settings.studentInfo"> </legend>

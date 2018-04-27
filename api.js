@@ -2,12 +2,12 @@ const Homey = require('homey');
 
 module.exports = [
 	{
-		description: 'Validate magister account settings',
+		description: 'Save magister account',
 		method: 'POST',
-		path: '/account/validate',
+		path: '/account/save',
 		fn: async function fn(args, callback) {
 			const credentials = args.body;
-			const result = await Homey.app.validateAccount(credentials);
+			const result = await Homey.app.saveAccount(credentials);
 			if (result instanceof Error) return callback(result);
 			return callback(null, result);
 		},
@@ -17,8 +17,8 @@ module.exports = [
 		method: 'DELETE',
 		path: '/account/delete',
 		fn: async function fn(args, callback) {
-			const studentId = args.body;
-			const result = await Homey.app.deleteAccount(studentId);
+			const { id: key } = args.body;
+			const result = await Homey.app.deleteAccount(key);
 			if (result instanceof Error) return callback(result);
 			return callback(null, result);
 		},

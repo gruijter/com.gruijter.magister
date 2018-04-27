@@ -87,12 +87,12 @@
           },
           {
           "name":"grade",
-          "type": "string",
+          "type": "number",
           "title": {
             "en":"grade",
             "nl":"cijfer"
             },
-          "example": "7.2"
+          "example": 7.2
           }
         ]
       },

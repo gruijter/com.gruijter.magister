@@ -27,9 +27,8 @@ available:
 Using parent credentials is not fully functional (no student picture, and only one
 student per school). Using student credentials is preferred.
 
-### Migrating from Version 1 app: ###
-Students and flows must be re-added when migrating from V1 to V2. The V1 student
-device should be deleted manually.
+### Migrating from Version 2 app: ###
+Students and flows must be deleted and re-added when migrating from V2 to V3.
 
 ##### Donate: #####
 If you like the app you can show your appreciation by posting it in the [forum].
@@ -41,7 +40,8 @@ If you really like the app you can buy me a beer.
 
 Version changelog
 ```
-v3.0.0  2018.04.15 ***WIP*** Complete rewrite to SDK2
+v3.0.0  2018.04.27 alpha1 ***WIP*** Complete rewrite to SDK2.
+ 				Parent login fixed. Only grades flowcards are operational.
 v2.0.7	2017.10.01 Minor bugfixes
 v2.0.6	2017.08.05 Condition cards bugfix. Removed driver
 v2.0.5	2017.08.05 Complete rewrite from device to app settings. Extra flowcards

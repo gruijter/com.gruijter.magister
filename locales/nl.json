@@ -38,6 +38,7 @@
     "school"              : "School",
     "username"            : "Gebruikersnaam",
     "password"            : "Wachtwoord",
+		"childNumber"					: "Ouder login #",
     "buttonCheck"         : "controleren",
     "buttonSave"          : "opslaan",
     "buttonClear"         : "scholier wissen",

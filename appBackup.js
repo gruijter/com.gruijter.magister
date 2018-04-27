@@ -22,41 +22,8 @@ along with com.gruijter.magister.  If not, see <http://www.gnu.org/licenses/>.
 const Homey = require('homey');
 const Logger = require('./captureLogs.js');
 const mapi = require('./mapi.js');
-const HomeyStudent = require('./homeyStudent.js');
 const fs = require('fs');
 // const util = require('util');
-
-// ========================SPEECH OUTPUT=========================================
-
-async function sayGrades(args) {
-	try {
-		let requestedPeriod;
-		let requestedDay;
-		if (args.when === 'today') {
-			requestedPeriod = new Date();
-			requestedPeriod.setDate(requestedPeriod.getDate() - 1);
-			requestedDay = Homey.__('today');
-		} else { // args.when === 'week'
-			requestedPeriod = new Date();
-			requestedPeriod.setDate(requestedPeriod.getDate() - 7);
-			requestedDay = Homey.__('the past 7 days');
-		}
-		const student = new HomeyStudent();
-		await student.loadSettings(args.student.studentId);	// get student settings from persistent storage
-		await student.login();
-		const grades = await student.getAllGrades();
-		const selectedGrades = grades.filter(grade => new Date(grade.dateFilledIn) > new Date(requestedPeriod));
-		Homey.ManagerSpeechOutput.say(`${Homey.__('new grades of')} ${student.firstName} ${Homey.__('of')} ${requestedDay}`);
-		if (selectedGrades.length < 1) {
-			return Homey.ManagerSpeechOutput.say(`${Homey.__('no new grades')} ${requestedDay}`);
-		}
-		selectedGrades.forEach((grade) => {
-			Homey.ManagerSpeechOutput.say(`${grade.classDescription} ${Homey.__('its a')} ${grade.grade}
-			${Homey.__('this one counts')} ${grade.weight} ${Homey.__('times')}`);
-		});
-	} catch (err) {	Homey.app.log(err); }
-	return true;
-}
 
 class MagisterApp extends Homey.App {
 
@@ -75,16 +42,41 @@ class MagisterApp extends Homey.App {
 				this.log('app unload called');
 				// save logs to persistant storage
 				this.logger.saveLogs();
-				// unregister listeners
-				// this.newGradeTrigger.unregister(); ?????
 			})
 			.on('memwarn', () => {
 				this.log('memwarn!');
 			});
+		// register trigger flowcards
+		this.newGradeTrigger = new Homey.FlowCardTrigger('new_grade')
+			.register()
+			.getArgument('student')
+			.registerAutocompleteListener((query, args) => {
+				let results = this.autoCompleteList;
+				results = results.filter(result => (result.name.toLowerCase().indexOf(query.toLowerCase()) > -1));
+				return Promise.resolve(results);
+			});
+
+		// // register action flow cards
+		// const blockDevice = new Homey.FlowCardAction('block_device');
+		// blockDevice.register()
+		// 	.on('run', async (args, state, callback) => {
+		// 		await this._driver.blockOrAllow.call(this, args.mac.name, 'Block');
+		// 		// this.log(args.mac.name);
+		// 		callback(null, true);
+		// 	})
+		// 	.getArgument('mac')
+		// 	.registerAutocompleteListener((query, args) => {
+		// 		let results = this._driver.makeAutocompleteList.call(this);
+		// 		results = results.filter((result) => {		// filter for query on MAC and Name
+		// 			const macFound = result.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+		// 			const nameFound = result.description.toLowerCase().indexOf(query.toLowerCase()) > -1;
+		// 			return macFound || nameFound;
+		// 		});
+		// 		return Promise.resolve(results);
+		// 	});
+
 
 		// init some variables
-		this.autoCompleteList = [];
-		this.registerFlowCards();
 		this.startPolling();
 	}
 
@@ -93,27 +85,25 @@ class MagisterApp extends Homey.App {
 			this.log('Polling started');
 			clearInterval(this.intervalId);	// stop polling first
 			this.makeAutocompleteList();	// needed for flowcards
-			this.pollStudentsOnce();	// get the first round of info right away
+			this.handleStudents();	// get the first round of info right away
 			this.intervalId = setInterval(() => {
-				this.pollStudentsOnce();
+				this.handleStudents();
 			}, 1000 * 60 * 10);// poll every 10 min
 		} catch (error) {
 			this.error(error);
 		}
 	}
 
-	async pollStudentsOnce() {
+	async handleStudents() {
 		const studentIds = Homey.ManagerSettings.getKeys();
 		// this.log(studentIds);
 		for (let idx = 0; idx < studentIds.length; idx += 1) {	// poll each student sequentially
 			const studentId = studentIds[idx];
-			const student = new HomeyStudent();
-			await student.loadSettings(studentId);	// get student settings from persistent storage
-			await student.login();
+			const { credentials } = Homey.ManagerSettings.get(studentId);
+			const student = await mapi.getStudent(credentials);
 			await this.handleGradesData(student);
 			// const appointments = await mapi.getAppointments(student, Date('2018-04-15'));
 			// this.log(appointments);
-			await student.saveSettings();	// save student changes back to persistent storage
 		}
 	}
 
@@ -128,12 +118,38 @@ class MagisterApp extends Homey.App {
 		this.log('Validating and saving', credentials);
 		return new Promise(async (resolve, reject) => {
 			try {
-				const newStudent = new HomeyStudent(credentials);
-				await newStudent.login();
-				newStudent.setLastLogDate(0); // get all grades from this course
-				const settings = await newStudent.saveSettings();
+				const student = await mapi.getStudent(credentials);
+				const currentCourse = await mapi.getCurrentCourse(student);
+				let { lastName } = student.profileInfo;
+				const initials = `${student.profileInfo.firstName[0]}${lastName[0]}`;
+				if (student.profileInfo.namePrefix !== null) {
+					lastName = `${student.profileInfo.namePrefix} ${student.profileInfo.lastName}`;
+				}
+				const oldStudentSettings = Homey.ManagerSettings.get(student.profileInfo.id) || {};
+				const newStudentSettings = {
+					studentId: student.profileInfo.id, // This is used as unique student ID, e.g. 18341
+					credentials: {
+						school: student.school.name,
+						username: credentials.username,
+						password: credentials.password,
+						childNumber: credentials.childNumber,
+					},
+					fullName: `${student.profileInfo.firstName} ${lastName}`,
+					initials,
+					type_group: `${currentCourse.type.description} - ${currentCourse.group.description}`,
+					period: `${currentCourse.schoolPeriod}`,
+					totalAverageGrade: oldStudentSettings.totalAverageGrade || null,
+					lastGradeLogDate: oldStudentSettings.lastGradeLogDate || 0,	// log all historic grades from currentCourse
+				};
+				Homey.ManagerSettings.set(newStudentSettings.studentId, newStudentSettings);
+				// store student photo in /userdata
+				const writeStream = fs.createWriteStream(`./userdata/${student.profileInfo.id}.jpg`);
+				student.profileInfo.getProfilePicture(128, 128, false)
+					.then((readStream) => {
+						readStream.pipe(writeStream);
+					});
 				this.startPolling();
-				return resolve(settings);
+				return resolve(newStudentSettings);
 			} catch (error) {
 				this.error(error);
 				return reject(error);
@@ -180,24 +196,47 @@ class MagisterApp extends Homey.App {
 	// logic to retrieve and handle student related information
 
 	handleGradesData(student) {
-		// this.log(`handling gradesData for ${student.name}`);
+		// this.log(`handling gradesData for ${student.profileInfo.id}`);
 		return new Promise(async (resolve, reject) => {
 			try {
-				const newGrades = await student.getNewGrades();
+				const studentSettings = Homey.ManagerSettings.get(student.profileInfo.id);
+				const grades = await mapi.getGrades(student);
+				const totalGrade = grades.reduce((acc, current) => {
+					const value = acc.value + (current.grade * current.weight);
+					const weight = acc.weight + current.weight;
+					return { value, weight };
+				}, { value: 0, weight: 0 });
+				const totalAverageGrade = Math.round(100 * (totalGrade.value / totalGrade.weight)) / 100;
+				const lastGradeDateFilledIn = grades.reduce((acc, current) => {
+					let lastDate = acc;
+					if (new Date(current.dateFilledIn) > new Date(lastDate)) {
+						lastDate = current.dateFilledIn;
+					}
+					return lastDate;
+				}, 0);
+				// update student settings with new avg grade and new fetch date/time
+				if (studentSettings.totalAverageGrade !== totalAverageGrade) {
+					studentSettings.totalAverageGrade = totalAverageGrade;
+				}
+				studentSettings.lastGradeLogDate = new Date(lastGradeDateFilledIn); // new Date('2018-4-15');	// for testing historic dates
+				// migrate initials from v2 app
+				if (!studentSettings.initials) {
+					studentSettings.initials = `${student.profileInfo.firstName[0]}${student.profileInfo.lastName[0]}`;
+				}
+				Homey.ManagerSettings.set(student.profileInfo.id, studentSettings);
+				// select and handle new grades
+				const newGrades = grades.filter(grade => new Date(grade.dateFilledIn) > new Date(studentSettings.lastGradeLogDate));
 				newGrades.forEach((newGrade) => {
-					const label = `${student.initials}-${newGrade.classDescription}`;
-					this.log(newGrade);
-					this.logGrade(newGrade, label);
+					this.logGrade(studentSettings.initials, newGrade);
 					const tokens = {
-						name: student.firstName,
+						name: student.profileInfo.firstName,
 						class: newGrade.classDescription,
 						description: newGrade.description,
 						weight: newGrade.weight,
 						grade: newGrade.grade,
 					};
-					const state = { studentId: student.studentId };
 					this.newGradeTrigger
-						.trigger(tokens, state)
+						.trigger(tokens)
 						.catch(this.error);
 				});
 				return resolve();
@@ -207,20 +246,20 @@ class MagisterApp extends Homey.App {
 		});
 	}
 
-	async logGrade(grade, label) {
+	async logGrade(studentInitials, grade) {
 		try {
 			const logDate = new Date(grade.testDate || grade.dateFilledIn); // use 1.testDate or 2.dateFilledIn as logdate
 			const log = await Homey.ManagerInsights.getLog(grade.classId)
-				.catch(async () => {
+				.catch(async (error) => {
 					const newLog = await Homey.ManagerInsights.createLog(grade.classId, {
-						label,
+						label: `${studentInitials}-${grade.classDescription}`,
 						type: 'number',
 						chart: 'scatter', // default chart type. can be: line, area, stepLine, column, spline, splineArea, scatter
 					});
 					return newLog;
 				});
 			log.createEntry(grade.grade, logDate);
-		}	catch (error) {	this.log(error.message); }
+		}	catch (error) {	this.log(error); }
 	}
 
 	deleteGradeLogs(studentInitials) {
@@ -263,41 +302,6 @@ class MagisterApp extends Homey.App {
 		});
 	}
 
-	// ========================FLOWCARD STUFF=========================================
-
-	registerFlowCards() {
-		// register trigger flowcards
-		this.newGradeTrigger = new Homey.FlowCardTrigger('new_grade')
-			.register()
-			.registerRunListener((args, state) => Promise.resolve(state.studentId === args.student.studentId));
-		this.newGradeTrigger
-			.getArgument('student')
-			.registerAutocompleteListener((query) => {
-				let results = this.autoCompleteList;
-				results = results.filter(result => (result.name.toLowerCase().indexOf(query.toLowerCase()) > -1));
-				return Promise.resolve(results);
-			});
-
-		// register condition flowcards
-
-		// register action flowcards
-		this.sayGradesAction = new Homey.FlowCardAction('sayGrades')
-			.register()
-			.registerRunListener((args) => {
-				sayGrades(args);
-				return Promise.resolve(true);
-			});
-		this.sayGradesAction
-			.getArgument('student')
-			.registerAutocompleteListener((query) => {
-				let results = this.autoCompleteList;
-				results = results.filter(result => (result.name.toLowerCase().indexOf(query.toLowerCase()) > -1));
-				return Promise.resolve(results);
-			});
-	}
-
-
 }
-
 
 module.exports = MagisterApp;
