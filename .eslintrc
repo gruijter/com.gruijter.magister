@@ -14,6 +14,7 @@
         "strict": 0,
         "padded-blocks": 0,
         "no-underscore-dangle": 0,
-        "max-len": ["error", { "comments": 250, "code": 150 }]
+        "max-len": ["error", { "comments": 250, "code": 150 }],
+        "no-await-in-loop": 0
     }
 }

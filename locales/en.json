@@ -1,7 +1,6 @@
 {
   "today"                       : "today",
   "tomorrow"                    : "tomorrow",
-
   "has no class"                : " has no class ",
   "but there is a description"  : "but there is a description: ",
   "the roster of"               : "the roster of ",
@@ -10,13 +9,10 @@
   "and ends at"                 : " and ends at ",
   "class"                       : "class ",
   "has been scrapped"           : ": has been scrapped",
-
   "homework of"                 : "homework of ",
-  "no homework"                 : " no homework ",
-
+  "no homework"                 : "has no homework ",
   "tests of"                    : "tests of ",
-  "no tests"                    : " no tests ",
-
+  "no tests"                    : "has no tests",
   "has a new grade for"         : " has a new grade for ",
   "its a"                      	: ", a ",
   "this one counts"             : "! this one counts ",
@@ -24,34 +20,35 @@
   "the past 7 days"             : "the past 7 days",
   "new grades of"               : "new grades of ",
   "no new grades"               : " no new grades ",
+  "fetchAllGrades"      				: "All grades are being re-fetched",
 
-    "settings": {
-      "title"               : "Magister settings",
-			"loggingTitle"				: "Debug logs",
-			"deletelogs"          : "Delete logs",
-			"getlogs"             : "Refresh logs",
-			"settingsTitle"				: "Settings",
-      "student"             : "Student",
-      "newStudent"          : "Add a new student",
-      "loginSettings"       : "Account credentials",
-      "school"              : "School",
-      "username"            : "Username",
-      "password"            : "Password",
-			"childNumber"					: "Parent login #",
-      "buttonCheck"         : "check",
-      "buttonSave"          : "save",
-      "buttonClear"         : "delete student",
-      "confirmClearAccount" : "are you sure?",
-      "busyValidation"      : "validating account",
-      "error sup"           : "school, username and password are mandatory",
-			"testOk"							: "OK!\r\n__profileInfo__",
-      "settingsSaved"       : "Settings were saved",
-      "error"               : "",
-      "studentOptions"      : "Options",
-      "studentInfo"         : "Student information",
-      "period"              : "Schoolperiod",
-      "type_group"          : "Schooltype and group",
-      "totalAverageGrade"   : "Total grade average "
-    }
+	"pair": {
+		"title"				: "Add Magister student",
+		"intro"				: "Enter the Magister login credentials. When parent credentials are used, modify the parent login #. (1 = 1<sup>st</sup> child, 2 = 2<sup>nd</sup> child, etc.)",
+		"school"			: "School",
+		"username"		: "Username",
+		"password"		: "Password",
+		"childNumber"	: "Parent login #",
+		"save"				: "Save",
+		"required"		: "School, username en password are mandatory",
+		"success"			: "The data have been correctly stored for: ",
+		"old_settings": "Old app version settings found! Remove the app first before re-installing from the Homey app store."
+	},
+
+	"settings": {
+		"title"               : "Magister App Information",
+		"loggingTitle"        : "Debug logs",
+		"deletelogs"          : "delete logs",
+		"getlogs"             : "get logs",
+		"settingsTitle"		    : "Student information",
+		"student"             : "Student",
+		"studentInfo"         : "Student information",
+		"period"              : "Course",
+		"typeAndgroup"        : "Schooltype and class",
+		"totalAverageGrade"   : "Grade average",
+		"instructionsLegend"	: "Instructions",
+		"instructions"				: "Students can be added and deleted from the Homey Device tab"
+	}
+
 
 }

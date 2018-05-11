@@ -25,12 +25,10 @@ const Magister = require('magister2.js');
 
 const magisterCache = [];
 
-module.exports.getAppointments = function getAppointments(student, date) {
-	console.log(`getting DayRoster for ${student.profileInfo.id} on ${date}`);
+module.exports.getAppointments = function getAppointments(student, from, to) {
+	// console.log(`getting DayRoster for ${student.profileInfo.id} from ${from} to ${to}`);
 	return new Promise(async (resolve, reject) => {
 		try {
-			const from = new Date(date);
-			const to = new Date(); // now
 			const appointments = await student.appointments(from, to);
 			// note: remove html content with .replace(/<[^>]+>/g, '');
 			return resolve(appointments);
@@ -41,7 +39,7 @@ module.exports.getAppointments = function getAppointments(student, date) {
 };
 
 module.exports.getGrades = function getGrades(student) {
-	console.log(`getting grades for ${student.profileInfo.id}`);
+	// console.log(`getting grades for ${student.profileInfo.id}`);
 	return new Promise(async (resolve, reject) => {
 		try {
 			const courses = await student.courses();
@@ -70,7 +68,7 @@ module.exports.getGrades = function getGrades(student) {
 };
 
 module.exports.getCurrentCourse = function getCurrentCourse(student) {
-	console.log(`getting latest course for ${student.profileInfo.id}`);
+	// console.log(`getting latest course for ${student.profileInfo.id}`);
 	return new Promise(async (resolve, reject) => {
 		try {
 			const courses = await student.courses();
@@ -85,7 +83,7 @@ module.exports.getCurrentCourse = function getCurrentCourse(student) {
 module.exports.getStudent = function getStudent(credentials) {
 	return new Promise(async (resolve, reject) => {
 		try {
-			const loginSession = await this.getMagisterSession(credentials);
+			const loginSession = await module.exports.getMagisterSession(credentials);
 			let student = loginSession;
 			const children = await loginSession.children()
 				.catch(() => {	// student account; leave student as is
@@ -111,9 +109,9 @@ module.exports.getMagisterSession = function getMagisterSession(credentials) {
 	return new Promise(async (resolve, reject) => {
 		try {
 			// // cache existing sessions
-			const id = `${credentials.school}_${credentials.username}`;
+			const id = `${credentials.school}_${credentials.username}_${credentials.password}`;
 			if (magisterCache[id] !== undefined) {
-				console.log('already got a session');
+				// console.log('already got a session');
 				return resolve(magisterCache[id]);
 			}
 			console.log('new session');

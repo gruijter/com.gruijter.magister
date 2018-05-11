@@ -29,29 +29,6 @@
           </select>
         </div>
         <fieldset>
-          <legend data-i18n="settings.loginSettings"> </legend>
-          <div class="field row">
-              <label for="school" data-i18n="settings.school"> </label>
-              <input id="school" type="text" placeholder="School" value="" />
-          </div>
-          <div class="field row">
-              <label for="username" data-i18n="settings.username"> </label>
-              <input id="username" type="text" placeholder="Username" value="" />
-          </div>
-          <div class="field row">
-              <label for="password" data-i18n="settings.password"> </label>
-              <input id="password" type="password" placeholder="Password" value="" />
-          </div>
-					<div class="field row">
-							<label for="password" data-i18n="settings.childNumber"> </label>
-							<input id="childNumber" type="number" min="1" max="9" style="width: 30px;" value="1" />
-					</div>
-
-					<i id="busy" class="magister-status magister-loading fa fa-cog fa-spin fa-2x fa-fw"> </i>
-					<button id="validate" class="right" onclick="save()"><i class="fa fa-save"></i> <span data-i18n="settings.buttonSave">Save</span></button>
-        	<button id="clearAccount" class="right" onclick="clearAccount()"><i class="fa fa-trash-o"></i> <span data-i18n="settings.buttonClear">Clear</span></button>
-        </fieldset>
-        <fieldset>
           <legend data-i18n="settings.studentInfo"> </legend>
           <img id="photo" src="student.jpg" alt="photo" style="width:128px;height:128px;">
           <div class="field row">
@@ -59,14 +36,18 @@
               <input id="period" type="text" disabled="true" value="" />
           </div>
           <div class="field row">
-              <label for="type_group" data-i18n="settings.type_group"> </label>
-              <input id="type_group" type="text" disabled="true" value="" />
+              <label for="typeAndgroup" data-i18n="settings.typeAndgroup"> </label>
+              <input id="typeAndgroup" type="text" disabled="true" value="" />
           </div>
           <div class="field row">
               <label for="totalAverageGrade" data-i18n="settings.totalAverageGrade"> </label>
               <input id="totalAverageGrade" type="text" disabled="true" value="" />
           </div>
         </fieldset>
+				<fieldset>
+					<legend data-i18n="settings.instructionsLegend"> </legend>
+					<p data-i18n="settings.instructions"> </p>
+				</fieldset>
       </div>
 
       <!-- Debug logs panel -->

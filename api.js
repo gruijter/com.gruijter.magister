@@ -2,28 +2,6 @@ const Homey = require('homey');
 
 module.exports = [
 	{
-		description: 'Save magister account',
-		method: 'POST',
-		path: '/account/save',
-		fn: async function fn(args, callback) {
-			const credentials = args.body;
-			const result = await Homey.app.saveAccount(credentials);
-			if (result instanceof Error) return callback(result);
-			return callback(null, result);
-		},
-	},
-	{
-		description: 'Delete magister account settings',
-		method: 'DELETE',
-		path: '/account/delete',
-		fn: async function fn(args, callback) {
-			const { id: key } = args.body;
-			const result = await Homey.app.deleteAccount(key);
-			if (result instanceof Error) return callback(result);
-			return callback(null, result);
-		},
-	},
-	{
 		description: 'Show loglines',
 		method: 'GET',
 		path: '/getlogs/',
@@ -45,45 +23,15 @@ module.exports = [
 			callback(null, result);
 		},
 	},
+	{
+		description: 'Get a list of students',
+		method: 'GET',
+		path: '/getStudents/',
+		requires_authorization: true,
+		role: 'owner',
+		fn: function fn(args, callback) {
+			const result = Homey.app.getStudents();
+			callback(null, result);
+		},
+	},
 ];
-
-// module.exports = [
-//
-//   {
-//     // validate account for use with settings page
-//     description: 'Validate magister account settings',
-//     method: 'GET',
-//     path:	'/account/validate',
-//     requires_authorization: true,
-//     role: 'owner',
-//     fn: function (callback, args) {
-//       var credentials = args.query;
-//       Homey.log("api validation entered");
-//       Homey.app.validateAccount (credentials, function (error, result){
-//         callback(null, {error, result});
-//         return;
-//       });
-//     }
-//   },
-//   {
-//     // Delete account
-//     description: 'Delete magister account settings',
-//     method: 'GET',
-//     path:	'/account/delete',
-//     requires_authorization: true,
-//     role: 'owner',
-//     fn: function (callback, args) {
-//       var toDelete = args.query;
-//       Homey.log("api deletion entered");
-//       Homey.log(args);
-//       Homey.log(toDelete);
-//
-//       Homey.app.deleteAccount (toDelete.id, function (error, result){
-//         Homey.log(error);
-//         Homey.log(result);
-//         return callback(error, result);
-//       });
-//     }
-//   }
-//
-// ]
