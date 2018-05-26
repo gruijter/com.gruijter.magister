@@ -40,7 +40,7 @@ If you really like the app you can buy me a beer.
 
 Version changelog (summary)
 ```
-v3.0.0  2018.05.11 ***BETA*** Complete rewrite to SDK2 as device. 1hr polling.
+v3.0.0  2018.05.26 Beta. Complete rewrite to SDK2 as device. 1hr polling.
         Parent login fixed. Added skipped class triggers. Added mobile card info.
 v2.0.7  2017.10.01 Minor bugfixes
 v2.0.6  2017.08.05 Condition cards bugfix. Removed driver

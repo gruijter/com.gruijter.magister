@@ -26,7 +26,7 @@ class MagisterApp extends Homey.App {
 
 	onInit() {
 		this.log('Magister app is running!');
-		this.logger = new Logger('log', 1000);
+		this.logger = new Logger('log', 200);
 		// register some listeners
 		process.on('unhandledRejection', (error) => {
 			this.error('unhandledRejection! ', error);

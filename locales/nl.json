@@ -24,7 +24,7 @@
 
 	"pair": {
     "title"				: "Magister leerling toevoegen",
-		"intro"				: "Vul de Magister inlog gegevens in. Als de login gegevens van een ouder wordt gebruikt, dan het ouder login # aanpassen (1 = 1<sup>e</sup> kind, 2 = 2<sup>e</sup> kind, etc.)",
+		"intro"				: "Vul de Magister inlog gegevens in. Als de login gegevens van een ouder worden gebruikt, dan het ouder login # aanpassen (1 = 1<sup>e</sup> kind, 2 = 2<sup>e</sup> kind, etc.)",
 		"school"			: "School",
 		"username"		: "Gebruikersnaam",
 		"password"		: "Wachtwoord",

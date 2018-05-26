@@ -1,8 +1,8 @@
 {
-  "id": "com.gruijter.magisterv3",
+  "id": "com.gruijter.magister",
   "name": {
-      "en": "MagisterV3",
-      "nl": "MagisterV3"
+      "en": "Magister",
+      "nl": "Magister"
   },
   "description": {
     "en": "School information from Magister",
