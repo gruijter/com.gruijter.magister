@@ -244,9 +244,18 @@ class StudentDriver extends Homey.Driver {
 			if (allRosterItems[0] !== undefined) {
 				summary.description = allRosterItems[0].description || allRosterItems[0].content || '';
 			}
-			const allLessons = allRosterItems.filter(lesson => lesson.schoolHour);	// lessons, including cancelled ones
+			const allHours = allRosterItems.filter(lesson => lesson.schoolHour); // all hours
+			const allLessons = allHours.filter((lesson) => { // lessons, including cancelled ones
+				if (!lesson.isCancelled) { return true; } // always include non-canceled hours
+				const doubles = allHours.filter(les => les.schoolHour === lesson.schoolHour);
+				if (doubles.length > 1) {
+					const undoubled = doubles.filter(ls => !ls.isCancelled);
+					if (undoubled.length > 0) { return false; }
+				}
+				return true;
+			});
 			summary.cancellations = (allLessons.filter(lesson => lesson.isCancelled).length);
-			const lessons = allLessons.filter(lesson => !lesson.isCancelled);	// lessons, not including cancelled ones
+			const lessons = allLessons.filter(lesson => !lesson.isCancelled); // lessons, not including cancelled ones
 			if (lessons.length > 0) {
 				summary.startHour = lessons[0].schoolHour;
 				summary.startTime = lessons[0].start.toTimeString().substr(0, 5);
@@ -289,12 +298,12 @@ class StudentDriver extends Homey.Driver {
 					// infoType e.g. 0=none, 1=homework, 2=test/proefwerk, 3=exam, 4=quiz/so, 5=oral/mondeling, 6 =information, 7=annotation
 
 					// teacher: appointment.teachers[0], // e.g. 'G. D. Lasseur'
-					// type: appointment.type,
+					// type: appointment.type, // e.g. 13??
 					// // type e.g. 0='none', 1='personal', 2='general', 3='schoolwide', 4='internship', 5='intake', 6='scheduleFree', 7='kwt', 8='standby', 9='block', 10='miscellaneous',
 					// // 11='localBlock', 12='classBlock', 13='lesson', 14='studiehuis', 15='scheduleFreeStudy', 16='planning', 101='actions', 102='presences', 103='examSchedule'
 					// isDone: appointment.isDone, // e.g. false
 					// classRoom: appointment.classRooms[0], // e.g. 'M218'
-					// status: appointment.status, // e.g. 4 ??? 2=dayInfo?, 3,9,10=changed, 4,5=canceled, 7=regular?
+					status: appointment.status, // e.g. 4 ??? 2=dayInfo?, 3,9,10=changed, 4,5=canceled, 7=regular?
 					// isChanged: appointment.isChanged, // e.g. false
 					// isFullDay: appointment.isFullDay, //  e.g. false
 				};
@@ -303,6 +312,8 @@ class StudentDriver extends Homey.Driver {
 				// 	lesson.teacher = lesson.teacher.fullName;
 				// }
 				lesson.content = lesson.content.replace(/<[^>]+>/g, '');
+				// lesson.content = lesson.content.replace(/\\[bntr]/g, '');
+				// lesson.content = lesson.content.replace(/&nbsp/g, '');
 				return lesson;
 			});
 			return Promise.resolve(allRosterItems);
@@ -340,6 +351,7 @@ class StudentDriver extends Homey.Driver {
 	logGrade(grade, label) {
 		try {
 			const logDate = new Date(grade.testDate || grade.dateFilledIn); // use 1.testDate or 2.dateFilledIn as logdate
+			this.log(`new/updated grade: ${label} ${grade.grade}, ${grade.weight}x, ${logDate}`);
 			const createOptions = {
 				label,
 				type: 'number',
@@ -396,8 +408,8 @@ class StudentDriver extends Homey.Driver {
 				}
 				return lastDate;
 			}, 0);
-			if (new Date(lastGradeDateFilledIn) > this.lastGradeLogDate) {
-				this.lastGradeLogDate = new Date(lastGradeDateFilledIn); // new Date('2018-4-15');	// for testing historic dates
+			if (new Date(lastGradeDateFilledIn) > new Date(this.lastGradeLogDate)) {
+				this.lastGradeLogDate = lastGradeDateFilledIn; // new Date('2018-4-15');	// for testing historic dates
 			}
 			return Promise.resolve(newGrades);
 		} catch (error) {

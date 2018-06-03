@@ -40,6 +40,7 @@ If you really like the app you can buy me a beer.
 
 Version changelog (summary)
 ```
+v3.0.1  2018.06.03 Fix repeated new grade reports. Improved cancelled class reports.
 v3.0.0  2018.05.26 Beta. Complete rewrite to SDK2 as device. 1hr polling.
         Parent login fixed. Added skipped class triggers. Added mobile card info.
 v2.0.7  2017.10.01 Minor bugfixes

@@ -44,7 +44,7 @@ class StudentDevice extends Homey.Device {	// studentDevice represents a student
 		this.typeAndGroup = settings.typeAndGroup;
 		this.period = settings.period;
 		this.totalAverageGrade = Number(settings.totalAverageGrade);
-		this.lastGradeLogDate = settings.lastGradeLogDate || 0;
+		this.lastGradeLogDate = new Date(settings.lastGradeLogDate || 0);
 		this.grades = [];	// available after getGrades
 		this.rosterToday = { summary: null, lessons: null }; // available after getDayRostersTodayAndTomorrow()
 		this.rosterTomorrow = { summary: null, lessons: null };	// available after getDayRostersTodayAndTomorrow()
@@ -118,7 +118,7 @@ class StudentDevice extends Homey.Device {	// studentDevice represents a student
 			typeAndGroup: this.typeAndGroup,
 			period: this.period,
 			totalAverageGrade: this.totalAverageGrade.toString(),
-			lastGradeLogDate: this.lastGradeLogDate,
+			lastGradeLogDate: this.lastGradeLogDate.toISOString(),
 		};
 		return studentSettings;
 	}
