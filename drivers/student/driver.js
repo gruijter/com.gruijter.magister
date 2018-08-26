@@ -85,6 +85,7 @@ class StudentDriver extends Homey.Driver {
 				await studentDevice.handleLessons();
 				// this.log(util.inspect(await studentDevice.handleLessons(), { colors: true, depth: null }));
 				studentDevice.saveSettings();	// save student changes back to persistent storage
+				global.gc(); // do garbage collection
 			} catch (error) {
 				this.error(error);
 			}
