@@ -1,6 +1,6 @@
 # Magister #
 
-Homey app to interface with the Magister school information system.
+Homey [app] to interface with the Magister school information system.
 
 After adding a student via the device tab, the following functionality is
 available:
@@ -52,7 +52,7 @@ v1.0.0  2016.12.27 Stable release
 v0.0.3  2016.07.09 Initial release
 ```
 
-
-[forum]: https://forum.athom.com/discussion/1716
+[app]: https://apps.athom.com/app/com.gruijter.magister
+[forum]: https://community.athom.com/t/595
 [pp-donate-link]: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YGTW25KRKEADE
 [pp-donate-image]: https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif
