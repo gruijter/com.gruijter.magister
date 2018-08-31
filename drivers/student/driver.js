@@ -420,7 +420,7 @@ class StudentDriver extends Homey.Driver {
 
 	// ========================SPEECH OUTPUT=========================================
 
-	sayGrades(args) {	// call with studentDevice as this
+	sayGrades(args) {
 		try {
 			let requestedPeriod;
 			let requestedDay;
@@ -433,8 +433,8 @@ class StudentDriver extends Homey.Driver {
 				requestedPeriod.setDate(requestedPeriod.getDate() - 7);
 				requestedDay = Homey.__('the past 7 days');
 			}
-			const selectedGrades = this.grades.filter(grade => new Date(grade.dateFilledIn) > new Date(requestedPeriod));
-			Homey.ManagerSpeechOutput.say(`${Homey.__('new grades of')} ${this.firstName} ${Homey.__('of')} ${requestedDay}`);
+			const selectedGrades = args.student.grades.filter(grade => new Date(grade.dateFilledIn) > new Date(requestedPeriod));
+			Homey.ManagerSpeechOutput.say(`${Homey.__('new grades of')} ${args.student.firstName} ${Homey.__('of')} ${requestedDay}`);
 			if (selectedGrades.length < 1) {
 				return Homey.ManagerSpeechOutput.say(`${Homey.__('no new grades')} ${requestedDay}`);
 			}
@@ -451,22 +451,22 @@ class StudentDriver extends Homey.Driver {
 			let requestedRoster;
 			let requestedDay;
 			if (args.when === 'today') {
-				requestedRoster = this.rosterToday;
+				requestedRoster = args.student.rosterToday;
 				requestedDay = Homey.__('today');
 			} else {
-				requestedRoster = this.rosterTomorrow;
+				requestedRoster = args.student.rosterTomorrow;
 				requestedDay = Homey.__('tomorrow');
 			}
 			if (!requestedRoster.lessons || !requestedRoster.summary) {
 				return;
 			}
 			if (!requestedRoster.summary.startHour) {
-				Homey.ManagerSpeechOutput.say(`${this.firstName} ${Homey.__('has no class')} ${requestedDay}`);
+				Homey.ManagerSpeechOutput.say(`${args.student.firstName} ${Homey.__('has no class')} ${requestedDay}`);
 				if (requestedRoster.summary.description !== '') {
 					Homey.ManagerSpeechOutput.say(`${Homey.__('but there is a description')}: ${requestedRoster.summary.description}`);
 				}
 			} else {
-				Homey.ManagerSpeechOutput.say(`${Homey.__('the roster of')} ${this.firstName} ${Homey.__('of')} ${requestedDay}
+				Homey.ManagerSpeechOutput.say(`${Homey.__('the roster of')} ${args.student.firstName} ${Homey.__('of')} ${requestedDay}
 					${Homey.__('starts at')} ${requestedRoster.summary.startTime} ${Homey.__('and ends at')} ${requestedRoster.summary.endTime}`);
 				requestedRoster.lessons.forEach((currentLesson) => {
 					if (currentLesson.isCancelled) {
@@ -484,19 +484,19 @@ class StudentDriver extends Homey.Driver {
 			let requestedRoster;
 			let requestedDay;
 			if (args.when === 'today') {
-				requestedRoster = this.rosterToday;
+				requestedRoster = args.student.rosterToday;
 				requestedDay = Homey.__('today');
 			} else {
-				requestedRoster = this.rosterTomorrow;
+				requestedRoster = args.student.rosterTomorrow;
 				requestedDay = Homey.__('tomorrow');
 			}
 			if (!requestedRoster.lessons || !requestedRoster.summary) {
 				return;
 			}
 			if (!requestedRoster.summary.homework) {
-				Homey.ManagerSpeechOutput.say(`${this.firstName} ${Homey.__('no homework')} ${requestedDay}`);
+				Homey.ManagerSpeechOutput.say(`${args.student.firstName} ${Homey.__('no homework')} ${requestedDay}`);
 			} else {
-				Homey.ManagerSpeechOutput.say(`${Homey.__('homework of')} ${this.firstName} ${Homey.__('of')} ${requestedDay}:`);
+				Homey.ManagerSpeechOutput.say(`${Homey.__('homework of')} ${args.student.firstName} ${Homey.__('of')} ${requestedDay}:`);
 				requestedRoster.lessons.forEach((currentLesson) => {
 					if (currentLesson.infoType >= 1) {
 						Homey.ManagerSpeechOutput.say(`${currentLesson.class}: ${currentLesson.content.substr(0, 255)}`);
@@ -511,19 +511,19 @@ class StudentDriver extends Homey.Driver {
 			let requestedRoster;
 			let requestedDay;
 			if (args.when === 'today') {
-				requestedRoster = this.rosterToday;
+				requestedRoster = args.student.rosterToday;
 				requestedDay = Homey.__('today');
 			} else {
-				requestedRoster = this.rosterTomorrow;
+				requestedRoster = args.student.rosterTomorrow;
 				requestedDay = Homey.__('tomorrow');
 			}
 			if (!requestedRoster.lessons || !requestedRoster.summary) {
 				return;
 			}
 			if (!requestedRoster.summary.tests) {
-				Homey.ManagerSpeechOutput.say(`${this.firstName} ${Homey.__('no tests')} ${requestedDay}`);
+				Homey.ManagerSpeechOutput.say(`${args.student.firstName} ${Homey.__('no tests')} ${requestedDay}`);
 			} else {
-				Homey.ManagerSpeechOutput.say(`${Homey.__('tests of')} ${this.firstName} ${Homey.__('of')} ${requestedDay}:`);
+				Homey.ManagerSpeechOutput.say(`${Homey.__('tests of')} ${args.student.firstName} ${Homey.__('of')} ${requestedDay}:`);
 				requestedRoster.lessons.forEach((currentLesson) => {
 					if (currentLesson.infoType >= 2) {
 						Homey.ManagerSpeechOutput.say(`${currentLesson.class}: ${currentLesson.content.substr(0, 255)}`);

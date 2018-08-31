@@ -132,7 +132,7 @@ class StudentDevice extends Homey.Device {	// studentDevice represents a student
 			.then((readStream) => {
 				readStream.pipe(writeStream);
 			})
-			.catch(this.error);
+			.catch(() => { this.log('profile picture could not be loaded'); });
 		return studentSettings;
 	}
 

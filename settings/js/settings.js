@@ -1,6 +1,7 @@
 /* global $ */
 let allStudents = {};
 var Homey;
+const img = new Image();
 
 function clearSettings() {
 	$('#studentList').val(null);
@@ -17,6 +18,13 @@ function showSettings(student) {
 	$('#totalAverageGrade').val(student.totalAverageGrade);
 	$('#period').val(student.period);
 	$('#photo').prop('src', `../userdata/${student.studentId}.jpg`);
+	img.onerror = function onError() {
+		$('#photo').prop('src', 'student.jpg');
+	};
+	// img.onload = function onLoad() {
+	// 	console.log('got picture');
+	// };
+	img.src = `../userdata/${student.studentId}.jpg`;
 }
 
 function studentSelected() {
