@@ -95,7 +95,7 @@ class StudentDevice extends Homey.Device {	// studentDevice represents a student
 		clearInterval(this.intervalIdDevicePoll);
 		this.log('student settings changed');
 		if (newSettingsObj.fetchAllGrades) {
-			this.lastGradeLogDate = 0;
+			this.lastGradeLogDate = new Date(0);
 			this._driver.startPolling();
 			return callback(Homey.__('fetchAllGrades'), null);
 		}

@@ -40,7 +40,7 @@ If you really like the app you can buy me a beer.
 
 Version changelog (summary)
 ```
-v3.0.3  2018.09.01 Fix flows for multiple students. Fix missing profile picture.
+v3.0.3  2018.09.02 Fix flows for multiple students. Fix missing profile picture.
 v3.0.2  2018.08.12 Reduced memory usage.
 v3.0.1  2018.06.03 Fix repeated new grade reports. Improved cancelled class reports.
 v3.0.0  2018.05.26 Beta. Complete rewrite to SDK2 as device. 1hr polling.
