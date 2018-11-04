@@ -23,7 +23,7 @@ along with com.gruijter.magister.  If not, see <http://www.gnu.org/licenses/>.
 
 const { default: magister, getSchools } = require('magister.js');
 
-const magisterCache = [];
+// const magisterCache = [];
 
 module.exports.getAppointments = function getAppointments(student, from, to) {
 	// console.log(`getting DayRoster for ${student.profileInfo.id} from ${from} to ${to}`);
@@ -109,11 +109,11 @@ module.exports.getMagisterSession = function getMagisterSession(credentials) {
 	return new Promise(async (resolve, reject) => {
 		try {
 			// // cache existing sessions
-			const id = `${credentials.school}_${credentials.username}_${credentials.password}`;
-			if (magisterCache[id] !== undefined) {
-				// console.log('already got a session');
-				return resolve(magisterCache[id]);
-			}
+			// const id = `${credentials.school}_${credentials.username}_${credentials.password}`;
+			// if (magisterCache[id] !== undefined) {
+			// 	// console.log('already got a session');
+			// 	return resolve(magisterCache[id]);
+			// }
 			console.log('new session');
 			const schoolQueery = credentials.school;
 			const schools = await getSchools(schoolQueery); // get schools matching '<schoolname>'
@@ -124,7 +124,7 @@ module.exports.getMagisterSession = function getMagisterSession(credentials) {
 				password: credentials.password,
 			};
 			const magisterSession = await magister(sessionCredentials);
-			magisterCache[id] = magisterSession;
+			// magisterCache[id] = magisterSession;
 			return resolve(magisterSession);
 		} catch (error) {
 			return reject(error);
