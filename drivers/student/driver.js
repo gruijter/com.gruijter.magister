@@ -393,8 +393,9 @@ class StudentDriver extends Homey.Driver {
 		try {
 			const gradesUnfiltered = await mapi.getGrades(this.magisterStudent);
 			// remove weight zero and grades that are not a number
-			const grades = gradesUnfiltered.filter(grade => (grade.weight > 0)); //  && !Number.isNaN(Number(grade.grade)));
-			const totalGrade = grades.reduce((acc, current) => {
+			const grades = gradesUnfiltered.filter(grade => (grade.weight > 0));
+			const gradesNumbers = grades.filter(grade => !Number.isNaN(Number(grade.grade)));
+			const totalGrade = gradesNumbers.reduce((acc, current) => {
 				const value = acc.value + (Number(current.grade) * current.weight);
 				const weight = acc.weight + current.weight;
 				return { value, weight };
