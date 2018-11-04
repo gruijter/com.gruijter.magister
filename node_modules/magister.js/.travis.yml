@@ -1,0 +1,19 @@
+sudo: false
+language: node_js
+node_js:
+  - "node"
+install:
+  - npm install
+before_script:
+  - test/version.sh
+script:
+  - npm run test
+  - npm run lint
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/2e5483e94201fb570123
+      - https://webhooks.gitter.im/e/091294274622b34e04f3
+    on_success: change
+    on_failure: always
+    on_start: never

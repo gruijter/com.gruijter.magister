@@ -40,7 +40,8 @@ If you really like the app you can buy me a beer.
 
 Version changelog (summary)
 ```
-***TODO*** New auth method. school search during pair. improve change roster detection. calendar sync.
+***TODO*** school search during pair. improve change roster detection. calendar sync.
+v3.0.6	2018.11.04 BETA new auth method
 v3.0.5	2018.11.04 Fix grades for non-numbers
 v3.0.4  2018.09.08 Fix login for schools with numbers in their url
 v3.0.3  2018.09.02 Fix flows for multiple students. Fix missing profile picture.

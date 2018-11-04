@@ -21,7 +21,7 @@ along with com.gruijter.magister.  If not, see <http://www.gnu.org/licenses/>.
 
 // retrieving data via Magister API
 
-const Magister = require('magister2.js');
+const { default: magister, getSchools } = require('magister.js');
 
 const magisterCache = [];
 
@@ -116,14 +116,14 @@ module.exports.getMagisterSession = function getMagisterSession(credentials) {
 			}
 			console.log('new session');
 			const schoolQueery = credentials.school;
-			const schools = await Magister.getSchools(schoolQueery); // get schools matching '<schoolname>'
+			const schools = await getSchools(schoolQueery); // get schools matching '<schoolname>'
 			if (schools.length < 1) throw Error('No matching school found');
 			const sessionCredentials = {
 				school: schools[0], // get first matching school
 				username: credentials.username,
 				password: credentials.password,
 			};
-			const magisterSession = await Magister.default(sessionCredentials);
+			const magisterSession = await magister(sessionCredentials);
 			magisterCache[id] = magisterSession;
 			return resolve(magisterSession);
 		} catch (error) {

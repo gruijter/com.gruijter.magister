@@ -1,0 +1,13 @@
+{
+	"ecmaVersion": 6,
+	"libs": [
+		"ecma5",
+		"ecma6",
+		"underscore"
+	],
+	"dontLoad": [ "node_modules", "lib" ],
+	"plugins": {
+		"node": {},
+		"es_modules": {}
+	}
+}
