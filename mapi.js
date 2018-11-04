@@ -47,10 +47,10 @@ module.exports.getGrades = function getGrades(student) {
 			const rawGrades = await currentCourse.grades();
 			// only type 1 grades, and grades that are a number
 			const grades = rawGrades
-				.filter(gradeRaw => (gradeRaw.type._type === 1 && !Number.isNaN(gradeRaw.grade.replace(',', '.'))))
+				.filter(gradeRaw => (gradeRaw.type._type === 1)) // && !Number.isNaN(gradeRaw.grade.replace(',', '.'))))
 				.map(gradeRaw => ({
 					id: gradeRaw.id,
-					grade: Number(gradeRaw.grade.replace(',', '.')),
+					grade: gradeRaw.grade.replace(',', '.'),	// this is a string!
 					weight: gradeRaw.weight,
 					description: gradeRaw.description,
 					testDate: gradeRaw.testDate,

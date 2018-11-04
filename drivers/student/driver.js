@@ -150,8 +150,10 @@ class StudentDriver extends Homey.Driver {
 			// check for roster change today
 			if (JSON.stringify(oldRosterToday.lessons) !== JSON.stringify(newRosters.rosterToday.lessons)) {
 				this.log('something changed today');
+				// console.log(JSON.stringify(oldRosterToday.lessons));
+				// console.log(JSON.stringify(newRosters.rosterToday.lessons));
 				rosterChangedToday = true;
-				// this.log(newRosters.rosterToday.summary);
+				this.log(JSON.stringify(newRosters.rosterToday.summary));
 				const tokens = {
 					name: this.firstName,
 					startHour: newRosters.rosterToday.summary.startHour,
@@ -168,7 +170,9 @@ class StudentDriver extends Homey.Driver {
 			// check for roster change tomorrow
 			if (JSON.stringify(oldRosterTomorrow.lessons) !== JSON.stringify(newRosters.rosterTomorrow.lessons)) {
 				this.log('something changed tomorrow');
-				// this.log(newRosters.rosterTomorrow.summary);
+				// console.log(JSON.stringify(oldRosterTomorrow.lessons));
+				// console.log(JSON.stringify(newRosters.rosterTomorrow.lessons));
+				this.log(JSON.stringify(newRosters.rosterTomorrow.summary));
 				const tokens = {
 					name: this.firstName,
 					startHour: newRosters.rosterTomorrow.summary.startHour,
@@ -218,9 +222,9 @@ class StudentDriver extends Homey.Driver {
 			const rosterToday = await this.getDayRoster(today);
 			this.setCapabilityValue('schoolStart', rosterToday.summary.startTime);
 			this.setCapabilityValue('schoolEnd', rosterToday.summary.endTime);
-			this.rosterToday = rosterToday;
+			this.rosterToday = await rosterToday;
 			const rosterTomorrow = await this.getDayRoster(tomorrow);
-			this.rosterTomorrow = rosterTomorrow;
+			this.rosterTomorrow = await rosterTomorrow;
 			return Promise.resolve({ rosterToday, rosterTomorrow });
 		} catch (error) {
 			return error;
@@ -330,6 +334,9 @@ class StudentDriver extends Homey.Driver {
 		try {
 			const newGrades = await this.getNewGrades();
 			newGrades.forEach((newGrade) => {
+				if (Number.isNaN(Number(newGrade.grade))) {
+					return;
+				}
 				const label = `${this.initials}-${newGrade.classDescription}`;
 				this.logGrade(newGrade, label);
 				const tokens = {
@@ -337,7 +344,7 @@ class StudentDriver extends Homey.Driver {
 					class: newGrade.classDescription,
 					description: newGrade.description,
 					weight: newGrade.weight,
-					grade: newGrade.grade,
+					grade: Number(newGrade.grade),
 				};
 				this.flowCards.newGradeTrigger
 					.trigger(this, tokens)
@@ -351,6 +358,9 @@ class StudentDriver extends Homey.Driver {
 
 	logGrade(grade, label) {
 		try {
+			if (Number.isNaN(Number(grade))) {
+				return;
+			}
 			const logDate = new Date(grade.testDate || grade.dateFilledIn); // use 1.testDate or 2.dateFilledIn as logdate
 			this.log(`new/updated grade: ${label} ${grade.grade}, ${grade.weight}x, ${logDate}`);
 			const createOptions = {
@@ -361,7 +371,7 @@ class StudentDriver extends Homey.Driver {
 			Homey.ManagerInsights.createLog(grade.classId, createOptions)
 				.catch(() => Promise.resolve(Homey.ManagerInsights.getLog(grade.classId)))
 				.then((newLog) => {
-					newLog.createEntry(grade.grade, logDate);
+					newLog.createEntry(Number(grade.grade), logDate);
 				});
 		}	catch (error) {	this.log(error.message); }
 	}
@@ -381,16 +391,23 @@ class StudentDriver extends Homey.Driver {
 
 	async getAllGrades() {	// call with studentDevice as this
 		try {
-			const grades = await mapi.getGrades(this.magisterStudent);
+			const gradesUnfiltered = await mapi.getGrades(this.magisterStudent);
+			// remove weight zero and grades that are not a number
+			const grades = gradesUnfiltered.filter(grade => (grade.weight > 0)); //  && !Number.isNaN(Number(grade.grade)));
 			const totalGrade = grades.reduce((acc, current) => {
-				const value = acc.value + (current.grade * current.weight);
+				const value = acc.value + (Number(current.grade) * current.weight);
 				const weight = acc.weight + current.weight;
 				return { value, weight };
 			}, { value: 0, weight: 0 });
 			this.totalAverageGrade = Math.round(100 * (totalGrade.value / totalGrade.weight)) / 100;
 			this.setCapabilityValue('totalAverageGrade', this.totalAverageGrade);
-			const lastGrade = `${grades[grades.length - 1].classAbreviation} ${grades[grades.length - 1].grade}x${grades[grades.length - 1].weight}`;
-			this.setCapabilityValue('lastGrade', lastGrade);
+			let lastGrade;
+			if (grades[grades.length - 1]) {
+				lastGrade = `${grades[grades.length - 1].classAbreviation} ${grades[grades.length - 1].grade}x${grades[grades.length - 1].weight}`;
+			}
+			if (lastGrade) {
+				this.setCapabilityValue('lastGrade', lastGrade);
+			}
 			this.grades = grades;
 			return Promise.resolve(grades);
 		} catch (error) {
