@@ -130,7 +130,6 @@ class StudentDevice extends Homey.Device {	// studentDevice represents a student
 		const writeStream = fs.createWriteStream(`./userdata/${this.studentId}.jpg`);
 		this.magisterStudent.profileInfo.getProfilePicture(128, 128, false)
 			.then((readStream) => {
-				console.log('saving picture now');
 				readStream.pipe(writeStream);
 			})
 			.catch(() => { this.log('profile picture could not be loaded'); });
