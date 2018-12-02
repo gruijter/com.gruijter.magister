@@ -1,14 +1,53 @@
+
+<p data-i18n="pair.intro">intro</p>
+
+<table class="pairSettings">
+	<tr>
+		<td style="width:100px;" data-i18n="pair.schoolName">schoolName</td>
+		<td><input id="schoolName" type="text" style="width:200px;" value="" placeholder=""/></td>
+	</tr>
+	<tr>
+		<td style="width:100px;" data-i18n="pair.schoolUrl">schoolUrl</td>
+		<td><input id="schoolUrl" type="text" style="width:200px;" value="" disabled/></td>
+	</tr>
+</table>
+
+<p></p>
+
+<table class="pairSettings">
+	<tr>
+		<td style="width:100px;" data-i18n="pair.username">username</td>
+		<td><input id="username" type="text" style="width:200px;" value="" placeholder=""/></td>
+	</tr>
+	<tr>
+		<td style="width:100px;" data-i18n="pair.password">password</td>
+		<td><input id="password" type="password" style="width:200px;" value="" placeholder=""/></td>
+	</tr>
+	<tr>
+		<td style="width:100px;" data-i18n="pair.childNumber">host</td>
+		<td><input id="childNumber" type="number" min=1 max=9 value=1 /></td>
+	</tr>
+</table>
+
+<p></p>
+
+<fieldset>
+	<button class="button" data-i18n="pair.save" onclick="testSettings()">Save</button>
+</fieldset>
+
 <script>
 Homey.setTitle( __('pair.title') );
 
+let school;
+
 function testSettings () {
 	// variables
-	var school = document.getElementById( 'school' ).value;
+	var schoolName = document.getElementById( 'schoolName' ).value;
 	var username = document.getElementById( 'username' ).value;
 	var password = document.getElementById( 'password' ).value;
 	var childNumber = document.getElementById( 'childNumber' ).value;
 
-	if (school != '' && username != '' && password != '') {
+	if (school && school.url && username != '' && password != '') {
 		var credentials = {
 			school,
 			username,
@@ -18,12 +57,11 @@ function testSettings () {
 		// Continue to back-end, pass along data
 		Homey.emit( 'save', credentials, function( err, result ){
 			if (err) {
-				console.log(err);
 				Homey.alert(err.message, 'error');
 			} else {
-				var response = JSON.parse(result);
+				const response = JSON.parse(result);
 				Homey.alert(`${Homey.__('pair.success')} ${response.info.firstName}`, 'info');
-				var device = {
+				const device = {
 					name: response.info.firstName,
 					data: { id: response.settings.studentId },
 					settings: response.settings
@@ -42,33 +80,81 @@ function testSettings () {
 		// Homey.done();
 	}
 }
+
+function autocomplete(inp) {
+	// the autocomplete function takes the text field element as argument
+	/*execute a function when someone writes in the text field:*/
+	var lastEventTm;
+	inp.addEventListener("input", async function(e) {
+		var a, b, i, self = this, val = this.value;
+		var thisEventTm = Date.now();
+		lastEventTm = thisEventTm;
+		/*close any already open lists of autocompleted values*/
+		closeAllLists();
+		if (!val) { return false;}
+		if (val.length <= 2) {return false;}
+		// get an array of schools
+		Homey.emit( 'findSchools', val, function( err, result ){
+			// cancel this job if user entered more text in the mean time
+			if (thisEventTm < lastEventTm) {
+				return false;
+			}
+			if (err) {
+				Homey.alert(err.message, 'error');
+				return;
+			}
+			const arr = JSON.parse(result);
+			/*close any already open lists of autocompleted values*/
+			closeAllLists();
+			/*create a DIV element that will contain the items (values):*/
+			a = document.createElement("DIV");
+			a.setAttribute("id", self.id + "autocomplete-list");
+			a.setAttribute("class", "autocomplete-items");
+			/*append the DIV element as a child of the autocomplete container:*/
+			self.parentNode.appendChild(a);
+			/*for each item in the array...*/
+			for (i = 0; i < arr.length; i++) {
+				/*create a DIV element for each matching element:*/
+				b = document.createElement("DIV");
+				const url = arr[i].url.replace('https://', '');
+				const name = arr[i].name.replace(/['|&;$%@"<>()+,]/g, '');
+				/*insert an input field that will hold the current array item's value:*/
+				b.innerHTML = `<input type='button' name='${name}' value='${name} (${url})' alt='${arr[i].url}'>`;
+				/*execute a function when someone clicks on the item value (DIV element):*/
+				b.addEventListener("click", function(e) {
+					const schoolUrl = this.getElementsByTagName("input")[0].alt;
+					const schoolName = this.getElementsByTagName("input")[0].name;
+					// set the school
+					school = arr.filter(school => school.url === schoolUrl)[0];
+					/*insert the value for the autocomplete text field:*/
+					inp.value = schoolName;
+					/*close the list of autocompleted values,
+					(or any other open lists of autocompleted values:*/
+					closeAllLists();
+					// set the school url field
+					document.getElementById("schoolUrl").value = schoolUrl;
+				});
+				a.appendChild(b);
+			}
+		});
+	});
+	function closeAllLists(elmnt) {
+		/*close all autocomplete lists in the document,
+		except the one passed as an argument:*/
+		var x = document.getElementsByClassName("autocomplete-items");
+		for (var i = 0; i < x.length; i++) {
+			if (elmnt != x[i] && elmnt != inp) {
+				x[i].parentNode.removeChild(x[i]);
+			}
+		}
+	}
+	/*execute a function when someone clicks in the document:*/
+	document.addEventListener("click", function (e) {
+		closeAllLists(e.target);
+	});
+}
+
+/*initiate the autocomplete function on the "school" element*/
+autocomplete(document.getElementById("schoolName"));
+
 </script>
-
-    <p data-i18n="pair.intro">enter IP address</p>
-
-		<table class="pairSettings">
-			<tr>
-				<td style="width:100px;" data-i18n="pair.school">school</td>
-				<td><input id="school" type="text" value="" placeholder=""/></td>
-			</tr>
-			<tr>
-				<td style="width:100px;" data-i18n="pair.username">username</td>
-				<td><input id="username" type="text" value="" placeholder=""/></td>
-			</tr>
-			<tr>
-				<td style="width:100px;" data-i18n="pair.password">password</td>
-				<td><input id="password" type="password" value="" placeholder=""/></td>
-			</tr>
-			<tr>
-				<td style="width:100px;" data-i18n="pair.childNumber">host</td>
-				<td><input id="childNumber" type="number" min=1 max=9 value=1 /></td>
-			</tr>
-		</table>
-
-		<p>
-		&nbsp;
-	  </p>
-
-<fieldset>
-    <button class="button" data-i18n="pair.save" onclick="testSettings()">Save</button>
-</fieldset>

@@ -24,30 +24,30 @@
 
 	"pair": {
     "title"				: "Magister leerling toevoegen",
-		"intro"				: "Vul de Magister inlog gegevens in. Als de login gegevens van een ouder worden gebruikt, dan het ouder login # aanpassen (1 = 1<sup>e</sup> kind, 2 = 2<sup>e</sup> kind, etc.)",
-		"school"			: "School",
+		"intro"				: "Zoek eerst de juiste school en vul vervolgens de Magister inlog gegevens in. Als de login gegevens van een ouder worden gebruikt, dan het ouder login # aanpassen (1 = 1<sup>e</sup> kind, 2 = 2<sup>e</sup> kind, etc.)",
+		"schoolName"	: "School naam",
+		"schoolUrl"		: "School url",
 		"username"		: "Gebruikersnaam",
 		"password"		: "Wachtwoord",
 		"childNumber"	: "Ouder login #",
 		"save"				: "Opslaan",
 		"required"		: "School, username en password zijn verplicht",
-		"success"			: "De gegevens zijn correct opgeslagen voor: ",
-		"old_settings": "Oude versie app instellingen gevonden! Verwijder de app eerst voordat deze nieuwe versie geinstalleerd kan worden vanuit de Homey appstore."
+		"success"			: "De gegevens zijn correct opgeslagen voor: "
 	},
 
   "settings": {
     "title"               : "Magister App Informatie",
-		"loggingTitle"        : "Debug logs",
-		"deletelogs"          : "logs verwijderen",
-		"getlogs"             : "logs verversen",
-		"settingsTitle"		    : "Leerling gegevens",
+    "loggingTitle"        : "Debug logs",
+    "deletelogs"          : "logs verwijderen",
+    "getlogs"             : "logs verversen",
+    "settingsTitle"		    : "Leerling gegevens",
     "student"             : "Scholier",
     "studentInfo"         : "Leerling gegevens",
     "period"              : "Schooljaar",
     "typeAndgroup"        : "Schooltype en klas",
     "totalAverageGrade"   : "Cijfergemiddelde",
-		"instructionsLegend"	: "Instructies",
-		"instructions"				: "Scholieren kunnen worden toegevoegd en verwijderd via Homey Apparaten"
+    "instructionsLegend"	: "Instructies",
+    "instructions"				: "Scholieren kunnen worden toegevoegd en verwijderd via Homey Apparaten"
   }
 
 }

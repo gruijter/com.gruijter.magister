@@ -49,9 +49,11 @@ class MagisterApp extends Homey.App {
 	deleteLogs() {
 		return this.logger.deleteLogs();
 	}
+
 	getLogs() {
 		return this.logger.logArray;
 	}
+
 	getStudents() {
 		this.log('settings frontend is requesting studentlist');
 		const driver = Homey.ManagerDrivers.getDriver('student');
@@ -70,6 +72,5 @@ class MagisterApp extends Homey.App {
 	}
 
 }
-
 
 module.exports = MagisterApp;

@@ -1,6 +1,6 @@
 /* global $ */
 let allStudents = {};
-var Homey;
+const Homey;
 const img = new Image();
 
 function clearSettings() {
@@ -21,9 +21,6 @@ function showSettings(student) {
 	img.onerror = function onError() {
 		$('#photo').prop('src', 'student.jpg');
 	};
-	// img.onload = function onLoad() {
-	// 	console.log('got picture');
-	// };
 	img.src = `../userdata/${student.studentId}.jpg`;
 }
 
@@ -41,7 +38,6 @@ function fillDropdown() {
 		dropDown.remove(dropDown.length - 1);
 	}
 	Object.keys(allStudents).forEach((key) => {
-	// for (const key in allStudents) {
 		const studentOption = document.createElement('option');
 		studentOption.text = allStudents[key].fullName;
 		studentOption.value = allStudents[key].studentId;

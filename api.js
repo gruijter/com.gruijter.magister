@@ -24,6 +24,18 @@ module.exports = [
 		},
 	},
 	{
+		description: 'Find schools',
+		method: 'GET',
+		path: '/findSchools/',
+		requires_authorization: false,
+		role: 'owner',
+		fn: async function fn(args, callback) {
+			console.log(args);
+			const result = await Homey.app.findSchools(args.query.query);
+			callback(null, result);
+		},
+	},
+	{
 		description: 'Get a list of students',
 		method: 'GET',
 		path: '/getStudents/',

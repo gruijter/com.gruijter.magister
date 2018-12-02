@@ -95,6 +95,7 @@ class StudentDevice extends Homey.Device {	// studentDevice represents a student
 		clearInterval(this.intervalIdDevicePoll);
 		this.log('student settings changed');
 		if (newSettingsObj.fetchAllGrades) {
+			this.log('refetching all grades');
 			this.lastGradeLogDate = new Date(0);
 			this._driver.startPolling();
 			return callback(Homey.__('fetchAllGrades'), null);
@@ -103,6 +104,7 @@ class StudentDevice extends Homey.Device {	// studentDevice represents a student
 			.catch(this.error);
 		setTimeout(() => {
 			this.onInit();
+			this._driver.startPolling();
 		}, 10000);
 		// do callback to confirm settings change
 		return callback(null, true);
@@ -112,6 +114,7 @@ class StudentDevice extends Homey.Device {	// studentDevice represents a student
 		const studentSettings = {
 			studentId: this.studentId,
 			school: this.credentials.school,
+			schoolName: this.credentials.school.name || this.credentials.school,
 			username: this.credentials.username,
 			password: this.credentials.password,
 			childNumber: this.credentials.childNumber,

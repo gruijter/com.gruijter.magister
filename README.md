@@ -26,10 +26,6 @@ available:
 ### Insights: ###
 - Log new incoming grades for all classes
 
-### Migrating from Version 2 app: ###
-The V2 app MUST be uninstalled before the V3 app is added again from the app store.
-All students and flows must be re-added when migrating from V2 to V3.
-
 ##### Donate: #####
 If you like the app you can show your appreciation by posting it in the [forum].
 If you really like the app you can buy me a beer.
@@ -40,8 +36,8 @@ If you really like the app you can buy me a beer.
 
 Version changelog (summary)
 ```
-***TODO*** school search during pair. improve change roster detection. calendar sync.
-v3.0.6	2018.11.04 BETA new auth method
+***TODO*** Calendar sync. Speech output via mobile app.
+v3.1.0	2018.12.02 BETA. New auth method. School search during pair. Improve change roster detection. Fix grade log.
 v3.0.5	2018.11.04 Fix grades for non-numbers
 v3.0.4  2018.09.08 Fix login for schools with numbers in their url
 v3.0.3  2018.09.02 Fix flows for multiple students. Fix missing profile picture.

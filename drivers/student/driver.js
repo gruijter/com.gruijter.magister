@@ -20,8 +20,10 @@ along with com.gruijter.magister.  If not, see <http://www.gnu.org/licenses/>.
 'use strict';
 
 const Homey = require('homey');
+const util = require('util');
 const mapi = require('../../mapi.js');
-// const util = require('util');
+
+const setTimeoutPromise = util.promisify(setTimeout);
 
 class StudentDriver extends Homey.Driver {
 
@@ -35,15 +37,11 @@ class StudentDriver extends Homey.Driver {
 		socket.on('save', async (credentials, callback) => {
 			try {
 				this.log('save button pressed in frontend');
-				const oldAppSettings = Homey.ManagerSettings.getKeys();
-				if (oldAppSettings.length > 0) {
-					throw Error(Homey.__('pair.old_settings'));
-				}
 				const magisterStudent = await mapi.getStudent(credentials); // test account credentials
 				const response = {
 					settings: {
 						studentId: magisterStudent.profileInfo.id,
-						school: magisterStudent.school.name,
+						school: magisterStudent.school,
 						username: credentials.username,
 						password: credentials.password,
 						childNumber: Number(credentials.childNumber),
@@ -57,7 +55,16 @@ class StudentDriver extends Homey.Driver {
 				this.error('Pair error', error.message);
 				callback(error);
 			}
-		});
+		})
+			.on('findSchools', async (query, callback) => {
+				try {
+					const schools = await mapi.findSchools(query);
+					callback(null, JSON.stringify(schools));
+				}	catch (error) {
+					callback(error);
+				}
+
+			});
 	}
 
 	startPolling() {
@@ -83,9 +90,9 @@ class StudentDriver extends Homey.Driver {
 				await studentDevice.getCurrentCourse();
 				await studentDevice.handleGradesData();
 				await studentDevice.handleLessons();
-				// this.log(util.inspect(await studentDevice.handleLessons(), { colors: true, depth: null }));
 				studentDevice.saveSettings();	// save student changes back to persistent storage
 				global.gc(); // do garbage collection
+				await setTimeoutPromise(1000 * 60 * 1); // wait some time
 			} catch (error) {
 				this.error(error);
 			}
@@ -106,7 +113,6 @@ class StudentDriver extends Homey.Driver {
 			this.fullName = `${this.magisterStudent.profileInfo.firstName} ${lastName}`;
 			this.firstName = this.magisterStudent.profileInfo.firstName;
 			this.initials = `${this.magisterStudent.profileInfo.firstName[0]}${this.magisterStudent.profileInfo.lastName[0]}`;
-			this.credentials.school = this.magisterStudent.school.name;
 			return Promise.resolve(this.magisterStudent);
 		} catch (error) {
 			this.setUnavailable(error.message)
@@ -140,20 +146,23 @@ class StudentDriver extends Homey.Driver {
 				oldRosterToday = this.rosterToday;
 				oldRosterTomorrow = this.rosterTomorrow;
 			}
-			// check for date change at midnight
-			const oldDay = new Date(oldRosterTomorrow.summary.date).getDate();
-			const newDay = new Date(newRosters.rosterTomorrow.summary.date).getDate();
-			if (oldDay !== newDay) {
+			if (oldRosterTomorrow.summary.date !== newRosters.rosterTomorrow.summary.date) {
 				// this.log('the day changed, so it must be just past midnight!');
 				return Promise.resolve(newRosters);
 			}
 			// check for roster change today
-			if (JSON.stringify(oldRosterToday.lessons) !== JSON.stringify(newRosters.rosterToday.lessons)) {
+			const changedLessonsToday = newRosters.rosterToday.lessons.filter((lesson, index) => (
+				lesson.id !== oldRosterToday.lessons[index].id
+				|| lesson.start.toTimeString() !== oldRosterToday.lessons[index].start.toTimeString()
+				|| lesson.end.toTimeString() !== oldRosterToday.lessons[index].end.toTimeString()
+				|| lesson.isCancelled !== oldRosterToday.lessons[index].isCancelled
+				|| lesson.location !== oldRosterToday.lessons[index].location
+				|| lesson.class !== oldRosterToday.lessons[index].class
+			));
+			if (changedLessonsToday.length > 0) {
 				this.log('something changed today');
-				// console.log(JSON.stringify(oldRosterToday.lessons));
-				// console.log(JSON.stringify(newRosters.rosterToday.lessons));
+				this.log(changedLessonsToday);
 				rosterChangedToday = true;
-				this.log(JSON.stringify(newRosters.rosterToday.summary));
 				const tokens = {
 					name: this.firstName,
 					startHour: newRosters.rosterToday.summary.startHour,
@@ -168,11 +177,17 @@ class StudentDriver extends Homey.Driver {
 					.catch(this.error);
 			}
 			// check for roster change tomorrow
-			if (JSON.stringify(oldRosterTomorrow.lessons) !== JSON.stringify(newRosters.rosterTomorrow.lessons)) {
+			const changedLessonsTomorrow = newRosters.rosterTomorrow.lessons.filter((lesson, index) => (
+				lesson.id !== oldRosterTomorrow.lessons[index].id
+				|| lesson.start.toTimeString() !== oldRosterTomorrow.lessons[index].start.toTimeString()
+				|| lesson.end.toTimeString() !== oldRosterTomorrow.lessons[index].end.toTimeString()
+				|| lesson.isCancelled !== oldRosterTomorrow.lessons[index].isCancelled
+				|| lesson.location !== oldRosterTomorrow.lessons[index].location
+				|| lesson.class !== oldRosterTomorrow.lessons[index].class
+			));
+			if (changedLessonsTomorrow.length > 0) {
 				this.log('something changed tomorrow');
-				// console.log(JSON.stringify(oldRosterTomorrow.lessons));
-				// console.log(JSON.stringify(newRosters.rosterTomorrow.lessons));
-				this.log(JSON.stringify(newRosters.rosterTomorrow.summary));
+				this.log(changedLessonsTomorrow);
 				const tokens = {
 					name: this.firstName,
 					startHour: newRosters.rosterTomorrow.summary.startHour,
@@ -235,7 +250,7 @@ class StudentDriver extends Homey.Driver {
 		try {
 			const allRosterItems = await this.getAllRosterItems(date);
 			const summary = {
-				date, // : date.toISOString(),
+				date: date.toLocaleDateString(), // : date.toISOString(),
 				startHour: null, // allLessons[0].schoolHour,
 				startTime: '', // allLessons[0].start,
 				endHour: null, // allLessons[0].schoolHour,
@@ -308,7 +323,7 @@ class StudentDriver extends Homey.Driver {
 					// // 11='localBlock', 12='classBlock', 13='lesson', 14='studiehuis', 15='scheduleFreeStudy', 16='planning', 101='actions', 102='presences', 103='examSchedule'
 					// isDone: appointment.isDone, // e.g. false
 					// classRoom: appointment.classRooms[0], // e.g. 'M218'
-					status: appointment.status, // e.g. 4 ??? 2=dayInfo?, 3,9,10=changed, 4,5=canceled, 7=regular?
+					// status: appointment.status, // e.g. 4 ??? 2=dayInfo?, 3,9,10=changed, 4,5=canceled, 7=regular?
 					// isChanged: appointment.isChanged, // e.g. false
 					// isFullDay: appointment.isFullDay, //  e.g. false
 				};
@@ -334,11 +349,11 @@ class StudentDriver extends Homey.Driver {
 		try {
 			const newGrades = await this.getNewGrades();
 			newGrades.forEach((newGrade) => {
-				if (Number.isNaN(Number(newGrade.grade))) {
-					return;
-				}
 				const label = `${this.initials}-${newGrade.classDescription}`;
 				this.logGrade(newGrade, label);
+				// if (Number.isNaN(Number(newGrade.grade))) {
+				// 	return;
+				// }
 				const tokens = {
 					name: this.firstName,
 					class: newGrade.classDescription,
@@ -358,11 +373,11 @@ class StudentDriver extends Homey.Driver {
 
 	logGrade(grade, label) {
 		try {
-			if (Number.isNaN(Number(grade))) {
-				return;
-			}
 			const logDate = new Date(grade.testDate || grade.dateFilledIn); // use 1.testDate or 2.dateFilledIn as logdate
 			this.log(`new/updated grade: ${label} ${grade.grade}, ${grade.weight}x, ${logDate}`);
+			if (Number.isNaN(Number(grade.grade))) {
+				return;
+			}
 			const createOptions = {
 				label,
 				type: 'number',
@@ -392,8 +407,9 @@ class StudentDriver extends Homey.Driver {
 	async getAllGrades() {	// call with studentDevice as this
 		try {
 			const gradesUnfiltered = await mapi.getGrades(this.magisterStudent);
-			// remove weight zero and grades that are not a number
+			// remove grades with weight zero
 			const grades = gradesUnfiltered.filter(grade => (grade.weight > 0));
+			// set totalAverageGrade capability
 			const gradesNumbers = grades.filter(grade => !Number.isNaN(Number(grade.grade)));
 			const totalGrade = gradesNumbers.reduce((acc, current) => {
 				const value = acc.value + (Number(current.grade) * current.weight);
@@ -402,6 +418,7 @@ class StudentDriver extends Homey.Driver {
 			}, { value: 0, weight: 0 });
 			this.totalAverageGrade = Math.round(100 * (totalGrade.value / totalGrade.weight)) / 100;
 			this.setCapabilityValue('totalAverageGrade', this.totalAverageGrade);
+			// set lastGrade capability
 			let lastGrade;
 			if (grades[grades.length - 1]) {
 				lastGrade = `${grades[grades.length - 1].classAbreviation} ${grades[grades.length - 1].grade}x${grades[grades.length - 1].weight}`;
