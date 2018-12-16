@@ -1,6 +1,6 @@
 /* global $ */
 let allStudents = {};
-const Homey;
+// const Homey;
 const img = new Image();
 
 function clearSettings() {

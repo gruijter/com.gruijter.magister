@@ -36,9 +36,9 @@ If you really like the app you can buy me a beer.
 
 Version changelog (summary)
 ```
-***TODO*** Calendar sync. Speech output via mobile app.
-v3.1.0	2018.12.02 BETA. New auth method. School search during pair. Improve change roster detection. Fix grade log.
-v3.0.5	2018.11.04 Fix grades for non-numbers
+v3.1.1  2018.12.16 stable release.
+v3.1.0  2018.12.02 BETA. New auth method. School search during pair. Improve change roster detection. Fix grade log.
+v3.0.5  2018.11.04 Fix grades for non-numbers
 v3.0.4  2018.09.08 Fix login for schools with numbers in their url
 v3.0.3  2018.09.02 Fix flows for multiple students. Fix missing profile picture.
 v3.0.2  2018.08.12 Reduced memory usage.
