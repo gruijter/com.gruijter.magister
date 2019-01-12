@@ -8,7 +8,7 @@
     "en": "School information from Magister",
     "nl": "School informatie van Magister"
   },
-  "version": "3.1.1",
+  "version": "3.2.0",
 	"sdk": 2,
   "compatibility": ">= 1.5",
   "author": {
@@ -515,7 +515,36 @@
 						"example": 0
 					}
 				]
-			}
+      },
+      {
+        "id": "day_start",
+        "title": {
+          "en": "First lesson starts in",
+          "nl": "Eerste les start over"
+        },
+        "args": [
+          {
+            "name": "student",
+            "type": "device",
+						"filter": "driver_id=student",
+            "placeholder": {
+              "en": "Which student",
+              "nl": "Welke scholier"
+             }
+          },
+          {
+            "name": "when",
+            "type": "number",
+            "min": -180,
+            "max": 180,
+            "step": 1,
+            "placeholder": {
+                "en": "Minutes",
+                "nl": "Minuten"
+            }
+          }
+        ]
+      }
     ],
     "conditions": [
       {

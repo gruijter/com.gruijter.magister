@@ -1,3 +1,6 @@
+/* eslint-disable no-console */
+/* eslint-disable max-len */
+
 'use strict';
 
 const { default: magister, getSchools } = require('magister.js');

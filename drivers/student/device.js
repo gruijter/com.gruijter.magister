@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /*
 Copyright 2017, 2018, Robin de Gruijter (gruijter@hotmail.com)
 
@@ -22,6 +23,13 @@ along with com.gruijter.magister.  If not, see <http://www.gnu.org/licenses/>.
 const Homey = require('homey');
 const fs = require('fs');
 // const util = require('util');
+
+// convert hh:mm string to minutes past midnight
+function toMinutes(hhmm) {
+	const a = hhmm.split(':'); // split it at the colons
+	const minutes = ((+a[0]) * 60 + (+a[1]));
+	return minutes;
+}
 
 class StudentDevice extends Homey.Device {	// studentDevice represents a student status and its methods
 
@@ -68,6 +76,13 @@ class StudentDevice extends Homey.Device {	// studentDevice represents a student
 		// init flow cards
 		this.flowCards = {};
 		this.registerFlowCards();
+		// check flowcard 'day_start' every minute
+		clearInterval(this.intervalId2);	// stop interval first
+		this.intervalId2 = setInterval(() => {
+			this.flowCards.dayStartTrigger
+				.trigger(this)
+				.catch(this.error);
+		}, 1000 * 60); // poll every 60 seconds
 	}
 
 	// this method is called when the Device is added
@@ -80,6 +95,7 @@ class StudentDevice extends Homey.Device {	// studentDevice represents a student
 	onDeleted() {
 		// stop polling
 		clearInterval(this.intervalIdDevicePoll);
+		clearInterval(this.intervalId2);
 		this.deleteGradeLogs(this.initials);
 		fs.unlink(`./userdata/${this.studentId}.jpg`, (err) => {
 			if (err) {
@@ -189,7 +205,25 @@ class StudentDevice extends Homey.Device {	// studentDevice represents a student
 			.register();
 		this.flowCards.classSkippedTrigger = new Homey.FlowCardTriggerDevice('class_skipped_today')
 			.register();
-		// register condition flow registerFlowCards
+		this.flowCards.dayStartTrigger = new Homey.FlowCardTriggerDevice('day_start')
+			.register()
+			.registerRunListener((args) => {
+				if (!this.rosterToday.summary) {
+					return false;
+				}
+				if (!this.rosterToday.summary.start || this.rosterToday.summary.start.length < 4) {
+					return false;
+				}
+				const start = toMinutes(this.rosterToday.summary.start);
+				const now = toMinutes(new Date().toTimeString().substr(0, 5));
+				if (start - now - args.when !== 0) {
+					return false;
+				}
+				console.log('flowcard start of school was triggered');
+				console.log(JSON.stringify(this.rosterToday.summary));
+				return Promise.resolve(true);
+			});
+		// register condition flow flowCards
 		this.flowCards.cancelledCondition = new Homey.FlowCardCondition('cancelled')
 			.register()
 			.registerRunListener((args) => {

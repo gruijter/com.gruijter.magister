@@ -74,7 +74,7 @@ class StudentDriver extends Homey.Driver {
 			this.pollStudentsOnce();	// get the first round of info right away
 			this.intervalId = setInterval(() => {
 				this.pollStudentsOnce();
-			}, 1000 * 60 * 60); // poll every 60 min
+			}, 1000 * 60 * 60); // poll Magister every 60 min
 		} catch (error) {
 			this.error(error);
 		}
