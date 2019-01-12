@@ -34,8 +34,8 @@
   },
   "category": ["internet", "tools"],
   "permissions": [
-    "homey:manager:speech-output",
-    "homey:manager:api"  ],
+    "homey:manager:speech-output"
+  ],
 	"capabilities": {
 		"schoolStart": {
 				"type": "string",
