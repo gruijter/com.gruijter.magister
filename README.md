@@ -36,7 +36,8 @@ If you really like the app you can buy me a beer.
 
 Version changelog (summary)
 ```
-todo: add trigger card 'First lesson starts in ... minutes'. 
+todo: add trigger card 'First lesson starts in ... minutes'.
+v3.2.1  2019.01.16 Another hotfix for login API change.
 v3.2.0  2019.01.12 Hotfix for login API change.
 v3.1.1  2018.12.16 stable release.
 v3.1.0  2018.12.02 BETA. New auth method. School search during pair. Improve change roster detection. Fix grade log.

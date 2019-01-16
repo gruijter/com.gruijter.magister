@@ -22,8 +22,32 @@ along with com.gruijter.magister.  If not, see <http://www.gnu.org/licenses/>.
 // retrieving data via Magister API
 
 const { default: magister, getSchools } = require('magister.js');
+const https = require('https');
+// const fs = require('fs');
 
+const authCodeUrl = 'https://raw.githubusercontent.com/simplyGits/magisterjs-authcode/master/code.json';
 const magisterTokenCache = [];
+
+function _getRequest(url) {
+	return new Promise((resolve, reject) => {
+		const req = https.get(url, (res) => {
+			let resBody = '';
+			res.on('data', (chunk) => {
+				resBody += chunk;
+			});
+			res.once('end', () => {
+				res.body = resBody;
+				return resolve(res); // resolve the request
+			});
+		});
+		req.setTimeout(5000, () => {
+			req.abort();
+		});
+		req.once('error', (e) => {
+			reject(e);
+		});
+	});
+}
 
 module.exports.getAppointments = async function getAppointments(student, from, to) {
 	// console.log(`getting DayRoster for ${student.profileInfo.id} from ${from} to ${to}`);
@@ -116,12 +140,16 @@ module.exports.getMagisterSession = async function getMagisterSession(credential
 			const schools = await this.findSchools(school);
 			[school] = schools;
 		}
+		// get the authToken
+		const authCodeResponse = await _getRequest(authCodeUrl);
+		const authCode = JSON.parse(authCodeResponse.body);
 		// retrieve existing token from cache
 		const id = `${school.url}_${credentials.username}_${credentials.password}`;
 		if (magisterTokenCache[id] !== undefined) {
 			const sessionCredentials = {
 				school,
 				token: magisterTokenCache[id],	// use the token
+				authCode,
 			};
 			const magisterSession = await magister(sessionCredentials)
 				.catch(() => false);
@@ -134,6 +162,7 @@ module.exports.getMagisterSession = async function getMagisterSession(credential
 			school,
 			username: credentials.username,
 			password: credentials.password,
+			authCode,
 		};
 		let magisterSession = await magister(sessionCredentials)
 			.catch(() => false);
