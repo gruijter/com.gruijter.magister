@@ -8,7 +8,7 @@
     "en": "School information from Magister",
     "nl": "School informatie van Magister"
   },
-  "version": "3.2.1",
+  "version": "3.2.2",
 	"sdk": 2,
   "compatibility": ">= 1.5",
   "author": {
@@ -45,7 +45,8 @@
 				},
 				"getable": true,
 				"setable": false,
-				"preventInsights": true
+				"preventInsights": true,
+        "icon": "./drivers/student/assets/schoolStart.svg"
 		},
 		"schoolEnd": {
 				"type": "string",
@@ -55,7 +56,8 @@
 				},
 				"getable": true,
 				"setable": false,
-				"preventInsights": true
+				"preventInsights": true,
+        "icon": "./drivers/student/assets/schoolEnd.svg"
 		},
 		"lastGrade": {
 				"type": "string",
@@ -65,7 +67,8 @@
 				},
 				"getable": true,
 				"setable": false,
-				"preventInsights": true
+				"preventInsights": true,
+        "icon": "./drivers/student/assets/lastGrade.svg"
 		},
 		"totalAverageGrade": {
 				"type": "number",
@@ -75,7 +78,8 @@
 				},
 				"getable": true,
 				"setable": false,
-				"preventInsights": true
+				"preventInsights": true,
+        "icon": "./drivers/student/assets/totalAverageGrade.svg"
 		}
 	},
 
