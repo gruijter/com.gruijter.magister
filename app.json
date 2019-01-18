@@ -1,19 +1,19 @@
 {
   "id": "com.gruijter.magister",
   "name": {
-      "en": "Magister",
-      "nl": "Magister"
+    "en": "Magister",
+    "nl": "Magister"
   },
   "description": {
     "en": "School information from Magister",
     "nl": "School informatie van Magister"
   },
-  "version": "3.2.1",
-	"sdk": 2,
+  "version": "3.2.2",
+  "sdk": 2,
   "compatibility": ">= 1.5",
   "author": {
-      "name": "Robin de Gruijter",
-      "email": "gruijter@hotmail.com"
+    "name": "Robin de Gruijter",
+    "email": "gruijter@hotmail.com"
   },
   "copyright": "Robin de Gruijter (gruijter@hotmail.com)",
   "license": " GPL-3.0-or-later",
@@ -24,497 +24,515 @@
       }
     }
   },
-	"bugs": {
-		"url": "https://github.com/gruijter/com.gruijter.magister/issues"
-	},
-	"homeyCommunityTopicId": 595,
+  "bugs": {
+    "url": "https://github.com/gruijter/com.gruijter.magister/issues"
+  },
+  "homeyCommunityTopicId": 595,
   "images": {
     "large": "./assets/images/large.jpg",
     "small": "./assets/images/small.jpg"
   },
-  "category": ["internet", "tools"],
+  "category": [
+    "internet",
+    "tools"
+  ],
   "permissions": [
     "homey:manager:speech-output"
   ],
-	"capabilities": {
-		"schoolStart": {
-				"type": "string",
-				"title": {
-						"en": "start",
-						"nl": "start"
-				},
-				"getable": true,
-				"setable": false,
-				"preventInsights": true
-		},
-		"schoolEnd": {
-				"type": "string",
-				"title": {
-						"en": "end",
-						"nl": "einde"
-				},
-				"getable": true,
-				"setable": false,
-				"preventInsights": true
-		},
-		"lastGrade": {
-				"type": "string",
-				"title": {
-						"en": "Last",
-						"nl": "Laatste"
-				},
-				"getable": true,
-				"setable": false,
-				"preventInsights": true
-		},
-		"totalAverageGrade": {
-				"type": "number",
-				"title": {
-						"en": "Average",
-						"nl": "Gemiddeld"
-				},
-				"getable": true,
-				"setable": false,
-				"preventInsights": true
-		}
-	},
-
-	"drivers": [
-		{
-			"id": "student",
-			"name": {
-				"en": "Student",
-				"nl": "Leerling"
-			},
-			"images": {
-			 "large": "drivers/student/assets/images/large.jpg",
-			 "small": "drivers/student/assets/images/small.jpg"
-			},
-			"class": "other",
-			"capabilities": [ "schoolStart", "schoolEnd", "lastGrade", "totalAverageGrade" ],
-			"capabilitiesOptions": {
-				"schoolStart": {
-					"preventInsights": true
-				},
-				"schoolEnd": {
-					"preventInsights": true
-				},
-				"lastGrade": {
-					"preventInsights": true
-				},
-				"totalAverageGrade": {
-					"preventInsights": true
-				}
-			},
-			"mobile": {
-				"components": [
-					{
-						"id": "icon",
-						"capabilities": [ ]
-					},
-					{
-						"id": "sensor",
-						"capabilities": [ "schoolStart", "schoolEnd", "lastGrade", "totalAverageGrade" ],
-						"options": {
-							"icons": {
-								"schoolStart": "./drivers/student/assets/schoolStart.svg",
-								"schoolEnd": "./drivers/student/assets/schoolEnd.svg",
-								"lastGrade": "./drivers/student/assets/lastGrade.svg",
-								"totalAverageGrade": "./drivers/student/assets/totalAverageGrade.svg"
-							}
-						}
-					}
-				]
-			},
-			"pair": [
-				{
-					"id": "start"
-				}
-			],
-			"settings": [
-				{
-					"type": "group",
-					"label": {
-						"en": "Student settings",
-						"nl": "Leerling instellingen"
-					},
-					"children": [
-						{
-							"id": "schoolName",
-							"type": "label",
-							"label": {
-								"en": "School",
-								"nl": "School"
-							},
-							"value": ""
-						},
-						{
-							"id": "username",
-							"type": "text",
-							"label": {
-								"en": "Username",
-								"nl": "Gebruikersnaam"
-							},
-							"value": ""
-						},
-						{
-							"id": "password",
-							"type": "password",
-							"label": {
-								"en": "Password",
-								"nl": "Wachtwoord"
-							},
-							"value": "password"
-						},
-						{
-							"id": "childNumber",
-							"type": "number",
-							"label": {
-								"en": "Parent login #",
-								"nl": "Ouder login #"
-							},
-							"attr": { "min": 1, "max": 9 },
-							"value": 1
-						}
-					]
-				},
-				{
-					"type": "group",
-					"label": {
-						"en": "Student information",
-						"nl": "Leerling informatie"
-					},
-					"children": [
-						{
-							"id": "period",
-							"type": "label",
-							"label": {
-								"en": "School period",
-								"nl": "Schooljaar"
-							},
-							"value": ""
-						},
-						{
-							"id": "typeAndGroup",
-							"type": "label",
-							"label": {
-								"en": "Schooltype and group",
-								"nl": "Schooltype en klas"
-							},
-							"value": ""
-						},
-						{
-							"id": "totalAverageGrade",
-							"type": "label",
-							"label": {
-								"en": "Total grade average",
-								"nl": "Cijfergemiddelde"
-							},
-							"value": ""
-						}
-					]
-				},
-				{
-					"type": "group",
-					"label": {
-						"en": "Options",
-						"nl": "Opties"
-					},
-					"children": [
-						{
-							"id": "fetchAllGrades",
-							"type": "checkbox",
-							"label": {
-								"en": "Refetch all grades",
-								"nl": "Alle cijfers opnieuw ophalen"
-							},
-							"value": false
-						}
-					]
-				}
-			]
-		}
-	],
-
-  "flow":	{
-    "triggers":[
-      {
-        "id":"new_grade",
-        "title": {
-          "en":"There is a new grade",
-          "nl":"Er is een nieuw cijfer"
+  "capabilities": {
+    "schoolStart": {
+      "type": "string",
+      "title": {
+        "en": "start",
+        "nl": "start"
+      },
+      "getable": true,
+      "setable": false,
+      "preventInsights": true,
+      "icon": "./drivers/student/assets/schoolStart.svg"
+    },
+    "schoolEnd": {
+      "type": "string",
+      "title": {
+        "en": "end",
+        "nl": "einde"
+      },
+      "getable": true,
+      "setable": false,
+      "preventInsights": true,
+      "icon": "./drivers/student/assets/schoolEnd.svg"
+    },
+    "lastGrade": {
+      "type": "string",
+      "title": {
+        "en": "Last",
+        "nl": "Laatste"
+      },
+      "getable": true,
+      "setable": false,
+      "preventInsights": true,
+      "icon": "./drivers/student/assets/lastGrade.svg"
+    },
+    "totalAverageGrade": {
+      "type": "number",
+      "title": {
+        "en": "Average",
+        "nl": "Gemiddeld"
+      },
+      "getable": true,
+      "setable": false,
+      "preventInsights": true,
+      "icon": "./drivers/student/assets/totalAverageGrade.svg"
+    }
+  },
+  "drivers": [
+    {
+      "id": "student",
+      "name": {
+        "en": "Student",
+        "nl": "Leerling"
+      },
+      "images": {
+        "large": "drivers/student/assets/images/large.jpg",
+        "small": "drivers/student/assets/images/small.jpg"
+      },
+      "class": "other",
+      "capabilities": [
+        "schoolStart",
+        "schoolEnd",
+        "lastGrade",
+        "totalAverageGrade"
+      ],
+      "capabilitiesOptions": {
+        "schoolStart": {
+          "preventInsights": true
         },
-        "args": [
+        "schoolEnd": {
+          "preventInsights": true
+        },
+        "lastGrade": {
+          "preventInsights": true
+        },
+        "totalAverageGrade": {
+          "preventInsights": true
+        }
+      },
+      "mobile": {
+        "components": [
           {
-            "name": "student",
-            "type": "device",
-						"filter": "driver_id=student",
-            "placeholder": {
-              "en": "Which student",
-              "nl": "Welke scholier"
-             }
-          }
-        ],
-        "tokens":[
-          {
-          "name":"name",
-          "type": "string",
-          "title": {
-            "en":"name",
-            "nl":"naam"
-            },
-          "example": "Jason"
+            "id": "icon",
+            "capabilities": []
           },
           {
-          "name":"class",
-          "type": "string",
-          "title": {
-            "en":"class",
-            "nl":"vak"
-            },
-          "example": "English"
-          },
-          {
-          "name":"description",
-          "type": "string",
-          "title": {
-            "en":"description",
-            "nl":"omschrijving"
-            },
-          "example": "grammar"
-          },
-          {
-          "name":"weight",
-          "type": "number",
-          "title": {
-            "en":"weight",
-            "nl":"gewicht"
-            },
-          "example": 1
-          },
-          {
-          "name":"grade",
-          "type": "number",
-          "title": {
-            "en":"grade",
-            "nl":"cijfer"
-            },
-          "example": 7.2
+            "id": "sensor",
+            "capabilities": [
+              "schoolStart",
+              "schoolEnd",
+              "lastGrade",
+              "totalAverageGrade"
+            ],
+            "options": {
+              "icons": {
+                "schoolStart": "./drivers/student/assets/schoolStart.svg",
+                "schoolEnd": "./drivers/student/assets/schoolEnd.svg",
+                "lastGrade": "./drivers/student/assets/lastGrade.svg",
+                "totalAverageGrade": "./drivers/student/assets/totalAverageGrade.svg"
+              }
+            }
           }
         ]
       },
+      "pair": [
+        {
+          "id": "start"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Student settings",
+            "nl": "Leerling instellingen"
+          },
+          "children": [
+            {
+              "id": "schoolName",
+              "type": "label",
+              "label": {
+                "en": "School",
+                "nl": "School"
+              },
+              "value": ""
+            },
+            {
+              "id": "username",
+              "type": "text",
+              "label": {
+                "en": "Username",
+                "nl": "Gebruikersnaam"
+              },
+              "value": ""
+            },
+            {
+              "id": "password",
+              "type": "password",
+              "label": {
+                "en": "Password",
+                "nl": "Wachtwoord"
+              },
+              "value": "password"
+            },
+            {
+              "id": "childNumber",
+              "type": "number",
+              "label": {
+                "en": "Parent login #",
+                "nl": "Ouder login #"
+              },
+              "attr": {
+                "min": 1,
+                "max": 9
+              },
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Student information",
+            "nl": "Leerling informatie"
+          },
+          "children": [
+            {
+              "id": "period",
+              "type": "label",
+              "label": {
+                "en": "School period",
+                "nl": "Schooljaar"
+              },
+              "value": ""
+            },
+            {
+              "id": "typeAndGroup",
+              "type": "label",
+              "label": {
+                "en": "Schooltype and group",
+                "nl": "Schooltype en klas"
+              },
+              "value": ""
+            },
+            {
+              "id": "totalAverageGrade",
+              "type": "label",
+              "label": {
+                "en": "Total grade average",
+                "nl": "Cijfergemiddelde"
+              },
+              "value": ""
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Options",
+            "nl": "Opties"
+          },
+          "children": [
+            {
+              "id": "fetchAllGrades",
+              "type": "checkbox",
+              "label": {
+                "en": "Refetch all grades",
+                "nl": "Alle cijfers opnieuw ophalen"
+              },
+              "value": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "flow": {
+    "triggers": [
       {
-        "id":"roster_changed_today",
+        "id": "new_grade",
         "title": {
-          "en":"Todays roster has changed",
-          "nl":"Rooster vandaag is gewijzigd"
+          "en": "There is a new grade",
+          "nl": "Er is een nieuw cijfer"
         },
         "args": [
           {
             "name": "student",
             "type": "device",
-						"filter": "driver_id=student",
+            "filter": "driver_id=student",
             "placeholder": {
               "en": "Which student",
               "nl": "Welke scholier"
-             }
+            }
           }
         ],
-        "tokens":[
+        "tokens": [
           {
-            "name":"name",
+            "name": "name",
             "type": "string",
             "title": {
-              "en":"name",
-              "nl":"naam"
+              "en": "name",
+              "nl": "naam"
             },
             "example": "Jason"
           },
           {
-            "name":"startHour",
+            "name": "class",
+            "type": "string",
+            "title": {
+              "en": "class",
+              "nl": "vak"
+            },
+            "example": "English"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "title": {
+              "en": "description",
+              "nl": "omschrijving"
+            },
+            "example": "grammar"
+          },
+          {
+            "name": "weight",
             "type": "number",
             "title": {
-              "en":"1st hr",
-              "nl":"1e uur"
+              "en": "weight",
+              "nl": "gewicht"
             },
             "example": 1
           },
           {
-            "name":"startTime",
+            "name": "grade",
+            "type": "number",
+            "title": {
+              "en": "grade",
+              "nl": "cijfer"
+            },
+            "example": 7.2
+          }
+        ]
+      },
+      {
+        "id": "roster_changed_today",
+        "title": {
+          "en": "Todays roster has changed",
+          "nl": "Rooster vandaag is gewijzigd"
+        },
+        "args": [
+          {
+            "name": "student",
+            "type": "device",
+            "filter": "driver_id=student",
+            "placeholder": {
+              "en": "Which student",
+              "nl": "Welke scholier"
+            }
+          }
+        ],
+        "tokens": [
+          {
+            "name": "name",
             "type": "string",
             "title": {
-              "en":"starttime",
-              "nl":"starttijd"
+              "en": "name",
+              "nl": "naam"
+            },
+            "example": "Jason"
+          },
+          {
+            "name": "startHour",
+            "type": "number",
+            "title": {
+              "en": "1st hr",
+              "nl": "1e uur"
+            },
+            "example": 1
+          },
+          {
+            "name": "startTime",
+            "type": "string",
+            "title": {
+              "en": "starttime",
+              "nl": "starttijd"
             },
             "example": "08:30"
           },
           {
-            "name":"endHour",
+            "name": "endHour",
             "type": "number",
             "title": {
-              "en":"last hr",
-              "nl":"laatste uur"
+              "en": "last hr",
+              "nl": "laatste uur"
             },
             "example": 7
           },
           {
-            "name":"endTime",
+            "name": "endTime",
             "type": "string",
             "title": {
-              "en":"endtime",
-              "nl":"eindtijd"
+              "en": "endtime",
+              "nl": "eindtijd"
             },
             "example": "15:00"
           },
           {
-            "name":"cancellations",
+            "name": "cancellations",
             "type": "number",
             "title": {
-              "en":"scrapped",
-              "nl":"uitval"
+              "en": "scrapped",
+              "nl": "uitval"
             },
             "example": 0
           },
-					{
-            "name":"tests",
+          {
+            "name": "tests",
             "type": "number",
             "title": {
-              "en":"tests",
-              "nl":"toetsen"
+              "en": "tests",
+              "nl": "toetsen"
             },
             "example": 0
           }
         ]
       },
       {
-        "id":"roster_changed_tomorrow",
+        "id": "roster_changed_tomorrow",
         "title": {
-          "en":"Tomorrows roster has changed",
-          "nl":"Rooster morgen is gewijzigd"
+          "en": "Tomorrows roster has changed",
+          "nl": "Rooster morgen is gewijzigd"
         },
         "args": [
           {
             "name": "student",
             "type": "device",
-						"filter": "driver_id=student",
+            "filter": "driver_id=student",
             "placeholder": {
               "en": "Which student",
               "nl": "Welke scholier"
-             }
+            }
           }
         ],
-        "tokens":[
+        "tokens": [
           {
-            "name":"name",
+            "name": "name",
             "type": "string",
             "title": {
-              "en":"name",
-              "nl":"naam"
+              "en": "name",
+              "nl": "naam"
             },
             "example": "Jason"
           },
           {
-            "name":"startHour",
+            "name": "startHour",
             "type": "number",
             "title": {
-              "en":"1st hr",
-              "nl":"1e uur"
+              "en": "1st hr",
+              "nl": "1e uur"
             },
             "example": 1
           },
           {
-            "name":"startTime",
+            "name": "startTime",
             "type": "string",
             "title": {
-              "en":"starttime",
-              "nl":"starttijd"
+              "en": "starttime",
+              "nl": "starttijd"
             },
             "example": "08:30"
           },
           {
-            "name":"endHour",
+            "name": "endHour",
             "type": "number",
             "title": {
-              "en":"last hr",
-              "nl":"laatste uur"
+              "en": "last hr",
+              "nl": "laatste uur"
             },
             "example": 7
           },
           {
-            "name":"endTime",
+            "name": "endTime",
             "type": "string",
             "title": {
-              "en":"endtime",
-              "nl":"eindtijd"
+              "en": "endtime",
+              "nl": "eindtijd"
             },
             "example": "15:00"
           },
           {
-            "name":"cancellations",
+            "name": "cancellations",
             "type": "number",
             "title": {
-              "en":"scrapped",
-              "nl":"uitval"
+              "en": "scrapped",
+              "nl": "uitval"
             },
             "example": 0
           },
-					{
-            "name":"tests",
+          {
+            "name": "tests",
             "type": "number",
             "title": {
-              "en":"tests",
-              "nl":"toetsen"
+              "en": "tests",
+              "nl": "toetsen"
             },
             "example": 0
           }
         ]
       },
-			{
-				"id":"class_skipped_today",
-				"title": {
-					"en":"Skipped a class today",
-					"nl":"Les gespijbeld vandaag"
-				},
-				"args": [
-					{
-						"name": "student",
-						"type": "device",
-						"filter": "driver_id=student",
-						"placeholder": {
-							"en": "Which student",
-							"nl": "Welke scholier"
-						 }
-					}
-				],
-				"tokens":[
-					{
-						"name":"name",
-						"type": "string",
-						"title": {
-							"en":"name",
-							"nl":"naam"
-						},
-						"example": "Jason"
-					},
-					{
-						"name":"schoolHour",
-						"type": "number",
-						"title": {
-							"en":"hour",
-							"nl":"uur"
-						},
-						"example": 1
-					},
-					{
-						"name":"class",
-						"type": "string",
-						"title": {
-							"en":"class",
-							"nl":"vak"
-						},
-						"example": 0
-					}
-				]
+      {
+        "id": "class_skipped_today",
+        "title": {
+          "en": "Skipped a class today",
+          "nl": "Les gespijbeld vandaag"
+        },
+        "args": [
+          {
+            "name": "student",
+            "type": "device",
+            "filter": "driver_id=student",
+            "placeholder": {
+              "en": "Which student",
+              "nl": "Welke scholier"
+            }
+          }
+        ],
+        "tokens": [
+          {
+            "name": "name",
+            "type": "string",
+            "title": {
+              "en": "name",
+              "nl": "naam"
+            },
+            "example": "Jason"
+          },
+          {
+            "name": "schoolHour",
+            "type": "number",
+            "title": {
+              "en": "hour",
+              "nl": "uur"
+            },
+            "example": 1
+          },
+          {
+            "name": "class",
+            "type": "string",
+            "title": {
+              "en": "class",
+              "nl": "vak"
+            },
+            "example": 0
+          }
+        ]
       },
       {
         "id": "day_start",
@@ -526,11 +544,11 @@
           {
             "name": "student",
             "type": "device",
-						"filter": "driver_id=student",
+            "filter": "driver_id=student",
             "placeholder": {
               "en": "Which student",
               "nl": "Welke scholier"
-             }
+            }
           },
           {
             "name": "when",
@@ -539,8 +557,8 @@
             "max": 180,
             "step": 1,
             "placeholder": {
-                "en": "Minutes",
-                "nl": "Minuten"
+              "en": "Minutes",
+              "nl": "Minuten"
             }
           }
         ]
@@ -557,11 +575,11 @@
           {
             "name": "student",
             "type": "device",
-						"filter": "driver_id=student",
+            "filter": "driver_id=student",
             "placeholder": {
               "en": "Which student",
               "nl": "Welke scholier"
-             }
+            }
           },
           {
             "name": "when",
@@ -594,12 +612,12 @@
         "args": [
           {
             "name": "student",
-						"type": "device",
-						"filter": "driver_id=student",
+            "type": "device",
+            "filter": "driver_id=student",
             "placeholder": {
               "en": "Which student",
               "nl": "Welke scholier"
-             }
+            }
           },
           {
             "name": "when",
@@ -623,44 +641,44 @@
           }
         ]
       },
-			{
-				"id": "homework",
-				"title": {
-					"en": "There !{{is|isn't any}} homework",
-					"nl": "Er is !{{|geen}} huiswerk"
-				},
-				"args": [
-					{
-						"name": "student",
-						"type": "device",
-						"filter": "driver_id=student",
-						"placeholder": {
-							"en": "Which student",
-							"nl": "Welke scholier"
-						 }
-					},
-					{
-						"name": "when",
-						"type": "dropdown",
-						"values": [
-							{
-								"id": "today",
-								"label": {
-									"en": "today",
-									"nl": "vandaag"
-								}
-							},
-							{
-								"id": "tomorrow",
-								"label": {
-									"en": "tomorrow",
-									"nl": "morgen"
-								}
-							}
-						]
-					}
-				]
-			}
+      {
+        "id": "homework",
+        "title": {
+          "en": "There !{{is|isn't any}} homework",
+          "nl": "Er is !{{|geen}} huiswerk"
+        },
+        "args": [
+          {
+            "name": "student",
+            "type": "device",
+            "filter": "driver_id=student",
+            "placeholder": {
+              "en": "Which student",
+              "nl": "Welke scholier"
+            }
+          },
+          {
+            "name": "when",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "today",
+                "label": {
+                  "en": "today",
+                  "nl": "vandaag"
+                }
+              },
+              {
+                "id": "tomorrow",
+                "label": {
+                  "en": "tomorrow",
+                  "nl": "morgen"
+                }
+              }
+            ]
+          }
+        ]
+      }
     ],
     "actions": [
       {
@@ -673,11 +691,11 @@
           {
             "name": "student",
             "type": "device",
-						"filter": "driver_id=student",
+            "filter": "driver_id=student",
             "placeholder": {
               "en": "Which student",
               "nl": "Welke scholier"
-             }
+            }
           },
           {
             "name": "when",
@@ -710,12 +728,12 @@
         "args": [
           {
             "name": "student",
-						"type": "device",
-						"filter": "driver_id=student",
+            "type": "device",
+            "filter": "driver_id=student",
             "placeholder": {
               "en": "Which student",
               "nl": "Welke scholier"
-             }
+            }
           },
           {
             "name": "when",
@@ -749,11 +767,11 @@
           {
             "name": "student",
             "type": "device",
-						"filter": "driver_id=student",
+            "filter": "driver_id=student",
             "placeholder": {
               "en": "Which student",
               "nl": "Welke scholier"
-             }
+            }
           },
           {
             "name": "when",
@@ -786,12 +804,12 @@
         "args": [
           {
             "name": "student",
-						"type": "device",
-						"filter": "driver_id=student",
+            "type": "device",
+            "filter": "driver_id=student",
             "placeholder": {
               "en": "Which student",
               "nl": "Welke scholier"
-             }
+            }
           },
           {
             "name": "when",
