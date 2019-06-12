@@ -1,5 +1,6 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /*
-Copyright 2016 - 2018, Robin de Gruijter (gruijter@hotmail.com)
+Copyright 2016 - 2019, Robin de Gruijter (gruijter@hotmail.com)
 
 This file is part of com.gruijter.magister.
 
@@ -29,10 +30,10 @@ class captureLogs {
 	// captures and reroutes Homey's this.log (stdout) and this.err (stderr)
 
 	constructor(logName, logLength) {
+		this.logArray = [];
 		this.logName = logName || 'log';
 		this.logLength = logLength || 50;
 		this.logFile = `/userdata/${this.logName}.json`;
-		this.logArray = [];
 		this.getLogs();
 		this.captureStdOut();
 		this.captureStdErr();
@@ -42,17 +43,15 @@ class captureLogs {
 	getLogs() {
 		fs.readFile(this.logFile, 'utf8', (err, data) => {
 			if (err) {
-				Homey.app.error('error reading logfile: ', err.message);
+				Homey.app.error('no logfile available');
 				return [];
 			}
 			try {
 				this.logArray = JSON.parse(data);
-				// console.log(this.logArray);
 			} catch (error) {
 				Homey.app.error('error parsing logfile: ', error.message);
 				return [];
 			}
-			// Homey.app.log('logs retrieved from module');
 			return this.logArray;
 		});
 	}
@@ -68,7 +67,6 @@ class captureLogs {
 	}
 
 	deleteLogs() {
-		// this.log('deleting logs from frontend');
 		this.logArray = [];
 		fs.unlink(this.logFile, (err) => {
 			if (err) {
@@ -83,7 +81,7 @@ class captureLogs {
 	captureStdOut() {
 		// Capture all writes to stdout (e.g. this.log)
 		this.captureStdout = new StdOutFixture({ stream: process.stdout });
-		Homey.app.log('capturing stdout');
+		// Homey.app.log('capturing stdout');
 		this.captureStdout.capture((string) => {
 			if (this.logArray.length >= this.logLength) {
 				this.logArray.shift();
@@ -97,7 +95,7 @@ class captureLogs {
 	captureStdErr() {
 		// Capture all writes to stderr (e.g. this.error)
 		this.captureStderr = new StdOutFixture({ stream: process.stderr });
-		Homey.app.log('capturing stderr');
+		// Homey.app.log('capturing stderr');
 		this.captureStderr.capture((string) => {
 			if (this.logArray.length >= this.logLength) {
 				this.logArray.shift();

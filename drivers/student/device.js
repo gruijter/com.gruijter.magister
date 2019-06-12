@@ -1,6 +1,6 @@
 /* eslint-disable prefer-destructuring */
 /*
-Copyright 2017, 2018, Robin de Gruijter (gruijter@hotmail.com)
+Copyright 2016 - 2019, Robin de Gruijter (gruijter@hotmail.com)
 
 This file is part of com.gruijter.magister.
 
