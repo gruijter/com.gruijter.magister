@@ -37,8 +37,9 @@ If you really like the app you can buy me a beer.
 Version changelog (summary)
 ```
 todo: add trigger card 'First lesson starts in ... minutes'.
-v3.2.3  2019-06-12 Magister.js updated to 2.0.0-alpha.12
-v3.2.2  2019-01-18 Fixed the custom capability icons.
+v3.2.4  2019.08.29 Package update node-fetch@2.6.0
+v3.2.3  2019.06.12 Magister.js updated to 2.0.0-alpha.12
+v3.2.2  2019.01.18 Fixed the custom capability icons.
 v3.2.1  2019.01.16 Another hotfix for login API change.
 v3.2.0  2019.01.12 Hotfix for login API change.
 v3.1.1  2018.12.16 stable release.
